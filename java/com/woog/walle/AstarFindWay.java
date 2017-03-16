@@ -1,0 +1,163 @@
+package com.woog.walle;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.registry.GameData;
+
+public class AstarFindWay {
+	//A*寻路算法
+	private V3D[] openList;
+	private List<V3D> closeList;
+	public List<V3D> way;
+	private V3D start;
+	private V3D end;
+	private int step;
+	private boolean canBreak;
+	private static Block[] air = {Blocks.AIR, Blocks.CARROTS, Blocks.WHEAT, Blocks.REEDS, Blocks.NETHER_WART};
+	
+	public AstarFindWay(V3D start, V3D end, boolean canBreak) {
+		this.start = start;
+		this.end = end;
+		this.canBreak = canBreak;
+		double sToe = start.distance(end);
+		way  = new ArrayList((int)(sToe * 3));
+		closeList = new ArrayList((int)(sToe * 5));
+		V3D current = start;					//初始化current路点
+		V3D father,son;	
+		father = current;					//father路点设置为current路点
+		for(int i = 0; i < 50; i++) {
+			son = getRightPoint(current, father);
+			way.add(son);
+			closeList.add(son);
+			if(i > 1) {
+				father = way.get(way.size() - 2);
+			}
+//			System.out.printf(" %s	", current);
+			current = son;
+			if(son.isEqual(end)) {
+				break;
+			}
+//			System.out.printf("[%d]	%s		%s	%s	%s \n",i,father, son,getId(son),isDanger(son));
+		}
+	}
+	
+	private V3D getRightPoint(V3D current, V3D father) {
+		int right = 0;
+		V3D buff;
+		double refer = current.distance(end);
+		ArrayList<V3D> list = new ArrayList(7);
+		ArrayList<V3D> list1 = new ArrayList(7);
+		ArrayList<V3D> list2 = new ArrayList(7);
+		list1 = current.targetPhaseList();		
+		boolean[] bool = new boolean[list1.size()];
+		if(!closeList.isEmpty()) {
+			for(int j = 1; j < list1.size(); j++) {
+				for(int i = 0; i < closeList.size(); i++) {
+					if(list1.get(j).isEqual(closeList.get(i))) {
+						bool[j] = true;
+					}
+				}
+			}
+			for(int i = 0; i < bool.length; i++) {
+				if(!bool[i]) {
+					list2.add(list1.get(i));
+				}
+			}
+		}else{
+			list2 = list1;
+		}
+		for(int i = 0; i < list2.size(); i++) {
+			buff = list2.get(i);
+			if(!isDanger(buff) && !buff.isEqual(current) && !buff.isEqual(father)) {
+				list.add(list2.get(i));
+			}
+		}
+		double[] score = new double[list.size()];
+		for(int i = 0; i < list.size(); i++) {
+			score[i] = 1 / list.get(i).distance(end);
+//			score[i] = (refer / list.get(i).distance(end)) * 10 * Math.abs(Math.sin(current.angle(end)));
+//			if(isEmpty(list.get(i))) {
+//				score[i] = score[i] + current.distance(end) / start.distance(end);
+//			}
+//			if(list.get(i).y == current.y) {
+//				score[i] = score[i] * 10 * Math.abs(Math.cos(list1.get(i).angle(end)));
+//			}
+//			score[i] = score[i] ;
+		}
+		double buf = -99.0D;
+		for(int i = 0; i < score.length; i++) {
+			if(score[i] > buf) {
+				buf = score[i];
+				right = i;
+			}
+		}
+		
+		if(!list.isEmpty()) {
+			return list.get(right);
+		}else{
+//			System.out.printf("【ERROR】%b	%s ", list==null, right);
+			return null;
+		}
+	}
+
+	private boolean isNear() {
+		return false;
+	}
+	
+	private boolean isEmpty(V3D target) {
+		int x = target.x;
+		int y = target.y + 1;
+		int z = target.z;
+		if(getId(target) == 0 && getId(x, y, z) == 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isDanger(V3D target) {
+		int id,id2;
+		V3D[] phase = target.targetAndPhase();
+		V3D target2 = new V3D(target.x, target.y + 1, target.z);
+		V3D[] phase2 = target2.targetAndPhase();
+		if(this.isBelongtoBlock(APIChunk.getBlock(phase[0])) && this.isBelongtoBlock(APIChunk.getBlock(phase2[0]))) {return false;}
+//		if(getId(phase[0]) == 0 && getId(phase2[0]) == 0) {return false;}
+		for(int i = 1; i <= 6; i++) {
+			id = getId(phase[i]);
+			id2 = getId(phase2[i]);
+			if(this.canBreak) {
+				if(id == 8 || id == 9 || id == 10 || id == 11) {
+					return true;
+				}
+				if(id2 == 8 || id2 == 9 || id2 == 10 || id2 == 11) {
+					return true;
+				}
+			}else{
+				if(id != 0) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean isBelongtoBlock(Block block) {
+		for(int i = 0; i < this.air.length; i++) {
+			if(block == this.air[i]) {
+				return true;
+			}
+		}
+		return false;
+	} 
+	
+	private int getId(V3D target) {
+		return GameData.getBlockRegistry().getIDForObject(Minecraft.getMinecraft().world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock());
+	}
+	
+	private int getId(int x, int y, int z) {
+		return GameData.getBlockRegistry().getIDForObject(Minecraft.getMinecraft().world.getBlockState(new BlockPos(x, y, z)).getBlock());
+	}
+}

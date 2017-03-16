@@ -1,0 +1,15 @@
+[
+{
+  "modid": "wall-e",
+  "name": "\u4eba\u5f62\u81ea\u8d70\u673a\u68b0\u002d\u74e6\u529b",
+  "description": "\u6b64\u004d\u004f\u0044\u7528\u4e8e\u8f85\u52a9\u6302\u673a\uff0c\u667a\u80fd\u5b8c\u6210\u4ee5\u4e0b\u529f\u80fd\uff1a\u9493\u9c7c\u3001\u780d\u6811\u3001\u94fa\u5730\u3001\u5237\u77f3\u3001\u6316\u6398\u3001\u519c\u4e1a\u7b49",
+  "version": "1.11.a",
+  "mcversion": "1.11",
+  "url": "none",
+  "authorList": ["WooG"],
+  "credits": "",
+  "logoFile": "WallE.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]

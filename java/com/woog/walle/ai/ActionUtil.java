@@ -1,0 +1,108 @@
+package com.woog.walle.ai;
+
+import com.woog.walle.APIPlayer;
+import com.woog.walle.V3D;
+import com.woog.walle.WallE;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.MouseHelper;
+import net.minecraft.util.MovementInputFromOptions;
+
+public class ActionUtil {
+	Minecraft mc = Minecraft.getMinecraft();
+	private int keyForward = mc.gameSettings.keyBindForward.getKeyCode();
+	private MovementEntry movement = new MovementEntry(0, false, false);
+	private MouseEntry mouse = new MouseEntry();
+	public boolean isShield = true;
+	private boolean shielding = false;
+	public V3D gazeBlockV3D = null;
+	public boolean isKeepGaze = false;
+	
+	ActionUtil() {
+		if(isShield) {
+			if(!shielding) {
+				mc.player.movementInput = this.movement;
+				mc.mouseHelper = this.mouse;
+				shielding = true;
+			}
+		}else{
+			if(shielding) {
+				allDefault();
+				shielding = false;
+			}
+		}
+//		p_i45001_3_ = "key.categories.gameplay";
+		// TODO Auto-generated constructor stub
+//		mc.gameSettings.keyBindAttack = new KeyBinding("key.Forward", 37, "key.categories.movement");
+//		mc.gameSettings.keyBindUseItem = new KeyBinding("key.UseItem", 39, "key.categories.movement");
+	}
+	
+	public void setMovement(float forward, boolean jump, boolean sneak) {
+		if(isShield) {
+			movement.set(forward, jump, sneak);
+		}else{
+			mc.gameSettings.keyBindForward.setKeyBindState(keyForward, true);
+		}
+	}
+	
+	public void moveLeft() {
+		mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), true);
+	}
+	
+	
+	public void setMouse() {
+		
+	}
+	
+	public void gazeOnBlock(V3D gazeAt) {
+		this.gazeBlockV3D = gazeAt;
+		this.isKeepGaze = true;
+		new GazeAtBlock().start();
+	}
+	
+	public void allDefault() {
+		if(WallE.acts.isEmpty()) {
+			movementDefault();
+			mouseDefault();
+		}
+	}
+	
+	public void movementDefault() {
+		mc.player.movementInput = new MovementInputFromOptions(mc.gameSettings);
+	}
+	
+	public void mouseDefault() {
+		mc.mouseHelper = new MouseHelper();
+	}
+	
+	private class GazeAtBlock extends Thread {
+		private boolean isNear() {
+			if(APIPlayer.getEye().distanceTo(gazeBlockV3D.toVec3()) < 0.3D) {}
+			return false;
+		}
+		
+		@Override
+		public void run() {
+			while(isKeepGaze && !this.isNear()) {
+				try {
+					Thread.sleep(50);
+					new FaceTo(gazeBlockV3D, 2);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			gazeBlockV3D = null;
+			isKeepGaze = false;
+		}
+	}
+	
+	private class MouseEntry extends MouseHelper {
+		public void mouseXYChange() {
+		}
+		
+		public void setDelta(int x, int y) {
+			this.deltaX = x;
+			this.deltaY = y;
+		}
+	}
+}
