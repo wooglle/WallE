@@ -51,10 +51,11 @@ public class KeepOnWatch {
 	
 	private class Keep extends Thread{
 		public void run() {
+			this.setName("KeepOnWatch");
 			while(isKeep) {
 				setAngle();
 				try {
-					Thread.sleep(1);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

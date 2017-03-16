@@ -182,7 +182,7 @@ public class RayTraceTarget {
 				this.dis, APIPlayer.getFoot2().toString(), this.target.toString(), this.foothold.toString());
 		if(!WallE.way.isEmpty()) {
 			for(int i = 0; i < Astar.way.size(); i++) {
-				System.out.printf("%s, ",Astar.way.get(i));
+				System.out.printf("%s; ",Astar.way.get(i));
 				if((i + 1) % 5 == 0) System.out.printf(" |  ");
 				if((i + 1) % 10 == 0) System.out.printf("\n");
 			}

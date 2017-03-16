@@ -36,7 +36,10 @@ public class ActionBase {
 		util = new ActionUtil();
 		doing = true;
 		WallE.acts.add(0, this);
-		new Monitor().start();
+//		new Monitor().start();
+		Monitor mon = new Monitor();
+		mon.setName("Action-" + getActName());
+		mon.start();
 		if(showMsg()) {
 			IDebug.PrintYellow(start);
 //			mc.player.addChatComponentMessage(start);
@@ -133,9 +136,7 @@ public class ActionBase {
 		util = new ActionUtil();
 		doing = true;
 		pause = false;
-		Monitor mon = new Monitor();
-		mon.setName("Action-" + getActName());
-		mon.start();
+		new Monitor().start();
 //		mc.player.addChatComponentMessage(resume);
 		IDebug.PrintYellow(resume);
 	}
@@ -155,6 +156,7 @@ public class ActionBase {
 	
 	protected class Monitor extends Thread {
 		public void run() {
+			this.setName("Action-" + getActName());
 			action();
 //			mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("§e§o【Wall-E】 " + WallE.acts.get(0).getActName() + "  pause: " + WallE.acts.get(0).pause + "  " + WallE.acts.isEmpty() + "  " + WallE.acts.size()));
 //			FMLClientHandler.instance().getClient().isGamePaused();

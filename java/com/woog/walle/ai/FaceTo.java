@@ -68,7 +68,6 @@ public class FaceTo {
 //		【膜蛤】叁只弱z和壹只渣z的701次故事
 //		我一个Math.atan2(-x, z)就搞定了
 		y = Math.toDegrees(Math.atan2(-x2, z2));
-//		System.out.println("▇目标角" + y + "    EYE " + APIPlayer.getEye() + "    " + APIPlayer.getFoot());
 		double deltax = 0, deltaz = 0;
 		double x3 = x2 + deltax;
 		double z3 = z2 + deltaz;

@@ -96,8 +96,8 @@ public class WalleConfig {
 	private void all2Default() {
 		properties.clear();
 		properties.put("friends", "woog");
-		properties.put("frie", "杀毒看僵尸");
-		properties.put("friend", String.valueOf(true));
-		properties.put("frien", String.valueOf(12345));
+//		properties.put("frie", "杀毒看僵尸");
+//		properties.put("friend", String.valueOf(true));
+//		properties.put("frien", String.valueOf(12345));
 	}
 }

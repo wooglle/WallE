@@ -7,7 +7,7 @@ public class HandleEventChat implements Runnable {
 		HandleEventChat handle = new HandleEventChat();
 		handle.setMessage(arg);
 		Thread thread = new Thread(handle);
-		thread.setName("WooG Chats Handle Thread");
+		thread.setName("Chats Handle Thread");
 		thread.start();
 	}
 	

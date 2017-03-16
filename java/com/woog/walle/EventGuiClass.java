@@ -24,18 +24,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EventGuiClass {
-	// 222.84.165.140 222.187.222.170
 	private Minecraft mc = Minecraft.getMinecraft();
-	// public ServerData server = new ServerData("cloudgap",
-	// "mc.cloudgap.net:25565");
-	// 115.231.219.218
-//	public ServerData server = new ServerData("cloudgap", "113.17.185.246:25565");
 	public ServerData server;
-	// public ServerData server = new ServerData("guojian",
-	// "115.231.219.218:25565");
-	// public ServerData server = new ServerData("cloudgap", "222.187.222.170",
-	// true);
-//	private final OldServerPinger pinger = new OldServerPinger();
 	
 	public static String guiName = null;
 	private static String oldName = "null";
@@ -49,14 +39,6 @@ public class EventGuiClass {
 	@SubscribeEvent
 	public void GuiEvent(GuiScreenEvent e) {
 		guiName = getGuiName(e.getGui());
-		// System.out.println("【】【】 " + mc.mcProfiler.getNameOfLastSection());
-		// if((mc == null) | mc.theWorld == null | (mc.thePlayer == null)) {
-		// if(!WallE.acts.isEmpty()) {
-		// WallE.acts.get(0).pause = true;你可以看后面那些凸出的方块，可能有岩浆
-		// }
-		// }
-		// mc.ingameGUI.getChatGUI().printChatMessage(new
-		// ChatComponentText("§e§o【Wall-E】❤❤❤" + n + "❤❤❤"+ guiName));
 		if (e.getGui().hashCode() != oldHash) {
 			System.out.println(" 【GUI】 guiName = " + guiName + "  oldName = " + oldName);
 			isChange = true;
@@ -72,7 +54,7 @@ public class EventGuiClass {
 			if (!WallE.acts.isEmpty()) {
 				WallE.acts.get(0).pause = true;
 			}
-			conect();
+//			conect();
 		} else if (guiName.equals("iplayer.GuiConnecting") && EventGuiClass.isChange) {
 			new interval().start();
 		} else if (guiName.equals("GuiChat")) {
@@ -137,7 +119,7 @@ public class EventGuiClass {
 			ServerData serTemp;
 			for(int i = 0; i < serList.countServers(); i++) {
 				serTemp = serList.getServerData(i);
-				if(serTemp.serverName.toLowerCase().equals("walle自动连接")) {
+				if(serTemp.serverName.toLowerCase().equals("walle")) {
 					this.server = serTemp;
 					break;
 				}
@@ -146,31 +128,27 @@ public class EventGuiClass {
 				return;
 			}
 		}
-//		/*
 		for (int i = 0; i < EventChatClass.lastTenChat.length; i++) {
 			EventChatClass.lastTenChat[i] = null;
 		}
 		if (!this.conecting) {
 			System.out.println(" 【GUI】 开始连接服务器。。。");
-			//
 			EventGuiClass.conecting = true;
 			try {
-				// System.out.println("【GUI】" +
-				// InetAddress.getByName("cloudgap.net"));
 				FMLClientHandler.instance().connectToServer(new GuiMainMenu(), server);
-				// FMLClientHandler.instance().connectToServer(mc.currentScreen,
-				// server);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// delay(3000);
 				// EventGuiClass.conecting = false;
 				new interval().start();
 			}
-
-			// FMLClientHandler.instance().connectToServer(mc.currentScreen,
-			// server);
 		}
-//		*/
+	}
+	
+	private static String getServerName() {
+		String temp = Minecraft.getMinecraft().getConnection().getNetworkManager().getRemoteAddress().toString();
+		String[] tem = temp.split("/");
+		return tem[0];
 	}
 
 	private void conectInterval(int interval) {
@@ -203,11 +181,12 @@ public class EventGuiClass {
 	}
 
 	private static String getPassWord() {
-		if (WallE.username == null) {
-			return null;
-		} else {
-			String str = WallE.config.getKey("psw@" + WallE.username.toLowerCase());
+		try {
+			String str = WallE.config.getKey(WallE.username.toLowerCase()  + "@" + getServerName());
 			return str == "none.." ? null : Crypto.deBase64(str);
+		}
+		catch(Exception e) {
+			return null;
 		}
 	}
 
@@ -216,14 +195,14 @@ public class EventGuiClass {
 			while (mc.ingameGUI.getChatGUI().getChatOpen()) {
 				delay(100);
 			}
-			delay(500);
+			delay(10);
 			if (!mc.ingameGUI.getChatGUI().getSentMessages().isEmpty()) {
 				for (int i = 0; i < mc.ingameGUI.getChatGUI().getSentMessages().size(); i++) {
 					String buff = (String) mc.ingameGUI.getChatGUI().getSentMessages().get(i).toString().toLowerCase();
 					if (buff.matches("^/l(ogin)?\\s+\\w+$") && EventChatClass.isLogined()) {
 						String buff2 = buff.substring(buff.indexOf(" ") + 1, buff.length());
 						EventGuiClass.password = buff.substring(buff.indexOf(" ") + 1, buff.length());
-						WallE.config.setKey("psw@" + WallE.username.toLowerCase(),
+						WallE.config.setKey(WallE.username.toLowerCase() + "@" + getServerName(),
 								Crypto.enBase64(EventGuiClass.password));
 //						mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("§e§o【Wall-E】 已获得登陆密码，密码已经保存!!!"));
 						IDebug.PrintYellow("已获得登陆密码，密码已经保存!!!");

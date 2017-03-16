@@ -61,7 +61,6 @@ public class EventChatClass
 	@SubscribeEvent
 	public void chatReceived(ClientChatReceivedEvent event) throws AWTException{
 		chat = event.getMessage().getUnformattedText().toLowerCase();
-		System.out.println("      " + chat);
 		if(last > 9) {
 			last -= 9;
 		}
@@ -75,6 +74,11 @@ public class EventChatClass
 		}else{
 //			HandleEventChat.main(chat);
 			handle();
+//			System.out.println("          " + Minecraft.getMinecraft().getConnection().getNetworkManager().getRemoteAddress());
+//			System.out.println("          " + Minecraft.getMinecraft().getConnection().getNetworkManager().getRemoteAddress().toString());
+			String temp = Minecraft.getMinecraft().getConnection().getNetworkManager().getRemoteAddress().toString();
+			String[] tem = temp.split("/");
+			System.out.println("          " + tem[0]);
 		}
 	}
 
@@ -380,22 +384,6 @@ public class EventChatClass
 			System.out.println(nc[0] + "   5  " + nc[1]); 
 		}
 		return nc;
-	}
-	
-	private String[] msg = {
-			"我又上线了，给服务器添麻烦了......",
-			"你的好友帅(DOU)比(BI)已上线~~~",
-			"路漫漫其修远兮，不如我们先玩会MC",
-			"我发誓再也不发誓不玩MC了",
-			"大家都让一下，下面有请楼下为我们装一个比O(∩_∩)O~",
-			"海		岛		商		店：/is warp 020",
-			"海		岛		商		店：/is warp yw",
-			"海		岛		商		店：/is warp lzd"};
-	
-	private void loggedMsg() {
-		if(isVIP()) {
-			mc.player.sendChatMessage(msg[(int)(Math.random() * msg.length)]);
-		}
 	}
 	
 	private boolean isGuest(String name) {
