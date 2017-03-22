@@ -1,25 +1,274 @@
 package com.woog.walle;
 
+import java.io.IOException;
+import java.util.Date;
+
+import com.woog.walle.additional.IDebug;
+import com.woog.walle.additional.LoginPassword;
+import com.woog.walle.ai.AIManager;
+import com.woog.walle.ai.ActionBase;
+import com.woog.walle.ai.DigChunk;
+import com.woog.walle.ai.Digging;
+import com.woog.walle.ai.Fishing;
+import com.woog.walle.ai.LogInIsland;
+import com.woog.walle.ai.WalkOneStep;
+
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.client.FMLClientHandler;
+
 public class HandleEventChat implements Runnable {
+	private static Minecraft mc = FMLClientHandler.instance().getClient();
+	private static String myName = FMLClientHandler.instance().getClient().getSession().getUsername().toLowerCase();
 	private String message;
-	
-	public static void main(String arg){
+	// private String chatem;
+	public ActionBase actionCurrent;
+	public AIManager ai;
+	// private String[] buff;
+	private String id;
+	private String info;
+	private long chattime0;
+	protected boolean isLogged = false;
+
+	public static void main(String arg) {
 		HandleEventChat handle = new HandleEventChat();
 		handle.setMessage(arg);
 		Thread thread = new Thread(handle);
 		thread.setName("Chats Handle Thread");
 		thread.start();
 	}
-	
+
+	private String Pertreat(String str) {
+		String b = null;
+		int n = str.indexOf("§");
+		if (n == 0) {
+			b = str.substring(2, str.length());
+			b = Pertreat(b);
+		} else if (n > 0) {
+			b = str.substring(0, n) + str.substring(n + 2, str.length());
+			b = Pertreat(b);
+		} else {
+			b = str;
+		}
+		return b;
+	}
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		System.out.println(this.message);
-//		System.runFinalization();
-//		System.gc();
+		 System.out.println("****111***" + message);
+		
+		if (message.matches("^.+/l.*(登|login).*$")) { // 非控制指令
+			if (!WallE.acts.isEmpty()) {
+				WallE.acts.get(0).pause = true;
+			}
+			String psw = LoginPassword.GetPassword();
+			if (psw != null) {
+				mc.player.sendChatMessage("/l " + psw);
+			} else {
+				IDebug.PrintYellow("没有获取到密码，请手动登陆!!!");
+			}
+		} else if (message.matches("^.*(已登录|成功登录|登陆成功|登录成功|logged|欢迎回来！).*$")) {
+			System.out.println("+++++++++++++++++++++++++++++登录");
+			if (LoginPassword.GetPassword() == null) {
+				LoginPassword.DetectAndSavePassword();
+			}
+			if (!WallE.acts.isEmpty()) {
+				WallE.acts.get(0).pause = true;
+			}
+			actionCurrent = new LogInIsland();
+		} else if (message.matches("^~+\\s+" + myName + "\\s+[\\u4E00-\\u9FA5]+~+$")) {
+			if (actionCurrent != null && (actionCurrent.getActName().equals("Automatic Log In Island")
+					| actionCurrent.getActName().equals("Automatic Walking to The Island"))) {
+				actionCurrent.doing = false;
+			}
+		} else if (message.matches(".*红包\\S+口令:\\s+\\[.*\\]")) {
+			// buff = message.split("\\[|\\]");
+			// sendMsg = buff[1].replace("\\S", "");
+			// mc.ingameGUI.getChatGUI().printChatMessage(new
+			// ChatComponentText("§e§o【Wall-E】" + sendMsg));
+			// mc.player.sendChatMessage("/qhb " + sendMsg);
+			// new SendMsg().start();
+		} else if (message.matches("^你.*")) {
+			if (message.matches("^你太累了暂时无法使用该技能.*")) {
+				// 你太累了暂时无法使用该技能.(1s)
+				String[] buf = message.split("\\(|s");
+				EventChatClass.skillTime = Integer.valueOf(buf[1]);
+			} else if (message.matches("你.*技能已经可以再次使用了！")) {
+				// 你的 超级碎石机 技能已经可以再次使用了！
+				EventChatClass.skillTime = 0;
+			}
+		} else if (message.matches("^\\*\\*.*已激活\\*\\*$")) {
+			// **你拿起了你的矿锄**
+			// **超级碎石机已激活**
+			EventChatClass.skillTime = 999;
+			// mc.ingameGUI.getChatGUI().printChatMessage(new
+			// ChatComponentText("§e§o【Wall-E】." + "已释放技能 。。。"));
+			IDebug.PrintYellow("已释放技能 。。。");
+		}else if (this.isPlayerChat()) {
+			String[] buff = this.getNameChat();
+			String chatName = buff[0];
+			String chatInfo = "";
+			for (int i = 1; i < buff.length; i++) {
+				chatInfo += buff[i];
+			}
+			System.out.println("+++++" + chatInfo);
+			System.out.println("-----" + chatInfo.substring(0, this.myName.length()));
+			if(chatName != null && this.isController(chatName)) { 	// 控制指令
+
+				if (chatInfo.substring(0, this.myName.length()).equals(myName)) { // 指令格式：name
+																					// +
+																					// 指令
+					if (chatInfo.matches("^.*(stop|停).*$")) {
+						if (this.actionCurrent != null) {
+							AIManager.doing = false;
+							actionCurrent.doing = false;
+						}
+						if (!ai.doing) {
+							ai.setDoing(false);
+						}
+						if (!chatName.equals(myName)) {
+							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，停止AI." + WallE.acts.get(0).getActName());
+						}
+					} else if (chatInfo.matches("^.*(ai).*$")) {
+						ai = new AIManager();
+						if (!chatName.equals(myName)) {
+							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开启AI！！！！！");
+						}
+					} else if (chatInfo.matches("^.*(fish|魚|鱼).*$")) {
+						actionCurrent = new Fishing();
+						if (!chatName.equals(myName)) {
+							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始钓鱼！！！！！");
+						}
+					} else if (chatInfo.matches("^.*(dig|挖|掘).*$")) {
+						actionCurrent = new DigChunk();
+					} else if (chatInfo.matches("^.*(cobble|石|stone).*$")) {
+						actionCurrent = new Digging();
+					} else if (chatInfo.matches("^disconnect$")) {
+						if (!chatName.equals(myName)) {
+							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始下线！！！！！");
+						}
+						mc.world.sendQuittingDisconnectingPacket();
+					} else if (chatInfo.matches("^test$")) {
+						System.out.println(APIPlayer.getFoot2().getRadiantSquare(APIPlayer.getFoot2(), 3));
+					} else if (chatInfo.matches("^eyeson$")) {
+						mc.player.sendChatMessage(APIChunk.getBlockEyesOn().toString());
+					} else if (chatInfo.matches(".*(hold|切换).*")) {
+						mc.player.inventory.changeCurrentItem(1);
+					} else if (chatInfo.matches(".*(walk|走).*")) {
+						new WalkOneStep();
+					} else if (chatInfo.matches("^.*(当前客户|chat\\s?guest).*$")) {
+						String guestsName = "";
+						for (int i = 0; i < EventChatClass.guests.size(); i++) {
+							Date da = new Date(EventChatClass.guests.get(i).time);
+							guestsName += EventChatClass.guests.get(i).name + "=" + da.getHours() + ":"
+									+ da.getMinutes() + ":" + da.getSeconds() + "  ";
+						}
+						mc.player.sendChatMessage("当前客户： " + guestsName);
+					} else if (!chatName.equals(this.myName)) { // 远程控制专用指令
+						if (chatInfo.matches("^r.*$")) {
+							mc.player.sendChatMessage(chatInfo.substring(1, chatInfo.length()));
+						} else if (chatInfo.matches("^.*(cancel|取消)(power|关|shut).*(off|机|down).*$")) {
+							try {
+								Runtime.getRuntime().exec("shutdown -a");
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，取消关机计划！！！！！");
+						} else if (!chatName.equals(this.myName)
+								&& chatInfo.matches("^.*(power|关|shut)(off|机|down).*$")) {
+							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，60秒后关闭计算机！！！！！");
+							try {
+								Runtime.getRuntime().exec("shutdown -s -t 60");
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}
+		} 
 	}
-	
-	public void setMessage(String arg){
-		this.message = arg;
+
+	private boolean isController(String name) {
+		if (name.equals(this.myName)) {
+			return true;
+		}
+		for (String maste : WallE.master) {
+			if (name.equals(maste)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isPlayerChat() {
+		// ❤Huier❤ <[Elite]dmc2002> 恩
+		// <[居民]why100> @dmc2002 真的么？？
+		// [[居民]foobar -> 我] walle woog shutdown
+		// [world]<[云隙]foobar> sadsd
+		// ❤3033877517❤ **Happy <[CEO]sxl> @jianb 你给我，我给你钱，我CEO，我骗你，你靠，我封号，我不值
+		// ☪56 [lv.49 ding_d] ♂ : 还好我附魔台弄得早 不然要累死。
+		// ^.*(<|\\[)\\W+\\w+(\\s\\W{2}\\s\\W)?(>|]) .*$
+		if (this.message.matches("^.*[<\\[]\\S*\\s?\\w+[>\\]].*")) {
+			System.out.println("+++++++++++++++++++++++++++++匹配   |" + message);
+			return true;
+		}
+		return false;
+	}
+
+	private String[] getNameChat() {
+		// [[居民]foobar -> 我] walle woog shutdown
+		// [[居民]foobar -> 我] wewe
+		String[] nc = new String[2];
+		nc[0] = null;
+		nc[1] = this.message;
+		if (this.message.matches("^\\[.*\\]?<\\[.*\\].*>.*$")) {
+			String[] tem = this.message.split("]|>\\s", 4);
+			nc[0] = tem[2];
+			nc[1] = tem[3];
+		} else if (this.message.matches("^(❤.*❤ )?<\\[.*\\]?\\w+>.*$")) {
+			String[] tem = this.message.split(">\\s|\\]");
+			nc[0] = tem[1];
+			nc[1] = tem[2];
+		} else if (this.message.matches("^(❤.*❤ )?(\\S+\\s)<\\[.*\\]?\\w+>.*$")) {
+			String[] tem = this.message.split(">\\s|\\]");
+			nc[0] = tem[1];
+			nc[1] = tem[2];
+		} else if (this.message.matches("^\\[(❤.*❤ )?\\[.*\\]\\w+ -> 我\\].*$")) {
+			String[] tem = this.message.split("\\[\\[\\S+\\]| -> 我\\]\\s");
+			nc[0] = tem[1];
+			nc[1] = tem[2];
+			// System.out.println(nc[0] + " 4 " + nc[1]);
+		} else if (this.message.matches("^\\[(❤.*❤ )?(\\S+\\s)\\[\\S+\\]\\w+ -> 我\\].*$")) {
+			String[] tem = this.message.split("\\[\\S+\\]| -> 我\\]\\s");
+			nc[0] = tem[1];
+			nc[1] = tem[2];
+		}
+		System.out.println(nc[0] + "   5  " + nc[1]);
+		return nc;
+	}
+
+	public static boolean isLogined() {
+		if (EventChatClass.lastTenChat[0] != null) {
+			for (int i = 0; i < EventChatClass.lastTenChat.length; i++) {
+				if (EventChatClass.lastTenChat[i] != null
+						&& EventChatClass.lastTenChat[i].matches("^.*(登陆成功|登录成功|logged).*$")) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private void delay(int x) {
+		try {
+			Thread.sleep(x);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setMessage(String arg) {
+		this.message = arg.replaceAll("§\\S", "");
 	}
 }

@@ -40,7 +40,7 @@ public class WallE {
 	public static String[] vip = { "woog", "sdsas", "mr_caigi", "lzd", "ck250", "ls", "panjy", "yunzhongyan",
 			"strideyouyou", "ann", "david", "fant", "st", "020", "ez12", "virginia", "reden", "touxin", "candy_1",
 			"mcfy" };
-	public static String master = "foobar";
+	public static String[] master = {"foobar"};
 	public static int[] dangerId = { 8, 9, 10, 11 };
 	public static int[] dangerStand = { 0, 81, 90, 119, 209 };
 	public static int minItemDamage = -5;

@@ -30,10 +30,10 @@ public class EventGuiClass {
 	public static String guiName = null;
 	private static String oldName = "null";
 	private static int oldHash = 0;
-	public static String password = getPassWord();
 	public static boolean conecting = false;
 	public static boolean passing = false;
 	private static boolean isChange = false;
+	public static boolean isDisconected = false;
 	private int n = 0;
 
 	@SubscribeEvent
@@ -54,39 +54,13 @@ public class EventGuiClass {
 			if (!WallE.acts.isEmpty()) {
 				WallE.acts.get(0).pause = true;
 			}
+			isDisconected = false;
 //			conect();
 		} else if (guiName.equals("iplayer.GuiConnecting") && EventGuiClass.isChange) {
+			isDisconected = true;
 			new interval().start();
-		} else if (guiName.equals("GuiChat")) {
-			if (this.password == null && !passing) {
-				passing = true;
-				new Password().start();
-			}
 		} else if (guiName.equals("inventory.GuiChest")) {
 			if (n == 200) {
-				// System.out.println(APIInventory.boxInventory);
-				// delay(10000);
-				// APIInventory.printInventory();
-
-				// ContainerChest con =
-				// (ContainerChest)mc.thePlayer.openContainer;
-				// System.out.println("【22】" + con.getLowerChestInventory());
-
-				// System.out.println("【22】" +
-				// mc.thePlayer.openContainer.getInventory());
-
-				// mc.ingameGUI.getChatGUI().printChatMessage(new
-				// ChatComponentText("§e§o【Wall-E】❤❤❤" + n + "❤❤❤"+ guiName));
-				// GuiScreen chest = (GuiScreen)e.gui;
-				// IInventory lower = (IInventory) IReflect.getField(chest,
-				// "lowerChestInventory");
-
-				// System.out.println("[name]" + lower.getName());
-
-				// mc.ingameGUI.getChatGUI().printChatMessage(new
-				// ChatComponentText("§e§o【Wall-E】❤❤❤" +
-				// lower.getDisplayName()));
-
 				// if(lower.getName().equals("§6§l服务器快捷切换")) {
 				// mc.ingameGUI.getChatGUI().printChatMessage(new
 				// ChatComponentText("§e§o【Wall-E】" + "afdsnfjdshfjs"));
@@ -144,22 +118,6 @@ public class EventGuiClass {
 			}
 		}
 	}
-	
-	private static String getServerName() {
-		String temp = Minecraft.getMinecraft().getConnection().getNetworkManager().getRemoteAddress().toString();
-		String[] tem = temp.split("/");
-		return tem[0];
-	}
-
-	private void conectInterval(int interval) {
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				EventGuiClass.conecting = false;
-				System.gc();
-			}
-		}, interval);
-	}
 
 	private class interval extends Thread {
 		@Override
@@ -178,39 +136,6 @@ public class EventGuiClass {
 			e.printStackTrace();
 		}
 		return "no";
-	}
-
-	private static String getPassWord() {
-		try {
-			String str = WallE.config.getKey(WallE.username.toLowerCase()  + "@" + getServerName());
-			return str == "none.." ? null : Crypto.deBase64(str);
-		}
-		catch(Exception e) {
-			return null;
-		}
-	}
-
-	private class Password extends Thread {
-		public void run() {
-			while (mc.ingameGUI.getChatGUI().getChatOpen()) {
-				delay(100);
-			}
-			delay(10);
-			if (!mc.ingameGUI.getChatGUI().getSentMessages().isEmpty()) {
-				for (int i = 0; i < mc.ingameGUI.getChatGUI().getSentMessages().size(); i++) {
-					String buff = (String) mc.ingameGUI.getChatGUI().getSentMessages().get(i).toString().toLowerCase();
-					if (buff.matches("^/l(ogin)?\\s+\\w+$") && EventChatClass.isLogined()) {
-						String buff2 = buff.substring(buff.indexOf(" ") + 1, buff.length());
-						EventGuiClass.password = buff.substring(buff.indexOf(" ") + 1, buff.length());
-						WallE.config.setKey(WallE.username.toLowerCase() + "@" + getServerName(),
-								Crypto.enBase64(EventGuiClass.password));
-//						mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("§e§o【Wall-E】 已获得登陆密码，密码已经保存!!!"));
-						IDebug.PrintYellow("已获得登陆密码，密码已经保存!!!");
-					}
-				}
-			}
-			passing = false;
-		}
 	}
 
 	private int getScale() {

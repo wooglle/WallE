@@ -10,6 +10,7 @@ import java.util.Random;
 
 import com.woog.walle.additional.Crypto;
 import com.woog.walle.additional.IDebug;
+import com.woog.walle.additional.LoginPassword;
 import com.woog.walle.ai.AIManager;
 import com.woog.walle.ai.ActionBase;
 import com.woog.walle.ai.DigChunk;
@@ -51,34 +52,40 @@ public class EventChatClass
 	private String info = "";
 	private String id = "";
 //	private ArrayList<String> guests = new ArrayList(20);
-	private ArrayList<NameTime> guests = new ArrayList(20);
+	public static ArrayList<NameTime> guests = new ArrayList(20);
 	private ArrayList<String> blackList = new ArrayList(20);
-	private int chattime = 0;
-	private static LinkedList<NameInfo> chats = new LinkedList();
+//	private int chattime = 0;
+	protected static LinkedList<NameInfo> chats = new LinkedList();
 	static long chattime0 = 0;
 	private boolean isCheckingGuests = false;
 	
 	@SubscribeEvent
 	public void chatReceived(ClientChatReceivedEvent event) throws AWTException{
 		chat = event.getMessage().getUnformattedText().toLowerCase();
+//		chat = event.getMessage().getFormattedText().toLowerCase();
 		if(last > 9) {
 			last -= 9;
 		}
 		lastTenChat[last] = chat;
 		last++;
 //		loggedMsg();
+//		System.out.println("          " + event.getMessage().getSiblings().get(0));
+		HandleEventChat.main(chat);
+		
+		
 		if(mc.isSingleplayer()) {
 //			HandleEventChat.main(chat);
 //			mc.player.sendChatMessage("123");
-			test();
+//			test();
 		}else{
 //			HandleEventChat.main(chat);
-			handle();
+//			handle();
+			
 //			System.out.println("          " + Minecraft.getMinecraft().getConnection().getNetworkManager().getRemoteAddress());
 //			System.out.println("          " + Minecraft.getMinecraft().getConnection().getNetworkManager().getRemoteAddress().toString());
-			String temp = Minecraft.getMinecraft().getConnection().getNetworkManager().getRemoteAddress().toString();
-			String[] tem = temp.split("/");
-			System.out.println("          " + tem[0]);
+//			String temp = Minecraft.getMinecraft().getConnection().getNetworkManager().getRemoteAddress().toString();
+//			String[] tem = temp.split("/");
+//			System.out.println("          " + tem[0]);
 		}
 	}
 
@@ -259,20 +266,18 @@ public class EventChatClass
 						mc.player.sendChatMessage("Wall-E 远程控制已执行命令： " + command);
 					}
 				}
-//				System.out.println("++++++++++" + guest + "====" + buff[1] + "======" +  buff[2]);
-//				System.out.println("++++++++++" + guest.equals(buff[1]) + "======" +  buff.length);
 			}
 		}else if(chatem.matches("^.+/login.*登.*$")) {
 			if(!WallE.acts.isEmpty()) {
 				WallE.acts.get(0).pause = true;
 			}
-			if(EventGuiClass.password != null) {
-				mc.player.sendChatMessage("/l " + EventGuiClass.password);
+			if(LoginPassword.GetPassword() != null) {
+				mc.player.sendChatMessage("/l " + LoginPassword.GetPassword());
 			}else{
 //				mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText() .app("§e§o【Wall-E】 没有获取密码，请手动登陆!!!"));
 				IDebug.PrintYellow("没有获取到密码，请手动登陆!!!");
 			}
-		}else if(chatem.matches("^.*(登陆成功|登录成功|logged|欢迎回来！).*$")) {
+		}else if(chatem.matches("^.*(成功登录|登陆成功|登录成功|logged|欢迎回来！).*$")) {
 			if(!WallE.acts.isEmpty()) {
 				WallE.acts.get(0).pause = true;
 			}
@@ -301,7 +306,6 @@ public class EventChatClass
 //			**你拿起了你的矿锄**
 //			**超级碎石机已激活**
 			EventChatClass.skillTime = 999;
-//			mc.player.sendChatMessage("已释放了超级碎石机技能 。。。");
 //			mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("§e§o【Wall-E】." + "已释放技能 。。。"));
 			IDebug.PrintYellow("已释放技能 。。。");
 		}else if(chatem.matches("已从.* 接收\\W*\\d.*")) {
@@ -517,7 +521,7 @@ public class EventChatClass
 		}
 	}
 	
-	private class NameTime {
+	class NameTime {
 		public String name;
 		public long time;
 		public NameTime(String name, long time) {
