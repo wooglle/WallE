@@ -19,7 +19,7 @@ public class Crypto {
 	}
 	
 	public static String enCrypt(String str) {
-		System.out.println("【Crypto】" + str);
+//		System.out.println("【Crypto】" + str);
 		String encode = enBase64(str);
 		String decode = deBase64(encode);
 		
@@ -93,7 +93,7 @@ public class Crypto {
 			throw new Error("miscalculated data length!");
 		try {
 			String s = new String(out, "ASCII");
-			System.out.println("【Crypto】" + s);
+//			System.out.println("【Crypto】" + s);
 			return s;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

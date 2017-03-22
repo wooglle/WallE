@@ -66,7 +66,8 @@ public class WalleConfig {
 	}
 	
 	public String getKey(String key) {
-		return properties.getProperty(key, "none..");
+		return properties.getProperty(key, null);
+//		return properties.getProperty(key, "none..");
 	}
 
 	private void iniConfig() {
