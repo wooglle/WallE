@@ -15,10 +15,8 @@ public class Digging extends ActionBase{
 	}
 	
 	@Override
-	public String[] getHolds() {
-		String[] holds = { "item.pickaxeDiamond", "item.pickaxeIron", "item.pickaxeStone"};
-//		String[] holds = {"item.pickaxeDiamond", "item.pickaxeIron"};
-		return holds;
+	public String getToolsKeyword() {
+		return "pickaxe";
 	}
 	
 	@Override

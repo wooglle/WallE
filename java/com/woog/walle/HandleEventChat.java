@@ -11,18 +11,23 @@ import com.woog.walle.ai.DigChunk;
 import com.woog.walle.ai.Digging;
 import com.woog.walle.ai.Fishing;
 import com.woog.walle.ai.LogInIsland;
+import com.woog.walle.ai.Stuffing;
 import com.woog.walle.ai.WalkOneStep;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.CPacketClickWindow;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class HandleEventChat implements Runnable {
 	private static Minecraft mc = FMLClientHandler.instance().getClient();
 	private static String myName = FMLClientHandler.instance().getClient().getSession().getUsername().toLowerCase();
+	public static ActionBase actionCurrent;
+	public static AIManager ai;
 	private String message;
 	// private String chatem;
-	public ActionBase actionCurrent;
-	public AIManager ai;
 	// private String[] buff;
 	private String id;
 	private String info;
@@ -55,7 +60,7 @@ public class HandleEventChat implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		 System.out.println("****111***" + message);
+//		 System.out.println("****111***" + message);
 		
 		if (message.matches("^.+/l.*(登|login).*$")) { // 非控制指令
 			if (!WallE.acts.isEmpty()) {
@@ -107,30 +112,52 @@ public class HandleEventChat implements Runnable {
 		}else if (this.isPlayerChat()) {
 			String[] buff = this.getNameChat();
 			String chatName = buff[0];
-			String chatInfo = "";
-			for (int i = 1; i < buff.length; i++) {
-				chatInfo += buff[i];
-			}
-			System.out.println("+++++" + chatInfo);
-			System.out.println("-----" + chatInfo.substring(0, this.myName.length()));
+			String chatInfo = buff[1];
+//			System.out.println(chatName + "     +++++       " + chatInfo);
+//			System.out.println("-----" + chatInfo.substring(0, this.myName.length()));
 			if(chatName != null && this.isController(chatName)) { 	// 控制指令
-
-				if (chatInfo.substring(0, this.myName.length()).equals(myName)) { // 指令格式：name
-																					// +
-																					// 指令
-					if (chatInfo.matches("^.*(stop|停).*$")) {
+				if (chatInfo.substring(0, this.myName.length()).equals(myName)) { // 指令格式：name + 指令
+					if (chatInfo.matches("^.*test.*$")) {
+//						new Stuffing();
+//						APIInventory.printInventory();
+						
+//						for(int i = 0; i < mc.player.inventory.mainInventory.size(); i++) {
+//							System.out.println( i + "       " + mc.player.inventory.mainInventory.get(i));
+//						}
+						
+						short short1 = mc.player.openContainer.getNextTransactionID(mc.player.inventory);
+						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
+								mc.player.inventoryContainer.windowId, 34, 8, ClickType.SWAP, 
+								APIInventory.getMainInventory().get(34), short1));
+						
+//						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
+//								mc.player.inventoryContainer.windowId, 33, 0, ClickType.PICKUP, 
+//								ItemStack.EMPTY, short1));
+//						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
+//								mc.player.inventoryContainer.windowId, 33, 1, ClickType.PICKUP, 
+//								APIInventory.getMainInventory().get(33), short1));
+//						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
+//								mc.player.inventoryContainer.windowId, 33, 0, ClickType.PICKUP, 
+//								ItemStack.EMPTY, short1));
+						
+//						NonNullList<ItemStack> is = APIInventory.getPacketInventory();
+//						for(int i = 0; i < is.size(); i++) {
+//							System.out.println("                " + is.get(i).getItem().getUnlocalizedName());
+//						}
+					} else if (chatInfo.matches("^.*(stop|停).*$")) {
+//						System.out.println("+++++++++++++++++++++++++++");
 						if (this.actionCurrent != null) {
 							AIManager.doing = false;
 							actionCurrent.doing = false;
 						}
-						if (!ai.doing) {
-							ai.setDoing(false);
+						if (this.ai != null && ai.doing) {
+							this.ai.setDoing(false);
 						}
 						if (!chatName.equals(myName)) {
 							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，停止AI." + WallE.acts.get(0).getActName());
 						}
 					} else if (chatInfo.matches("^.*(ai).*$")) {
-						ai = new AIManager();
+						this.ai = new AIManager();
 						if (!chatName.equals(myName)) {
 							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开启AI！！！！！");
 						}
@@ -156,6 +183,10 @@ public class HandleEventChat implements Runnable {
 						mc.player.inventory.changeCurrentItem(1);
 					} else if (chatInfo.matches(".*(walk|走).*")) {
 						new WalkOneStep();
+					} else if(chatInfo.matches("^.*light.*off$")) {
+						mc.gameSettings.gammaSetting = 1.0F;
+					} else if(chatInfo.matches("^.*light.*on$")) {
+						mc.gameSettings.gammaSetting = 100F;
 					} else if (chatInfo.matches("^.*(当前客户|chat\\s?guest).*$")) {
 						String guestsName = "";
 						for (int i = 0; i < EventChatClass.guests.size(); i++) {
@@ -210,7 +241,7 @@ public class HandleEventChat implements Runnable {
 		// ☪56 [lv.49 ding_d] ♂ : 还好我附魔台弄得早 不然要累死。
 		// ^.*(<|\\[)\\W+\\w+(\\s\\W{2}\\s\\W)?(>|]) .*$
 		if (this.message.matches("^.*[<\\[]\\S*\\s?\\w+[>\\]].*")) {
-			System.out.println("+++++++++++++++++++++++++++++匹配   |" + message);
+//			System.out.println("+++++++++++++++++++++++++++++匹配   |" + message);
 			return true;
 		}
 		return false;
@@ -222,7 +253,21 @@ public class HandleEventChat implements Runnable {
 		String[] nc = new String[2];
 		nc[0] = null;
 		nc[1] = this.message;
-		if (this.message.matches("^\\[.*\\]?<\\[.*\\].*>.*$")) {
+		if(this.message.matches("^<\\w+>\\s.*$")) {
+			String[] tem = this.message.split("<|>\\s", 3);
+//			for(String s : tem) {
+//				System.out.println("      1111       " + s);
+//			}
+			nc[0] = tem[1];
+			nc[1] = tem[2];
+		}else if(this.message.matches("^.*\\[\\S*\\s\\w+\\]\\s\\S\\s.*$")) { 
+			String[] tem = this.message.split("]|:|\\s", 7);
+//			for(String s : tem) {
+//				System.out.println("      222       " + s);
+//			}
+			nc[0] = tem[2];
+			nc[1] = tem[6];
+		}else if (this.message.matches("^\\[.*\\]?<\\[.*\\].*>.*$")) {
 			String[] tem = this.message.split("]|>\\s", 4);
 			nc[0] = tem[2];
 			nc[1] = tem[3];
@@ -244,7 +289,7 @@ public class HandleEventChat implements Runnable {
 			nc[0] = tem[1];
 			nc[1] = tem[2];
 		}
-		System.out.println(nc[0] + "   5  " + nc[1]);
+//		System.out.println(nc[0] + "   5  " + nc[1]);
 		return nc;
 	}
 

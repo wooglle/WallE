@@ -14,15 +14,13 @@ public class DigChunk extends ActionBase {
 	public static V3D blockDigging = null;
 	
 	@Override
-	public String[] getHolds() {
-		String[] holds = {"item.pickaxeDiamond", "item.pickaxeIron"};
-//		String[] holds = {"item.pickaxeDiamond", "item.pickaxeIron"};
-		return holds;
+	public String getToolsKeyword() {
+		return "pickaxe";
 	}
 	
 	@Override
 	public String getActName() {
-		return "Dig Blocks Nearby";
+		return "Dig Chunk";
 	}
 	
 	@Override

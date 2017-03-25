@@ -18,7 +18,7 @@ public class ActionBase {
 	private String suspend = getActName() + " has suspended!";
 	private String resume = getActName() + " has resume!";
 //	private Item[] holds = this.getHolds(); 
-	private String[] holds = this.getHolds();
+	private String toolsKeyword = this.getToolsKeyword();
 	
 	public static ActionUtil util;
 	
@@ -46,26 +46,32 @@ public class ActionBase {
 		}
 	}
 	
-	protected String[] getHolds() {
+	/**
+	 * 动作所使用工具的关键字
+	 * @return
+	 */
+	protected String getToolsKeyword() {
+		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
 	 * 手持物重装
 	 */
 	protected void holdStuff() {
-		while(this.condition() && this.canStuff()) {
-//			System.out.println("  " + mc.gameSettings.keyBindAttack.isKeyDown());
+		if(this.canStuff()) {
 			if(mc.gameSettings.keyBindAttack.isKeyDown()) {
 				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
-				new Stuffing(this.holds);
-				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
-			}else{
-				new Stuffing(this.holds);
 			}
-			delay(500);
+			while(this.condition() && this.canStuff()) {
+//				new Stuffing(this.holds);
+				new Stuffing(this.toolsKeyword);
+				delay(50);
+			}
+			if(!mc.gameSettings.keyBindAttack.isKeyDown()) {
+				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
+			}
 		}
-//		delay(1000);
 	}
 	
 	/**
@@ -77,10 +83,8 @@ public class ActionBase {
 			return true;
 		}else{
 			boolean flag = false;
-			for(int i = 0; i < this.holds.length; i++) {
-				if(APIInventory.getHeldItem().getItem().getUnlocalizedName().equals(this.holds[i])) {
-					flag = true;
-				}
+			if(APIInventory.getHeldItem().getItem().getUnlocalizedName().matches("^.*" + toolsKeyword + ".*")) {
+				flag = true;
 			}
 			if(flag && APIInventory.getHeldItemDamage() < WallE.minItemDamage) {
 				return true;

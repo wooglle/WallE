@@ -20,6 +20,8 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -76,6 +78,7 @@ public class WallE {
 		MinecraftForge.EVENT_BUS.register(new EventChatClass());
 		MinecraftForge.EVENT_BUS.register(new EventSoundClass());
 		MinecraftForge.EVENT_BUS.register(new EventGuiClass());
+//		MinecraftForge.EVENT_BUS.register(new EventServerTestClass());
 
 		// MinecraftForge.EVENT_BUS.register(new EventOfflineClass());
 		// System.out.println("客户端输出：" +

@@ -20,7 +20,7 @@ public class APIInventory {
 	
 	public static NonNullList<ItemStack> getMainInventory() {
 		if(mc.player == null) {
-			return null;
+			return NonNullList.create();
 		}else{
 			return mc.player.inventory.mainInventory;
 		}
@@ -45,14 +45,14 @@ public class APIInventory {
 	}
 	
 	/**
-	 * 查找背包中指定item的序号
+	 * 通过item的全名查找背包中指定item的序号
 	 * @param name Ex：item.fishingRod
 	 * @return
 	 */
 	public static int getItem(String name) {
 		NonNullList<ItemStack> is = getPacketInventory();
 		for(int i = 0; i < is.size(); i++) {
-			if(is.get(i) != null && is.get(i).getItem().getUnlocalizedName().equals(name)) {
+			if(is.get(i) != ItemStack.EMPTY && is.get(i).getItem().getUnlocalizedName().equals(name)) {
 				return i;
 			}
 		}
@@ -60,24 +60,62 @@ public class APIInventory {
 	}
 	
 	/**
-	 * 
+	 * 通过关键字查找背包中指定item的序号
+	 * @param name Ex：item.fishingRod
 	 * @return
 	 */
+	public static int getItemByKeyword(String keyword) {
+		NonNullList<ItemStack> is = getPacketInventory();
+		for(int i = 0; i < is.size(); i++) {
+			if(is.get(i) != ItemStack.EMPTY && is.get(i).getItem().getUnlocalizedName().matches("^.*" + keyword + ".*")) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**
+	 * 服务器上玩家背包及hotbar物品排列
+	 * @return 0-8： hotbar, 9-36：背包从上到下
+	 */
 	public static NonNullList<ItemStack> getPacketInventory() {
-		if(mc.player != null){
+		if(FMLClientHandler.instance().getClient().player != null){
+//			NonNullList<ItemStack> out = NonNullList.<ItemStack>withSize(45, ItemStack.EMPTY);
+//			for(int i = 5; i < 9; i++){
+//				out.set(i, mc.player.inventory.armorInventory.get(i - 5));
+//			}
+//			for(int i = 9; i < 45; i++){
+//				out.set(i, mc.player.inventory.mainInventory.get(i - 9));
+//			}
+			return mc.player.inventory.mainInventory;
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * 获取玩家全身物品
+	 * 0-4：合成台， 5-8：脚-头， 9-45: 9*4从上到下
+	 * @return
+	 */
+	public static NonNullList<ItemStack> getAllInventory() {
+		if(FMLClientHandler.instance().getClient().player != null){
 			NonNullList<ItemStack> out = NonNullList.<ItemStack>withSize(45, ItemStack.EMPTY);
 			for(int i = 0; i < 5; i++){
-				out.set(i, null);
+				out.set(i, ItemStack.EMPTY);
 			}
 			for(int i = 5; i < 9; i++){
 				out.set(i, mc.player.inventory.armorInventory.get(i - 5));
 			}
-			for(int i = 9; i < 36; i++){
-				out.set(i, mc.player.inventory.mainInventory.get(i));
+			for(int i = 9; i < 45; i++){
+				out.set(i, mc.player.inventory.mainInventory.get(i - 9));
 			}
-			for(int i = 36; i < 45; i++){
-				out.set(i, mc.player.inventory.mainInventory.get(i - 36));
-			}
+//			for(int i = 9; i < 36; i++){
+//				out.set(i, mc.player.inventory.mainInventory.get(i));
+//			}
+//			for(int i = 36; i < 45; i++){
+//				out.set(i, mc.player.inventory.mainInventory.get(i - 36));
+//			}
 			return out;
 		}else{
 			return null;

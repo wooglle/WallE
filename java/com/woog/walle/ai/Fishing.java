@@ -10,9 +10,8 @@ public class Fishing extends ActionBase{
 	}
 	
 	@Override
-	public String[] getHolds() {
-		String[] holds = {"item.fishingRod"};
-		return holds;
+	public String getToolsKeyword() {
+		return "fishingRod";
 	}
 	
 	@Override
