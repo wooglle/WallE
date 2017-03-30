@@ -15,7 +15,7 @@ public class WalkOneStep extends ActionBase{
 	
 	@Override
 	public String getActName() {
-		return "Automatic Step One";
+		return "Walk One Step";
 	}
 	
 	@Override

@@ -292,7 +292,7 @@ public class V3D {
 	 * 获取方块邻近面的中心点
 	 * @return
 	 */
-	public Vec3d getCenterOfSide() {
+	public Vec3d getCenterOfNearestSide() {
 		V3D diff = this.minus(APIPlayer.getFoot2());
 		Vec3d sideDiff = new Vec3d(this.x + 0.0D, this.y + 0.0D, this.z + 0.0D);
 		if(diff.x > 0) {

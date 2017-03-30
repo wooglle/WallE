@@ -102,7 +102,7 @@ public class FaceTo {
 	
 	private YawPitch getAngle(Vec3d target) {
 		V3D tar = new V3D(target);
-		Vec3d side = tar.getCenterOfSide();
+		Vec3d side = tar.getCenterOfNearestSide();
 		double yaw = 0, pitch = 0;
 		Vec3d look = mc.player.getLookVec();
 		double x0 = APIPlayer.getEye().xCoord;

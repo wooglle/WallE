@@ -23,6 +23,7 @@ public class AstarFindWay {
 		this.start = start;
 		this.end = end;
 		this.canBreak = canBreak;
+		System.out.printf("[S-E]	%s		%s	 \n",start, end);
 		double sToe = start.distance(end);
 		way  = new ArrayList((int)(sToe * 3));
 		closeList = new ArrayList((int)(sToe * 5));
@@ -41,7 +42,7 @@ public class AstarFindWay {
 			if(son.isEqual(end)) {
 				break;
 			}
-//			System.out.printf("[%d]	%s		%s	%s	%s \n",i,father, son,getId(son),isDanger(son));
+			System.out.printf("[%d]	%s		%s	%s	%s \n",i,father, son,getId(son),isDanger(son));
 		}
 	}
 	
@@ -112,8 +113,42 @@ public class AstarFindWay {
 		int x = target.x;
 		int y = target.y + 1;
 		int z = target.z;
-		if(getId(target) == 0 && getId(x, y, z) == 0) {
+//		if(getId(target) == 0 && getId(x, y, z) == 0) {
+//			return true;
+//		}
+		if(isNullBlock(target) && isNullBlock(new V3D(x, y, z))) {
 			return true;
+		}
+		return false;
+	}
+	
+	private boolean isNullBlock(V3D target) {
+		switch(getId(target)) {
+		case 0: return true;
+		case 31: return true;
+		case 32: return true;
+		case 37: return true;
+		case 38: return true;
+		case 39: return true;
+		case 40: return true;
+		case 50: return true;
+		case 55: return true;
+		case 59: return true;
+		case 63: return true;
+		case 66: return true;
+		case 68: return true;
+		case 69: return true;
+		case 70: return true;
+		case 72: return true;
+		case 75: return true;
+		case 76: return true;
+		case 77: return true;
+		case 83: return true;
+		case 115: return true;
+		case 141: return true;
+		case 142: return true;
+		case 171: return true;
+		case 175: return true;
 		}
 		return false;
 	}

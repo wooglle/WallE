@@ -9,10 +9,7 @@ import net.minecraftforge.fml.common.registry.GameData;
 public class RayTraceTarget {
 	private Minecraft mc = Minecraft.getMinecraft();
 	public Block targetBlock;
-	public double dis;
-	public int x;
-	public int y;
-	public int z;
+//	public double dis;
 	private boolean isDanger;
 	private V3D foothold = null;
 	public AstarFindWay Astar;
@@ -21,7 +18,7 @@ public class RayTraceTarget {
 	
 	public RayTraceTarget(int distance, boolean canBreak) {
 		WallE.way = null;
-		dis = (double)distance;
+		double dis = (double)distance;
 		Vec3d vec1 = mc.player.getPositionEyes(1.0F);
 		Vec3d vec2 = mc.player.getLook(1.0F);
 		Vec3d vec3 = vec1.addVector(vec2.xCoord * dis, vec2.yCoord * dis, vec2.zCoord * dis);
@@ -32,7 +29,7 @@ public class RayTraceTarget {
 			foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
 			Astar= new AstarFindWay(APIPlayer.getFoot2(), foothold, canBreak);
 		}else{
-			foothold = getFoothold(target.x, target.y, target.z);
+			foothold = getFoothold(target);
 			Astar= new AstarFindWay(APIPlayer.getFoot2(), foothold, canBreak);
 		}
 		if(!Astar.way.isEmpty()) {
@@ -45,36 +42,39 @@ public class RayTraceTarget {
 	}
 	
 	public RayTraceTarget(V3D targetV3D, boolean canBreak) {
+		System.out.println("现在1111:" + APIPlayer.getFoot2() + "  目标:" + targetV3D);
 		WallE.way = null;
-		dis = APIPlayer.getFoot2().distance(targetV3D);
-		Vec3d vec1 = mc.player.getPositionEyes(1.0F);
-		Vec3d vec2 = mc.player.getLook(1.0F);
-		Vec3d vec3 = vec1.addVector(vec2.xCoord * dis, vec2.yCoord * dis, vec2.zCoord * dis);
-		this.target = new V3D(vec3);
+		double dis = APIPlayer.getFoot2().distance(targetV3D);
+//		Vec3d vec1 = mc.player.getPositionEyes(1.0F);
+//		Vec3d vec2 = mc.player.getLook(1.0F);
+//		Vec3d vec3 = vec1.addVector(vec2.xCoord * dis, vec2.yCoord * dis, vec2.zCoord * dis);
+		this.target = targetV3D;
 		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
 		this.isDanger = this.isDanger(target);
 		if(dis < 2.0D) {
 			foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
 			Astar= new AstarFindWay(APIPlayer.getFoot2(), foothold, canBreak);
 		}else{
-			foothold = getFoothold(target.x, target.y, target.z);
+			foothold = getFoothold(target);
 			Astar= new AstarFindWay(APIPlayer.getFoot2(), foothold, canBreak);
 		}
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-			for(int i = 0; i < Astar.way.size(); i++) {
-			}
-//			System.out.println("现在:" + new V3D(vec1) + "  目标:" + v3d1 + "  落脚点:" + foothold);
+//			for(int i = 0; i < Astar.way.size(); i++) {
+//			}
+			System.out.println("现在2222:" + APIPlayer.getFoot2() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	
 	private V3D[] foots = new V3D[13];
 	private double[] socre = new double[13];
-	private V3D getFoothold(int x, int y, int z) {
+	private V3D getFoothold(V3D targetPos) {
+		int x = targetPos.x;
+		int y = targetPos.y;
+		int z = targetPos.z;
 		double max = -9999.0D;
 		int s = 1;
 		foots[0] = new V3D(mc.player.getPositionEyes(1.0F)).minus(new V3D(0, 1, 0));
-		System.out.println(foots[0]);
 		foots[1] = new V3D(x - 1, y - 1, z);
 		foots[2] = new V3D(x + 1, y - 1, z);
 		foots[3] = new V3D(x, y - 1, z - 1);
@@ -88,7 +88,6 @@ public class RayTraceTarget {
 		foots[11] = new V3D(x , y - 3, z);
 		foots[12] = new V3D(x , y - 4, z);
 		int firsty = getFirstFootholdy(foots[0]);
-		System.out.printf("%s", this.dis);
 		for(int i = 1; i < foots.length; i++) {
 			socre[i] = socre[i] - Math.abs(foots[i].y - foots[0].y) * 10;
 			if(foots[i].y == firsty) {
@@ -179,7 +178,7 @@ public class RayTraceTarget {
 	
 	public void info() {		
 		System.out.printf("【RayTraceTarget】  [%s]    now: (%s), target: (%s), foothold: (%s)\n", 
-				this.dis, APIPlayer.getFoot2().toString(), this.target.toString(), this.foothold.toString());
+				APIPlayer.getFoot2().toString(), this.target.toString(), this.foothold.toString());
 		if(!WallE.way.isEmpty()) {
 			for(int i = 0; i < Astar.way.size(); i++) {
 				System.out.printf("%s; ",Astar.way.get(i));

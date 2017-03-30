@@ -2,7 +2,7 @@ package com.woog.walle.ai;
 
 import com.woog.walle.V3D;
 
-public class WalkOnWay {
+public class WalkOnWay extends ActionBase{
 	
 	/**
 	 * 按照路线行走， 目光朝向下一步

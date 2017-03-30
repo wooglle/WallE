@@ -10,8 +10,11 @@ import com.woog.walle.ai.ActionBase;
 import com.woog.walle.ai.DigChunk;
 import com.woog.walle.ai.Digging;
 import com.woog.walle.ai.Fishing;
+import com.woog.walle.ai.KeepOnWatch;
 import com.woog.walle.ai.LogInIsland;
 import com.woog.walle.ai.Stuffing;
+import com.woog.walle.ai.Walk;
+import com.woog.walle.ai.Walk2There;
 import com.woog.walle.ai.WalkOneStep;
 
 import net.minecraft.client.Minecraft;
@@ -60,7 +63,6 @@ public class HandleEventChat implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-//		 System.out.println("****111***" + message);
 		
 		if (message.matches("^.+/l.*(登|login).*$")) { // 非控制指令
 			if (!WallE.acts.isEmpty()) {
@@ -102,6 +104,20 @@ public class HandleEventChat implements Runnable {
 				// 你的 超级碎石机 技能已经可以再次使用了！
 				EventChatClass.skillTime = 0;
 			}
+		} else if (message.matches("^.*kq1 is resetting.*$")) {
+			// **你拿起了你的矿锄**
+			// **超级碎石机已激活**
+//			100, 4, -1837
+			if (!WallE.acts.isEmpty()) {
+				WallE.acts.get(0).pause = true;
+				WallE.way.clear();
+				new RayTraceTarget(new V3D(100, 4, -1837), false);
+				Walk2There w2t = new Walk2There();
+				actionCurrent = w2t;
+				WallE.acts.add(w2t);
+			}
+			// mc.ingameGUI.getChatGUI().printChatMessage(new
+			// ChatComponentText("§e§o【Wall-E】." + "已释放技能 。。。"));
 		} else if (message.matches("^\\*\\*.*已激活\\*\\*$")) {
 			// **你拿起了你的矿锄**
 			// **超级碎石机已激活**
@@ -125,10 +141,13 @@ public class HandleEventChat implements Runnable {
 //							System.out.println( i + "       " + mc.player.inventory.mainInventory.get(i));
 //						}
 						
-						short short1 = mc.player.openContainer.getNextTransactionID(mc.player.inventory);
-						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
-								mc.player.inventoryContainer.windowId, 34, 8, ClickType.SWAP, 
-								APIInventory.getMainInventory().get(34), short1));
+//						new RayTraceTarget(new V3D(100, 5, -1837), false);
+						new RayTraceTarget(new V3D(-990, 28, -1048), false);
+						Walk2There w2t = new Walk2There();
+						actionCurrent = w2t;
+//						WallE.acts.add(w2t);
+						
+//						new KeepOnWatch(new V3D(-940, 26, -1015), 1);
 						
 //						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
 //								mc.player.inventoryContainer.windowId, 33, 0, ClickType.PICKUP, 
@@ -170,14 +189,12 @@ public class HandleEventChat implements Runnable {
 						actionCurrent = new DigChunk();
 					} else if (chatInfo.matches("^.*(cobble|石|stone).*$")) {
 						actionCurrent = new Digging();
-					} else if (chatInfo.matches("^disconnect$")) {
+					} else if (chatInfo.matches("^.*disconnect$")) {
 						if (!chatName.equals(myName)) {
 							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始下线！！！！！");
 						}
 						mc.world.sendQuittingDisconnectingPacket();
-					} else if (chatInfo.matches("^test$")) {
-						System.out.println(APIPlayer.getFoot2().getRadiantSquare(APIPlayer.getFoot2(), 3));
-					} else if (chatInfo.matches("^eyeson$")) {
+					} else if (chatInfo.matches("^.*eyeson$")) {
 						mc.player.sendChatMessage(APIChunk.getBlockEyesOn().toString());
 					} else if (chatInfo.matches(".*(hold|切换).*")) {
 						mc.player.inventory.changeCurrentItem(1);

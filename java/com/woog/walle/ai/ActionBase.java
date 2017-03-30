@@ -66,7 +66,7 @@ public class ActionBase {
 			while(this.condition() && this.canStuff()) {
 //				new Stuffing(this.holds);
 				new Stuffing(this.toolsKeyword);
-				delay(50);
+				delay(100);
 			}
 			if(!mc.gameSettings.keyBindAttack.isKeyDown()) {
 				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
@@ -162,11 +162,6 @@ public class ActionBase {
 		public void run() {
 			this.setName("Action-" + getActName());
 			action();
-//			mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("§e§o【Wall-E】 " + WallE.acts.get(0).getActName() + "  pause: " + WallE.acts.get(0).pause + "  " + WallE.acts.isEmpty() + "  " + WallE.acts.size()));
-//			FMLClientHandler.instance().getClient().isGamePaused();
-//			delay(1500);
-//			mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("§e§o【Wall-E】 " + WallE.acts.get(0).getActName() + "  pause: " + WallE.acts.get(0).pause + "  " + WallE.acts.isEmpty() + "  " + WallE.acts.size()));
-//			System.out.println("【infobase】 " + WallE.acts.get(0).getActName() + "  " + WallE.acts.get(0).pause);
 			if(!WallE.acts.isEmpty()) {
 				if(mc.world != null & !pause) {
 //					mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("§e§o【Wall-E】 " + WallE.acts.get(0).getActName() + "已被删除"));
@@ -182,7 +177,7 @@ public class ActionBase {
 							WallE.acts.get(0).goOn();
 						}
 					}
-				}else if(WallE.acts.size() > 1){
+				}else if(WallE.acts.size() > 1) {
 					pause = true;
 					util.allDefault();
 //					mc.player.addChatComponentMessage(suspend);
