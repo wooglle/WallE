@@ -44,7 +44,7 @@ public class Walk
 			for(int i = 0; i < n; i++) {
 //				System.out.println("~~~~~ " + WallE.way.size() + " " + WallE.way.get(0) + "   " + new V3D(APIPlayer.getFoot()));
 //				new FaceTo(WallE.way.get(0), 2);
-				watch.pos = WallE.way.get(0);
+				watch.SetPos(WallE.way.get(0));
 				forward();
 				
 				while(true) {

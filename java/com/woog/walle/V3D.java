@@ -88,7 +88,7 @@ public class V3D {
 		return phase;
 	}
 	
-	public ArrayList targetPhaseList() {
+	public ArrayList<V3D> targetPhaseList() {
 		int x = this.x;
 		int y = this.y;
 		int z = this.z;
@@ -103,6 +103,21 @@ public class V3D {
 		return phase;
 	}
 	
+	public ArrayList<Vec3d> targetPhaseCenterList() {
+		int x = this.x;
+		int y = this.y;
+		int z = this.z;
+		ArrayList<Vec3d> phase = new ArrayList();
+		phase.add(new Vec3d(x + 0.5, y + 0.5, z + 0.5));
+		phase.add(new Vec3d(x - 0.5, y + 0.5, z + 0.5));
+		phase.add(new Vec3d(x + 1.5, y + 0.5, z + 0.5));
+		phase.add(new Vec3d(x + 0.5, y + 0.5, z - 0.5));
+		phase.add(new Vec3d(x + 0.5, y + 0.5, z + 1.5));
+		phase.add(new Vec3d(x + 0.5, y - 0.5, z + 0.5));
+		phase.add(new Vec3d(x + 0.5, y + 1.5, z + 0.5));
+		return phase;
+	}
+	
 	public double distance(V3D b) {
 		double ax = (double)this.x;
 		double ay = (double)this.y;
@@ -110,6 +125,16 @@ public class V3D {
 		double bx = (double)b.x;
 		double by = (double)b.y;
 		double bz = (double)b.z;
+		return Math.sqrt(Math.pow(ax - bx, 2.0D) + Math.pow(ay - by, 2.0D) + Math.pow(az - bz, 2.0D));
+	}
+	
+	public double centerDistance(V3D b) {
+		double ax = (double)this.x + 0.5D;
+		double ay = (double)this.y + 0.5D;
+		double az = (double)this.z + 0.5D;
+		double bx = (double)b.x + 0.5D;
+		double by = (double)b.y + 0.5D;
+		double bz = (double)b.z + 0.5D;
 		return Math.sqrt(Math.pow(ax - bx, 2.0D) + Math.pow(ay - by, 2.0D) + Math.pow(az - bz, 2.0D));
 	}
 	

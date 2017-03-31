@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.registry.GameData;
 
 public class AstarFindWay {
@@ -30,18 +31,18 @@ public class AstarFindWay {
 		V3D current = start;					//初始化current路点
 		V3D father,son;	
 		father = current;					//father路点设置为current路点
-		for(int i = 0; i < 50; i++) {
+		for(int i = 0; i < 200; i++) {		//路线长度限制200步
 			son = getRightPoint(current, father);
 			way.add(son);
 			closeList.add(son);
 			if(i > 1) {
 				father = way.get(way.size() - 2);
 			}
-//			System.out.printf(" %s	", current);
-			current = son;
-			if(son.isEqual(end)) {
+			if(current.isEqual(end)) {
 				break;
 			}
+			current = son;
+//			System.out.printf("\n %s	 %s", current, end);
 			System.out.printf("[%d]	%s		%s	%s	%s \n",i,father, son,getId(son),isDanger(son));
 		}
 	}
@@ -49,7 +50,7 @@ public class AstarFindWay {
 	private V3D getRightPoint(V3D current, V3D father) {
 		int right = 0;
 		V3D buff;
-		double refer = current.distance(end);
+		double refer = current.centerDistance(end);
 		ArrayList<V3D> list = new ArrayList(7);
 		ArrayList<V3D> list1 = new ArrayList(7);
 		ArrayList<V3D> list2 = new ArrayList(7);
@@ -73,14 +74,17 @@ public class AstarFindWay {
 		}
 		for(int i = 0; i < list2.size(); i++) {
 			buff = list2.get(i);
+//			System.out.println("   12    " + buff + "   " + !isDanger(buff) + "   " +
+//					!buff.isEqual(current) + "   " + !buff.isEqual(father));
 			if(!isDanger(buff) && !buff.isEqual(current) && !buff.isEqual(father)) {
 				list.add(list2.get(i));
 			}
 		}
-		double[] score = new double[list.size()];
+		double[] score = new double[list.size()];	//评价函数
 		for(int i = 0; i < list.size(); i++) {
-			score[i] = 1 / list.get(i).distance(end);
-//			score[i] = (refer / list.get(i).distance(end)) * 10 * Math.abs(Math.sin(current.angle(end)));
+//			System.out.println("   22    " + list.get(i) + "  " + end + "   " + list.get(i).centerDistance(end));
+			score[i] = 1 / list.get(i).centerDistance(end);
+//			score[i] = (refer / list.get(i).centerDistance(end)) * 10 * Math.abs(Math.sin(current.angle(end)));
 //			if(isEmpty(list.get(i))) {
 //				score[i] = score[i] + current.distance(end) / start.distance(end);
 //			}
@@ -89,8 +93,9 @@ public class AstarFindWay {
 //			}
 //			score[i] = score[i] ;
 		}
-		double buf = -99.0D;
-		for(int i = 0; i < score.length; i++) {
+		double buf = -9999999.0D;
+		for(int i = 0; i < score.length; i++) {	//取评价值最大的脚标
+//			System.out.printf("【%s】	%s %s \n", buf, score[i], list.get(i));
 			if(score[i] > buf) {
 				buf = score[i];
 				right = i;
@@ -117,6 +122,7 @@ public class AstarFindWay {
 //			return true;
 //		}
 		if(isNullBlock(target) && isNullBlock(new V3D(x, y, z))) {
+			System.out.println("isNull: " + target + "    " + x + " " + y + " " + z);
 			return true;
 		}
 		return false;

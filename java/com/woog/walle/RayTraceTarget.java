@@ -35,7 +35,7 @@ public class RayTraceTarget {
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
 			for(int i = 0; i < Astar.way.size(); i++) {
-//				System.out.println("【" + i + "】" + "  " + Astar.way.get(i));
+				System.out.println("【" + i + "】" + "  " + Astar.way.get(i));
 			}
 //			System.out.println("现在:" + new V3D(vec1) + "  目标:" + v3d1 + "  落脚点:" + foothold);
 		}
@@ -44,7 +44,7 @@ public class RayTraceTarget {
 	public RayTraceTarget(V3D targetV3D, boolean canBreak) {
 		System.out.println("现在1111:" + APIPlayer.getFoot2() + "  目标:" + targetV3D);
 		WallE.way = null;
-		double dis = APIPlayer.getFoot2().distance(targetV3D);
+		double dis = APIPlayer.getFoot2().centerDistance(targetV3D);
 //		Vec3d vec1 = mc.player.getPositionEyes(1.0F);
 //		Vec3d vec2 = mc.player.getLook(1.0F);
 //		Vec3d vec3 = vec1.addVector(vec2.xCoord * dis, vec2.yCoord * dis, vec2.zCoord * dis);
@@ -99,12 +99,12 @@ public class RayTraceTarget {
 				socre[i] = socre[i] + Math.pow(10, num + 1) ;
 			}
 			socre[i] = socre[i] - foots[0].distance(foots[i]);
-			System.out.printf("	%s", socre[i]);
+//			System.out.printf("	%s", socre[i]);
 //			if(i % 5 == 0) {
 //				System.out.printf(" \n");
 //			}
 		}
-		System.out.printf(" \n");
+//		System.out.printf(" \n");
 		for(int i = 1; i < socre.length; i++) {
 			if(socre[i] > max) {
 				s = i;

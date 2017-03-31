@@ -8,7 +8,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class KeepOnWatch {
 	public static boolean isKeep = false;
-	public static V3D pos = null;
+	private static V3D pos = null;
 	private int code = 0;
 	
 	/**
@@ -83,6 +83,10 @@ public class KeepOnWatch {
 			Vec3d p = this.pos.getCenter();
 			return new Vec3d(p.xCoord, APIPlayer.posY() + 3.5D, p.zCoord);
 		}
+	}
+	
+	public void SetPos(V3D pos) {
+		this.pos = pos;
 	}
 	
 	private class Keep extends Thread{

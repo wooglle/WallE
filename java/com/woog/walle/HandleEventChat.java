@@ -16,6 +16,7 @@ import com.woog.walle.ai.Stuffing;
 import com.woog.walle.ai.Walk;
 import com.woog.walle.ai.Walk2There;
 import com.woog.walle.ai.WalkOneStep;
+import com.woog.walle.chatrobot.HttpRequest;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.ClickType;
@@ -109,12 +110,20 @@ public class HandleEventChat implements Runnable {
 			// **超级碎石机已激活**
 //			100, 4, -1837
 			if (!WallE.acts.isEmpty()) {
-				WallE.acts.get(0).pause = true;
-				WallE.way.clear();
-				new RayTraceTarget(new V3D(100, 4, -1837), false);
-				Walk2There w2t = new Walk2There();
-				actionCurrent = w2t;
-				WallE.acts.add(w2t);
+				new Thread(){public void run() {
+					try {
+						WallE.acts.get(0).pause = true;
+						sleep(3000);
+						WallE.way.clear();
+						new RayTraceTarget(new V3D(99, 4, -1838), false);
+//						Walk2There w2t = new Walk2There();
+						actionCurrent = new Walk2There();
+//						WallE.acts.add(w2t);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}}.start();
 			}
 			// mc.ingameGUI.getChatGUI().printChatMessage(new
 			// ChatComponentText("§e§o【Wall-E】." + "已释放技能 。。。"));
@@ -122,14 +131,17 @@ public class HandleEventChat implements Runnable {
 			// **你拿起了你的矿锄**
 			// **超级碎石机已激活**
 			EventChatClass.skillTime = 999;
-			// mc.ingameGUI.getChatGUI().printChatMessage(new
+			// mc.ingameGUI.getChatGUI().printChatMessage(new 谁能发一条信息？：woog你好
 			// ChatComponentText("§e§o【Wall-E】." + "已释放技能 。。。"));
 			IDebug.PrintYellow("已释放技能 。。。");
-		}else if (this.isPlayerChat()) {
+		} else if (this.isPlayerChat()) {
 			String[] buff = this.getNameChat();
 			String chatName = buff[0];
 			String chatInfo = buff[1];
 //			System.out.println(chatName + "     +++++       " + chatInfo);
+			if(chatInfo.matches("^\\w+$")) {
+				return;
+			}
 //			System.out.println("-----" + chatInfo.substring(0, this.myName.length()));
 			if(chatName != null && this.isController(chatName)) { 	// 控制指令
 				if (chatInfo.substring(0, this.myName.length()).equals(myName)) { // 指令格式：name + 指令
@@ -140,11 +152,11 @@ public class HandleEventChat implements Runnable {
 //						for(int i = 0; i < mc.player.inventory.mainInventory.size(); i++) {
 //							System.out.println( i + "       " + mc.player.inventory.mainInventory.get(i));
 //						}
-						
-//						new RayTraceTarget(new V3D(100, 5, -1837), false);
-						new RayTraceTarget(new V3D(-990, 28, -1048), false);
-						Walk2There w2t = new Walk2There();
-						actionCurrent = w2t;
+						WallE.way.clear();
+						new RayTraceTarget(new V3D(99, 4, -1837), false);
+//						new RayTraceTarget(new V3D(-990, 28, -1048), false);
+//						Walk2There w2t = new Walk2There();
+//						actionCurrent = new Walk2There();
 //						WallE.acts.add(w2t);
 						
 //						new KeepOnWatch(new V3D(-940, 26, -1015), 1);
@@ -233,6 +245,15 @@ public class HandleEventChat implements Runnable {
 						}
 					}
 				}
+			} else if(chatName != null && chatInfo.length() > myName.length() && chatInfo.substring(0, this.myName.length()).equals(myName)) {
+//				&& chatInfo.substring(0, this.myName.length()).equals(myName)
+//				专业智能被调戏型聊天机器人，可同时多人聊天, 现在正免费测试中。。。
+//				System.out.println(chatName + "     +++++       " + chatInfo);
+//				String msg = chatInfo.substring(myName.length(), chatInfo.length() - myName.length());
+				String msg = chatInfo;
+				HttpRequest http = new HttpRequest(msg, chatName);
+				String str = http.answer.replace("<br>", "");
+				mc.player.sendChatMessage("@" + chatName + "，" + str);
 			}
 		} 
 	}

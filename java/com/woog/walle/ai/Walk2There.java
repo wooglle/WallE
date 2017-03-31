@@ -36,26 +36,46 @@ public class Walk2There extends ActionBase{
 	@Override
 	public void action() {
 		int n = WallE.way.size();
+		if(n == 0) {
+			return;
+		}
 		V3D current = null;
 		
-		for(int i = 0; i < n; i++) {
-//			System.out.println("   " + i + "           " + WallE.way.get(0));
-			KeepOnWatch watch = new KeepOnWatch(WallE.way.get(0), 0);
-//			watch.pos = WallE.way.get(0);
+		KeepOnWatch watch = new KeepOnWatch(WallE.way.get(0), 0);
+		while(this.condition() && !WallE.way.isEmpty()) {
+			watch.SetPos(WallE.way.get(0));
 			forward();
-			
-			while(true) {
+			while(this.condition()) {
 				if(mc.player.getEntityBoundingBox().isVecInside(WallE.way.get(0).toVec3())) {
 					System.out.println("bounding====================");
 				}
+				delay(50);
+				System.out.println("   " + WallE.way.get(0) + "    " + APIPlayer.getFoot());
 				if(WallE.way.get(0).isEqual(new V3D(APIPlayer.getFoot()))) {
 					forwardstop();
 					WallE.way.remove(0);
 					break;
 				}
 			}
-			watch.isKeep = false;
 		}
-		util.allDefault();
+//		for(int i = 0; i < n; i++) {
+//			watch.SetPos(WallE.way.get(0));
+//			forward();
+//			while(this.condition()) {
+//				if(mc.player.getEntityBoundingBox().isVecInside(WallE.way.get(0).toVec3())) {
+//					System.out.println("bounding====================");
+//				}
+//				if(WallE.way.get(0).isEqual(new V3D(APIPlayer.getFoot()))) {
+//					forwardstop();
+//					WallE.way.remove(0);
+//					break;
+//				}
+//			}
+//			if(!this.condition()) {
+//				return;
+//			}
+//		}
+		watch.isKeep = false;
+//		util.allDefault();
 	}
 }
