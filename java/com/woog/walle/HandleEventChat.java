@@ -176,7 +176,6 @@ public class HandleEventChat implements Runnable {
 //							System.out.println("                " + is.get(i).getItem().getUnlocalizedName());
 //						}
 					} else if (chatInfo.matches("^.*(stop|停).*$")) {
-//						System.out.println("+++++++++++++++++++++++++++");
 						if (this.actionCurrent != null) {
 							AIManager.doing = false;
 							actionCurrent.doing = false;
@@ -245,16 +244,13 @@ public class HandleEventChat implements Runnable {
 						}
 					}
 				}
-			} else if(chatName != null && chatInfo.length() > myName.length() && chatInfo.substring(0, this.myName.length()).equals(myName)) {
-//				&& chatInfo.substring(0, this.myName.length()).equals(myName)
-//				专业智能被调戏型聊天机器人，可同时多人聊天, 现在正免费测试中。。。
-//				System.out.println(chatName + "     +++++       " + chatInfo);
-//				String msg = chatInfo.substring(myName.length(), chatInfo.length() - myName.length());
-				String msg = chatInfo;
-				HttpRequest http = new HttpRequest(msg, chatName);
-				String str = http.answer.replace("<br>", "");
-				mc.player.sendChatMessage("@" + chatName + "，" + str);
-			}
+			} 
+//			else if(chatName != null && chatInfo.length() > myName.length() && chatInfo.substring(0, this.myName.length()).equals(myName)) {
+//				String msg = chatInfo;
+//				HttpRequest http = new HttpRequest(msg, chatName);
+//				String str = http.answer.replace("<br>", "");
+//				mc.player.sendChatMessage("@" + chatName + "，" + str);
+//			}
 		} 
 	}
 

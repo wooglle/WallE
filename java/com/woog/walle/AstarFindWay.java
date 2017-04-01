@@ -42,12 +42,11 @@ public class AstarFindWay {
 				break;
 			}
 			current = son;
-//			System.out.printf("\n %s	 %s", current, end);
 			System.out.printf("[%d]	%s		%s	%s	%s \n",i,father, son,getId(son),isDanger(son));
 		}
 	}
 	
-	private V3D getRightPoint(V3D current, V3D father) {
+	private V3D getRightPoint(V3D current, V3D father) {	//下一路点选取函数
 		int right = 0;
 		V3D buff;
 		double refer = current.centerDistance(end);
@@ -74,8 +73,6 @@ public class AstarFindWay {
 		}
 		for(int i = 0; i < list2.size(); i++) {
 			buff = list2.get(i);
-//			System.out.println("   12    " + buff + "   " + !isDanger(buff) + "   " +
-//					!buff.isEqual(current) + "   " + !buff.isEqual(father));
 			if(!isDanger(buff) && !buff.isEqual(current) && !buff.isEqual(father)) {
 				list.add(list2.get(i));
 			}
@@ -177,11 +174,12 @@ public class AstarFindWay {
 					return true;
 				}
 			}else{
-				if(id != 0) {
+				if(!isNullBlock(target)) {
 					return true;
 				}
 			}
 		}
+		
 		return false;
 	}
 	
