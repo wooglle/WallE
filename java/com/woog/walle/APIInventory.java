@@ -66,8 +66,9 @@ public class APIInventory {
 	 */
 	public static int getItemByKeyword(String keyword) {
 		NonNullList<ItemStack> is = getPacketInventory();
-		for(int i = 0; i < is.size(); i++) {
-			if(is.get(i) != ItemStack.EMPTY && is.get(i).getItem().getUnlocalizedName().matches("^.*" + keyword + ".*")) {
+//		System.out.println("    " + is.get(0).getItem().getUnlocalizedName().matches("^.*" + keyword + ".*"));
+		for(int i = 9; i < 45; i++) {
+			if(is.get(i).getItem().getUnlocalizedName().matches("^.*" + keyword + ".*")) {
 				return i;
 			}
 		}
@@ -76,18 +77,23 @@ public class APIInventory {
 	
 	/**
 	 * 服务器上玩家背包及hotbar物品排列
-	 * @return 0-8： hotbar, 9-36：背包从上到下
+	 * @return 0: 合成台输出， 1-4： 合成台, 5-8：装备栏， 9-35：背包从上到下， 36-44：hotbar， 45：副手
 	 */
 	public static NonNullList<ItemStack> getPacketInventory() {
 		if(FMLClientHandler.instance().getClient().player != null){
-//			NonNullList<ItemStack> out = NonNullList.<ItemStack>withSize(45, ItemStack.EMPTY);
-//			for(int i = 5; i < 9; i++){
-//				out.set(i, mc.player.inventory.armorInventory.get(i - 5));
-//			}
-//			for(int i = 9; i < 45; i++){
-//				out.set(i, mc.player.inventory.mainInventory.get(i - 9));
-//			}
-			return mc.player.inventory.mainInventory;
+			NonNullList<ItemStack> out = NonNullList.<ItemStack>withSize(46, ItemStack.EMPTY);
+			for(int i = 5; i < 9; i++){
+				out.set(i, mc.player.inventory.armorInventory.get(i - 5));
+			}
+			for(int i = 9; i < 35; i++){
+				out.set(i, APIInventory.getMainInventory().get(i));
+			}
+			for(int i = 36; i < 45; i++) {
+				out.set(i, APIInventory.getMainInventory().get(i - 36));
+			}
+			out.set(45, mc.player.inventory.offHandInventory.get(0));
+//			return mc.player.inventory.mainInventory;
+			return out;
 		}else{
 			return null;
 		}

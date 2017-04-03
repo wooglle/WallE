@@ -24,7 +24,7 @@ public class AstarFindWay {
 		this.start = start;
 		this.end = end;
 		this.canBreak = canBreak;
-		System.out.printf("[S-E]	%s		%s	 \n",start, end);
+//		System.out.printf("[S-E]	%s		%s	 \n",start, end);
 		double sToe = start.distance(end);
 		way  = new ArrayList((int)(sToe * 3));
 		closeList = new ArrayList((int)(sToe * 5));
@@ -42,7 +42,7 @@ public class AstarFindWay {
 				break;
 			}
 			current = son;
-			System.out.printf("[%d]	%s		%s	%s	%s \n",i,father, son,getId(son),isDanger(son));
+//			System.out.printf("[%d]	%s		%s	%s	%s \n",i,father, son,getId(son),isDanger(son));
 		}
 	}
 	

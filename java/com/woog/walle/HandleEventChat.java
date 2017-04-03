@@ -112,10 +112,11 @@ public class HandleEventChat implements Runnable {
 			if (!WallE.acts.isEmpty()) {
 				new Thread(){public void run() {
 					try {
+						System.out.println("     " + WallE.acts.size());
 						WallE.acts.get(0).pause = true;
 						sleep(3000);
 						WallE.way.clear();
-						new RayTraceTarget(new V3D(99, 4, -1838), false);
+						new RayTraceTarget(new V3D(100, 4, -1838), false);
 //						Walk2There w2t = new Walk2There();
 						actionCurrent = new Walk2There();
 //						WallE.acts.add(w2t);
@@ -138,8 +139,8 @@ public class HandleEventChat implements Runnable {
 			String[] buff = this.getNameChat();
 			String chatName = buff[0];
 			String chatInfo = buff[1];
-//			System.out.println(chatName + "     +++++       " + chatInfo);
-			if(chatInfo.matches("^\\w+$")) {
+//			System.out.println(chatName + "     +++++       " + chatInfo + "  " + chatInfo.matches("^\\W+$"));
+			if(chatInfo.matches("^\\W+$")) {
 				return;
 			}
 //			System.out.println("-----" + chatInfo.substring(0, this.myName.length()));
@@ -152,8 +153,19 @@ public class HandleEventChat implements Runnable {
 //						for(int i = 0; i < mc.player.inventory.mainInventory.size(); i++) {
 //							System.out.println( i + "       " + mc.player.inventory.mainInventory.get(i));
 //						}
-						WallE.way.clear();
-						new RayTraceTarget(new V3D(99, 4, -1837), false);
+						
+//						short short1 = mc.player.openContainer.getNextTransactionID(mc.player.inventory);
+//						int slot = 44;
+//						ItemStack itemstack = mc.player.inventoryContainer.slotClick(slot, 6, ClickType.SWAP, mc.player);
+//						System.out.println("ssssssssss  " + itemstack);
+//						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
+//								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
+//								itemstack, short1));
+						
+						new Stuffing("pickaxe");
+						
+//						WallE.way.clear();
+//						new RayTraceTarget(new V3D(100, 4, -1837), false);
 //						new RayTraceTarget(new V3D(-990, 28, -1048), false);
 //						Walk2There w2t = new Walk2There();
 //						actionCurrent = new Walk2There();
@@ -161,20 +173,6 @@ public class HandleEventChat implements Runnable {
 						
 //						new KeepOnWatch(new V3D(-940, 26, -1015), 1);
 						
-//						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
-//								mc.player.inventoryContainer.windowId, 33, 0, ClickType.PICKUP, 
-//								ItemStack.EMPTY, short1));
-//						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
-//								mc.player.inventoryContainer.windowId, 33, 1, ClickType.PICKUP, 
-//								APIInventory.getMainInventory().get(33), short1));
-//						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
-//								mc.player.inventoryContainer.windowId, 33, 0, ClickType.PICKUP, 
-//								ItemStack.EMPTY, short1));
-						
-//						NonNullList<ItemStack> is = APIInventory.getPacketInventory();
-//						for(int i = 0; i < is.size(); i++) {
-//							System.out.println("                " + is.get(i).getItem().getUnlocalizedName());
-//						}
 					} else if (chatInfo.matches("^.*(stop|停).*$")) {
 						if (this.actionCurrent != null) {
 							AIManager.doing = false;

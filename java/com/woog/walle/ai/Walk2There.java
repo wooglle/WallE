@@ -50,7 +50,6 @@ public class Walk2There extends ActionBase{
 					System.out.println("bounding====================");
 				}
 				delay(50);
-				System.out.println("   " + WallE.way.get(0) + "    " + APIPlayer.getFoot());
 				if(WallE.way.get(0).isEqual(new V3D(APIPlayer.getFoot()))) {
 					forwardstop();
 					WallE.way.remove(0);
