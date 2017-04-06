@@ -61,6 +61,7 @@ public class EventGuiClass {
 			new interval().start();
 		} else if (guiName.equals("inventory.GuiChest")) {
 			if (n == 200) {
+				System.out.println("          " + APIInventory.getBoxInventory().getSizeInventory());
 				// if(lower.getName().equals("§6§l服务器快捷切换")) {
 				// mc.ingameGUI.getChatGUI().printChatMessage(new
 				// ChatComponentText("§e§o【Wall-E】" + "afdsnfjdshfjs"));

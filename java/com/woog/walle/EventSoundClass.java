@@ -9,11 +9,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class EventSoundClass {
 	private String ename;
 	private static Minecraft mc = WallE.mc;
+	private static String oldname = null;
 	
 	@SubscribeEvent
 	public void PlaySound(PlaySoundEvent e){
 		ename = e.getName();
-//		System.out.println("【Sound】" + e.getName());
+		if(!ename.equals(oldname)) {
+//			System.out.println("【Sound】   " + ename);
+			oldname = ename;
+		}
 		if(ename.matches("^.*player.*hurt.*$")){
 //			System.out.println("【hurt】 ===" + FMLClientHandler.instance().getClient().thePlayer.getFoodStats().needFood());
 //			System.out.println("【hurt】 ===" + APIPlayer.getHealth() + "   " + mc.player.getMaxHealth());

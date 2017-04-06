@@ -20,6 +20,10 @@ public class APIInventory {
 //	public static ItemStack[] myInventory = getPlayersInventory();
 //	public static List boxInventory = getBoxInventory();
 	
+	/***
+	 * 获取主要的库存（快捷栏 + 背包）
+	 * @return
+	 */
 	public static NonNullList<ItemStack> getMainInventory() {
 		if(mc.player == null) {
 			return NonNullList.create();
@@ -28,14 +32,22 @@ public class APIInventory {
 		}
 	}
 	
-	public static List getCurrentInventory(){
+	/***
+	 * 获取当前库存界面的所有格槽内的物品
+	 * @return 从上到下，自左至右
+	 */
+	public static NonNullList<ItemStack> getCurrentInventory() {
 		if(mc.player.openContainer != null) {
 			return mc.player.openContainer.getInventory();
 		}else{
-			return null;
+			return NonNullList.create();
 		}
 	}
 	
+	/***
+	 * 获取当前打开的箱子内的物品
+	 * @return
+	 */
 	public static IInventory getBoxInventory() {
 		if(mc.player.openContainer != null && mc.player.openContainer instanceof ContainerChest) {
 			ContainerChest con = (ContainerChest)mc.player.openContainer;
@@ -76,6 +88,11 @@ public class APIInventory {
 		return -1;
 	}
 	
+	/***
+	 * 根据给定的关键字获取背包里名称符合关键字的item
+	 * @param keyword item的关键字
+	 * @return null： 没有名称符合keyword的item， 或背包里没有符合的item
+	 */
 	public static Item getItemByKeyword(String keyword) {
 		NonNullList<ItemStack> is = getPacketInventory();
 		for(int i = 9; i < 45; i++) {
@@ -87,6 +104,12 @@ public class APIInventory {
 		return null;
 	}
 	
+	/***
+	 * 判断item是否可用于破坏pos位置的block
+	 * @param item 工具item
+	 * @param pos 指定block的坐标
+	 * @return
+	 */
 	public static boolean canItemBrokeBlock(Item item, V3D pos) {
 		return item.canHarvestBlock(Minecraft.getMinecraft().world.getBlockState(pos.toBlockPos()));
 	}
@@ -143,6 +166,10 @@ public class APIInventory {
 		}
 	}
 	
+	/**
+	 * 获取当前手持的物品的ItemStack
+	 * @return
+	 */
 	public static ItemStack getHeldItem() {
 		if(mc.player == null) {
 			return null;
@@ -151,6 +178,10 @@ public class APIInventory {
 		}
 	}
 	
+	/***
+	 * 获取当前手持物品的名称
+	 * @return
+	 */
 	public static String getHeldName() {
 		if(mc.player == null) {
 			return null;
@@ -159,6 +190,10 @@ public class APIInventory {
 		}
 	}
 	
+	/***
+	 * 获取当前手持物品的剩余耐久度
+	 * @return
+	 */
 	public static int getHeldItemDamage() {
 		if(mc.player == null) {
 			return 0;
@@ -171,6 +206,11 @@ public class APIInventory {
 		}
 	}
 	
+	/**
+	 * 获取指定物品的剩余耐久度
+	 * @param item
+	 * @return
+	 */
 	public static int getItemDamage(ItemStack item) {
 		if(mc.player == null | item == null) {
 			return 0;
@@ -179,6 +219,10 @@ public class APIInventory {
 		}
 	}
 	
+	/***
+	 * 获取当前主手手持物品的ID
+	 * @return
+	 */
 	public static int getHeldID() {
 		if(mc.world != null && mc.player.getHeldItem(EnumHand.MAIN_HAND) != null) {
 			return Item.getIdFromItem(mc.player.getHeldItem(EnumHand.MAIN_HAND).getItem());
@@ -187,12 +231,20 @@ public class APIInventory {
 		}
 	}
 	
+	/***
+	 * 把手持物品切换为快捷栏里的其他物品
+	 * @param slotID 0-8
+	 */
 	public static void setHeldItem(int slotID) {
 		if(0 < slotID & slotID < mc.player.inventory.getHotbarSize()) {
 			mc.player.inventory.setInventorySlotContents(slotID, (ItemStack)null);
 		}
 	}
 	
+	/**
+	 * 获取主库存内恢复饥饿值最大物品的索引号
+	 * @return
+	 */
 	public static int getFoodMax() {
 		if(mc.player == null) {
 			return -1;
@@ -212,6 +264,11 @@ public class APIInventory {
 		return get;
 	}
 	
+	/**
+	 * 从主库存内获取指定ID的物品的索引
+	 * @param itemID 物品的ID
+	 * @return
+	 */
 	public static int getItem(int itemID) {
 		int x;
 		for(int i = 0; i < getMainInventory().size(); i++) {
@@ -229,10 +286,14 @@ public class APIInventory {
 		return -1;
 	}
 	
-	public static void printStacks(ItemStack[] stack){
-		for(int i = 0; i < stack.length; i++){
-			if(stack[i] != null){
-				System.out.printf(" %s: %s,", i, stack[i]);
+	/**
+	 * 用于显示物品堆垛
+	 * @param stack
+	 */
+	public static void printStacks(NonNullList<ItemStack> list){
+		for(int i = 0; i < list.size(); i++){
+			if(list.get(i) != ItemStack.EMPTY){
+				System.out.printf(" %s: %s,", i, list.get(i));
 			}
 			if((i + 1) % 9 == 0) {
 				System.out.printf(" \n");
@@ -240,6 +301,9 @@ public class APIInventory {
 		}
 	}
 	
+	/**
+	 * 用于显示当前玩家的主库存及打开的箱子的库存
+	 */
 	public static void printInventory() {
 		System.out.printf("玩家库存 \n");
 		for(int i = 0; i < getMainInventory().size(); i++) {

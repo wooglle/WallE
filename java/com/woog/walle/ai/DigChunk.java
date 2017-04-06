@@ -7,6 +7,7 @@ import com.woog.walle.additional.IChunk;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -72,11 +73,11 @@ public class DigChunk extends ActionBase {
 		if(!chunk.isTurn) {
 			for(int i = 0; i < nearby.length; i++) {
 				Block block = mc.world.getBlockState(new BlockPos(nearby[i].x, nearby[i].y, nearby[i].z)).getBlock();
-				Item tool = APIInventory.getHeldItem().getItem();
-				if(tool == null) {
+				ItemStack tool = APIInventory.getHeldItem();
+				if(ItemStack.areItemStacksEqual(tool, ItemStack.EMPTY)) {
 					this.holdStuff();
 				}
-				if(APIInventory.canItemBrokeBlock(tool, nearby[i])) {
+				if(APIInventory.canItemBrokeBlock(tool.getItem(), nearby[i])) {
 					hasDigged = true;
 					digCrossChunk(nearby[i]);
 				}

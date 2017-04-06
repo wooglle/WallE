@@ -163,9 +163,8 @@ public class HandleEventChat implements Runnable {
 //								itemstack, short1));
 						
 //						new Stuffing("pickaxe");
-						V3D pos = new V3D(-990, 26, -1050);
-						System.out.println("          " + Item.getItemById(257).getUnlocalizedName() + "   " + APIChunk.getBlock(pos));;
-						System.out.println("    " + APIInventory.canItemBrokeBlock(Item.getItemById(257), pos));
+//						V3D pos = new V3D(-990, 26, -1050);
+						System.out.println("          " + mc.player.openContainer.getInventory());
 						
 //						WallE.way.clear();
 //						new RayTraceTarget(new V3D(100, 4, -1837), false);
