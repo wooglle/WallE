@@ -2,6 +2,7 @@ package com.woog.walle;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class APIInventory {
@@ -49,7 +51,7 @@ public class APIInventory {
 	 * @param name Ex：item.fishingRod
 	 * @return
 	 */
-	public static int getItem(String name) {
+	public static int getItemIndex(String name) {
 		NonNullList<ItemStack> is = getPacketInventory();
 		for(int i = 0; i < is.size(); i++) {
 			if(is.get(i) != ItemStack.EMPTY && is.get(i).getItem().getUnlocalizedName().equals(name)) {
@@ -64,15 +66,29 @@ public class APIInventory {
 	 * @param name Ex：item.fishingRod
 	 * @return
 	 */
-	public static int getItemByKeyword(String keyword) {
+	public static int getItemIndexByKeyword(String keyword) {
 		NonNullList<ItemStack> is = getPacketInventory();
-//		System.out.println("    " + is.get(0).getItem().getUnlocalizedName().matches("^.*" + keyword + ".*"));
 		for(int i = 9; i < 45; i++) {
 			if(is.get(i).getItem().getUnlocalizedName().matches("^.*" + keyword + ".*")) {
 				return i;
 			}
 		}
 		return -1;
+	}
+	
+	public static Item getItemByKeyword(String keyword) {
+		NonNullList<ItemStack> is = getPacketInventory();
+		for(int i = 9; i < 45; i++) {
+			Item b = is.get(i).getItem();
+			if(b.getUnlocalizedName().matches("^.*" + keyword + ".*")) {
+				return b;
+			}
+		}
+		return null;
+	}
+	
+	public static boolean canItemBrokeBlock(Item item, V3D pos) {
+		return item.canHarvestBlock(Minecraft.getMinecraft().world.getBlockState(pos.toBlockPos()));
 	}
 	
 	/**
@@ -82,17 +98,16 @@ public class APIInventory {
 	public static NonNullList<ItemStack> getPacketInventory() {
 		if(FMLClientHandler.instance().getClient().player != null){
 			NonNullList<ItemStack> out = NonNullList.<ItemStack>withSize(46, ItemStack.EMPTY);
-			for(int i = 5; i < 9; i++){
+			for(int i = 5; i < 9; i++) {
 				out.set(i, mc.player.inventory.armorInventory.get(i - 5));
 			}
-			for(int i = 9; i < 35; i++){
+			for(int i = 9; i < 36; i++) {
 				out.set(i, APIInventory.getMainInventory().get(i));
 			}
 			for(int i = 36; i < 45; i++) {
 				out.set(i, APIInventory.getMainInventory().get(i - 36));
 			}
 			out.set(45, mc.player.inventory.offHandInventory.get(0));
-//			return mc.player.inventory.mainInventory;
 			return out;
 		}else{
 			return null;

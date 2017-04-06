@@ -42,6 +42,11 @@ public class IChunk {
 		return out;
 	}
 	
+	/**
+	 * 获取玩家以前后左右各1格方块围成（指定高度）的十字内方块的坐标
+	 * @param height 从玩家脚底向上的高度， 为2时等于玩家高度
+	 * @return 坐标数组
+	 */
 	public V3D[] getCorssHeight(int height) {
 		V3D[] cross = new V3D[height - 2 + 4 * height];
 		if(height - 2 > 0) {

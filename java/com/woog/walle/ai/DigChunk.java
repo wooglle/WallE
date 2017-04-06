@@ -1,10 +1,12 @@
 package com.woog.walle.ai;
 
+import com.woog.walle.APIInventory;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
 import com.woog.walle.additional.IChunk;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,9 +43,9 @@ public class DigChunk extends ActionBase {
 			delay(50);
 			mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
 			int n = 0;
-			while(t.getId() != 0 & n < 500) {
+			while(t.getId() != 0 & n < 200) {
 				++n;
-				delay(10);
+				delay(50);
 			}
 			mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
 			this.holdStuff();
@@ -53,7 +55,6 @@ public class DigChunk extends ActionBase {
 //			【续命】虾米Mickey 2016/5/27 10:01:19
 //			嫌麻烦直接setBlockState
 //			setBlockState会调用markAndNotifyBlock
-//
 //			}
 		}
 	}
@@ -66,13 +67,23 @@ public class DigChunk extends ActionBase {
 	@Override
 	public void action() {
 		IChunk chunk = new IChunk(APIPlayer.getFoot2());
-		V3D[] nearby = chunk.getCorssHeight(3);
-		
+		V3D[] nearby = chunk.getCorssHeight(4);
+		boolean hasDigged = false;
 		if(!chunk.isTurn) {
 			for(int i = 0; i < nearby.length; i++) {
 				Block block = mc.world.getBlockState(new BlockPos(nearby[i].x, nearby[i].y, nearby[i].z)).getBlock();
-				digCrossChunk(nearby[i]);
-//				delay(5);
+				Item tool = APIInventory.getHeldItem().getItem();
+				if(tool == null) {
+					this.holdStuff();
+				}
+				if(APIInventory.canItemBrokeBlock(tool, nearby[i])) {
+					hasDigged = true;
+					digCrossChunk(nearby[i]);
+				}
+				delay(10);
+			}
+			if(!hasDigged) {
+				return;
 			}
 		}else{
 			System.out.println("nooooooooooo  nearby!!!!!!!");

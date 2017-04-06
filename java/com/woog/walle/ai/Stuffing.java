@@ -24,7 +24,7 @@ public class Stuffing{
 	
 	public Stuffing(String itemKeyword){
 		boolean isStuffed = false;
-		int n = APIInventory.getItemByKeyword(itemKeyword);
+		int n = APIInventory.getItemIndexByKeyword(itemKeyword);
 		if(n >= 0) {
 //			swapSlot2Hotbar(n, mc.player.inventory.currentItem);
 			swapSlot2Hotbar(this.getItemInBackbagByKeyword(itemKeyword), mc.player.inventory.currentItem);

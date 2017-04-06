@@ -36,6 +36,7 @@ public class ActionBase {
 		util = new ActionUtil();
 		doing = true;
 		WallE.acts.add(0, this);
+		WallE.currentAct = this;
 //		new Monitor().start();
 		Monitor mon = new Monitor();
 		mon.setName("Action-" + getActName());
@@ -51,7 +52,6 @@ public class ActionBase {
 	 * @return
 	 */
 	protected String getToolsKeyword() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -153,7 +153,6 @@ public class ActionBase {
 		try {
 			Thread.sleep(msec);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -169,7 +168,6 @@ public class ActionBase {
 						WallE.acts.remove(0);
 						util.allDefault();
 						if(showMsg()) {
-//							mc.player.addChatComponentMessage(stop);
 							IDebug.PrintRed(stop);
 						}
 						doing = false;
@@ -177,10 +175,9 @@ public class ActionBase {
 							WallE.acts.get(0).goOn();
 						}
 					}
-				}else if(WallE.acts.size() > 1) {
+				}else if(WallE.acts.size() > 1 | pause) {
 					pause = true;
 					util.allDefault();
-//					mc.player.addChatComponentMessage(suspend);
 					IDebug.PrintYellow(suspend);
 					if(mc.gameSettings.keyBindAttack.isKeyDown()) {
 						mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);

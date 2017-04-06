@@ -31,12 +31,12 @@ public class WallE {
 	public static final String MODVERSION = "1.11";
 	public static final String MODID = "wall-e";
 	public static final String MODNAME = "人形自走全能挂机苦工-瓦力";
-	public static Timer timer = null;
-	public static final String mcTitle = Display.getTitle();
+//	public static Timer timer = null;
+//	public static final String mcTitle = Display.getTitle();
 	public static String wallepath = Minecraft.getMinecraft().mcDataDir.toString() + "/mods/WallE/";
 	public static WalleConfig config = new WalleConfig();
 	public static String username = FMLClientHandler.instance().getClient().getSession().getUsername();
-	public static World world;
+//	public static World world;
 	public static Minecraft mc = Minecraft.getMinecraft();
 	public static String myfriends = "strideyouyou,mcfy,st_,woog,020";
 	public static String[] vip = { "woog", "sdsas", "mr_caigi", "lzd", "ck250", "ls", "panjy", "yunzhongyan",
@@ -47,8 +47,9 @@ public class WallE {
 	public static int[] dangerStand = { 0, 81, 90, 119, 209 };
 	public static int minItemDamage = -5;
 	public static List<V3D> way = new ArrayList(100);
-	public static boolean isWalking = false;
+//	public static boolean isWalking = false;
 	public static List<ActionBase> acts = new ArrayList(10);
+	public static ActionBase currentAct = null;
 
 	public void preLoad(FMLPreInitializationEvent event) throws FileNotFoundException, IOException {
 	}

@@ -20,6 +20,7 @@ import com.woog.walle.chatrobot.HttpRequest;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketClickWindow;
 import net.minecraft.util.NonNullList;
@@ -28,7 +29,6 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 public class HandleEventChat implements Runnable {
 	private static Minecraft mc = FMLClientHandler.instance().getClient();
 	private static String myName = FMLClientHandler.instance().getClient().getSession().getUsername().toLowerCase();
-	public static ActionBase actionCurrent;
 	public static AIManager ai;
 	private String message;
 	// private String chatem;
@@ -83,11 +83,11 @@ public class HandleEventChat implements Runnable {
 			if (!WallE.acts.isEmpty()) {
 				WallE.acts.get(0).pause = true;
 			}
-			actionCurrent = new LogInIsland();
+			new LogInIsland();
 		} else if (message.matches("^~+\\s+" + myName + "\\s+[\\u4E00-\\u9FA5]+~+$")) {
-			if (actionCurrent != null && (actionCurrent.getActName().equals("Automatic Log In Island")
-					| actionCurrent.getActName().equals("Automatic Walking to The Island"))) {
-				actionCurrent.doing = false;
+			if (WallE.currentAct != null && (WallE.currentAct.getActName().equals("Automatic Log In Island")
+					| WallE.currentAct.getActName().equals("Automatic Walking to The Island"))) {
+				WallE.currentAct.doing = false;
 			}
 		} else if (message.matches(".*红包\\S+口令:\\s+\\[.*\\]")) {
 			// buff = message.split("\\[|\\]");
@@ -113,12 +113,12 @@ public class HandleEventChat implements Runnable {
 				new Thread(){public void run() {
 					try {
 						System.out.println("     " + WallE.acts.size());
-						WallE.acts.get(0).pause = true;
-						sleep(3000);
+//						WallE.acts.get(0).pause = true;
+						sleep(50);
 						WallE.way.clear();
 						new RayTraceTarget(new V3D(100, 4, -1838), false);
 //						Walk2There w2t = new Walk2There();
-						actionCurrent = new Walk2There();
+						new Walk2There();
 //						WallE.acts.add(w2t);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
@@ -162,21 +162,24 @@ public class HandleEventChat implements Runnable {
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
 						
-						new Stuffing("pickaxe");
+//						new Stuffing("pickaxe");
+						V3D pos = new V3D(-990, 26, -1050);
+						System.out.println("          " + Item.getItemById(257).getUnlocalizedName() + "   " + APIChunk.getBlock(pos));;
+						System.out.println("    " + APIInventory.canItemBrokeBlock(Item.getItemById(257), pos));
 						
 //						WallE.way.clear();
 //						new RayTraceTarget(new V3D(100, 4, -1837), false);
 //						new RayTraceTarget(new V3D(-990, 28, -1048), false);
 //						Walk2There w2t = new Walk2There();
-//						actionCurrent = new Walk2There();
+//						new Walk2There();
 //						WallE.acts.add(w2t);
 						
 //						new KeepOnWatch(new V3D(-940, 26, -1015), 1);
 						
 					} else if (chatInfo.matches("^.*(stop|停).*$")) {
-						if (this.actionCurrent != null) {
+						if (WallE.currentAct != null) {
 							AIManager.doing = false;
-							actionCurrent.doing = false;
+							WallE.currentAct.doing = false;
 						}
 						if (this.ai != null && ai.doing) {
 							this.ai.setDoing(false);
@@ -190,14 +193,14 @@ public class HandleEventChat implements Runnable {
 							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开启AI！！！！！");
 						}
 					} else if (chatInfo.matches("^.*(fish|魚|鱼).*$")) {
-						actionCurrent = new Fishing();
+						new Fishing();
 						if (!chatName.equals(myName)) {
 							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始钓鱼！！！！！");
 						}
 					} else if (chatInfo.matches("^.*(dig|挖|掘).*$")) {
-						actionCurrent = new DigChunk();
+						new DigChunk();
 					} else if (chatInfo.matches("^.*(cobble|石|stone).*$")) {
-						actionCurrent = new Digging();
+						new Digging();
 					} else if (chatInfo.matches("^.*disconnect$")) {
 						if (!chatName.equals(myName)) {
 							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始下线！！！！！");

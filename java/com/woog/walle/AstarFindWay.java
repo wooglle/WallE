@@ -173,7 +173,7 @@ public class AstarFindWay {
 				if(id2 == 8 || id2 == 9 || id2 == 10 || id2 == 11) {
 					return true;
 				}
-			}else{
+			} else {
 				if(!isNullBlock(target)) {
 					return true;
 				}
