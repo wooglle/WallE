@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DigChunk extends ActionBase {
 	public static V3D blockDigging = null;
+	private static V3D iniPos = null;
 	
 	@Override
 	public String getToolsKeyword() {
@@ -37,6 +38,9 @@ public class DigChunk extends ActionBase {
 	}
 	
 	private void digCrossChunk(V3D t) {
+		if(this.iniPos.distance(APIPlayer.getFoot2()) > 2) {
+			return;
+		}
 		Block block = mc.world.getBlockState(new BlockPos(t.x, t.y, t.z)).getBlock();
 		if(t.getId() != 0) {
 			new FaceTo(t, 1);
@@ -49,7 +53,7 @@ public class DigChunk extends ActionBase {
 				delay(50);
 			}
 			mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
-			this.holdStuff();
+//			this.holdStuff();
 //			delay(1000);
 //			if(APIInventory.getHeldItemDamage() < WallE.minItemDamage + 5) {
 //			notifyBlockUpdate
@@ -67,16 +71,17 @@ public class DigChunk extends ActionBase {
 	
 	@Override
 	public void action() {
-		IChunk chunk = new IChunk(APIPlayer.getFoot2());
+		this.iniPos = APIPlayer.getFoot2();
+		IChunk chunk = new IChunk(iniPos);
 		V3D[] nearby = chunk.getCorssHeight(4);
 		boolean hasDigged = false;
 		if(!chunk.isTurn) {
 			for(int i = 0; i < nearby.length; i++) {
 				Block block = mc.world.getBlockState(new BlockPos(nearby[i].x, nearby[i].y, nearby[i].z)).getBlock();
+//				if(!APIInventory.getHeldName().matches("^.*" + this.getToolsKeyword() + ".*")) {
+//				}
+				this.holdStuff();
 				ItemStack tool = APIInventory.getHeldItem();
-				if(ItemStack.areItemStacksEqual(tool, ItemStack.EMPTY)) {
-					this.holdStuff();
-				}
 				if(APIInventory.canItemBrokeBlock(tool.getItem(), nearby[i])) {
 					hasDigged = true;
 					digCrossChunk(nearby[i]);

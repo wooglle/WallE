@@ -114,7 +114,7 @@ public class HandleEventChat implements Runnable {
 					try {
 						System.out.println("     " + WallE.acts.size());
 //						WallE.acts.get(0).pause = true;
-						sleep(50);
+						sleep(10);
 						WallE.way.clear();
 						new RayTraceTarget(new V3D(100, 4, -1838), false);
 //						Walk2There w2t = new Walk2There();
@@ -164,7 +164,7 @@ public class HandleEventChat implements Runnable {
 						
 //						new Stuffing("pickaxe");
 //						V3D pos = new V3D(-990, 26, -1050);
-						System.out.println("          " + mc.player.openContainer.getInventory());
+//						System.out.println("          " + mc.player.openContainer.getInventory());
 						
 //						WallE.way.clear();
 //						new RayTraceTarget(new V3D(100, 4, -1837), false);
