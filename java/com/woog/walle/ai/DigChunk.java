@@ -38,7 +38,7 @@ public class DigChunk extends ActionBase {
 	}
 	
 	private void digCrossChunk(V3D t) {
-		if(this.iniPos.distance(APIPlayer.getFoot2()) > 2) {
+		if(this.iniPos.distance(APIPlayer.getFootWithOffset()) > 2) {
 			return;
 		}
 		Block block = mc.world.getBlockState(new BlockPos(t.x, t.y, t.z)).getBlock();
@@ -71,7 +71,7 @@ public class DigChunk extends ActionBase {
 	
 	@Override
 	public void action() {
-		this.iniPos = APIPlayer.getFoot2();
+		this.iniPos = APIPlayer.getFootWithOffset();
 		IChunk chunk = new IChunk(iniPos);
 		V3D[] nearby = chunk.getCorssHeight(4);
 		boolean hasDigged = false;

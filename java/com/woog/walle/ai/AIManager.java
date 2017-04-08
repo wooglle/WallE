@@ -41,7 +41,7 @@ public class AIManager {
 	}
 	
 	private static void addFootPoint() {
-		footPoints[footIndex] = APIPlayer.getFoot2();
+		footPoints[footIndex] = APIPlayer.getFootWithOffset();
 		footIndex = footIndex + 2 > footPoints.length ? 0 : footIndex + 1;
 	}
 	
@@ -122,12 +122,12 @@ public class AIManager {
 					new WalkOneStep();
 				}else{
 					if(Math.random() > 0.5D) {
-						V3D foot0 = APIPlayer.getFoot2();
+						V3D foot0 = APIPlayer.getFootWithOffset();
 //						new FaceTo(chunk.getRandomFRL(), 2);
 						new FaceTo(chunk.getRandomFRLB(), 2);
 						new WalkOneStep();
 //						setCorners2Default();
-						if(!foot0.isEqual(APIPlayer.getFoot2())) {
+						if(!foot0.isEqual(APIPlayer.getFootWithOffset())) {
 							isLoop = false;
 						}
 					}

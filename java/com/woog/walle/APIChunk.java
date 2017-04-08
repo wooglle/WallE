@@ -7,30 +7,43 @@ import net.minecraft.world.chunk.Chunk;
 
 public class APIChunk {
 	private static Minecraft mc = Minecraft.getMinecraft();
-//	获取最近的方块（高于地面1-5格）
-//	判断方块是否可挖（相邻是否岩浆，下方是否为空（当方块不高于player时））
-//	方块是否挖得到（true则next，flase则move）
-//	获取指定方块
-//	获取目标方块周围的指定方块
-//	取得落脚点
-//	move（定向导航，自动避障，路径回归）
-	public static void chunkForDig(){
-//		规格：下1，上2+3+1，前1+1，左1+3+1，右1+3+1
-//		竖直方向×左右×前后；挖掘体积：5×7×1；危险探测体积：7×9×2
-		Chunk chunk = mc.world.getChunkFromChunkCoords(mc.player.chunkCoordX, mc.player.chunkCoordZ);
+
+	/**
+	 * 获取晚间视线落点的方块
+	 * @return
+	 */
+	public static Block getBlockEyesOn() {
+		return Minecraft.getMinecraft().world
+				.getBlockState(new BlockPos(APIPlayer.viewX(), APIPlayer.viewY(), APIPlayer.viewZ())).getBlock();
 	}
 	
-	public static V3D nearestBlock(){
-		
+	/**
+	 * 获取指定位置的方块
+	 * @param blockV3D
+	 * @return
+	 */
+	public static Block getBlock(V3D blockV3D) {
+		return Minecraft.getMinecraft().world.getBlockState(blockV3D.toBlockPos()).getBlock();
+	}
+	
+	/**
+	 * 获取玩家头部高度平面内距离不大于5范围内的木头方块
+	 * @return
+	 */
+	public static Block getWood() {
+		V3D[] neighbor = APIPlayer.getHeadPos().getNeighborByDistance(5);
+		for(V3D pos: neighbor) {
+			System.out.println("   " + pos);
+		}
 		return null;
 	}
 	
-	public static Block getBlockEyesOn(){
-		return Minecraft.getMinecraft().world.getBlockState(
-				new BlockPos(APIPlayer.viewX(), APIPlayer.viewY(), APIPlayer.viewZ())).getBlock();
-	}
-	
-	public static Block getBlock(V3D blockV3D){
-		return Minecraft.getMinecraft().world.getBlockState(blockV3D.toBlockPos()).getBlock();
+	/**
+	 * 判断指定位置的方块是否被挖掉
+	 * @param blockPos
+	 * @return
+	 */
+	public static boolean isBlockBroke(V3D blockPos) {
+		return false;
 	}
 }

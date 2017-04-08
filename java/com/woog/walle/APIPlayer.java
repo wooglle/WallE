@@ -38,7 +38,7 @@ public class APIPlayer {
 				(double)mc.player.getPositionEyes(1.0F).zCoord);
 	}
 	
-	public static V3D getFoot2() {
+	public static V3D getFootWithOffset() {
 //		mc.player.boundingBox.minY
 //		System.out.println("=====  " + mc.player.getPositionEyes(1.0F));
 //		return new V3D(mc.player.getPosition());
@@ -58,6 +58,10 @@ public class APIPlayer {
 		return new Vec3d((double)mc.player.getPositionEyes(1.0F).xCoord, 
 				(double)mc.player.getPositionEyes(1.0F).yCoord, 
 				(double)mc.player.getPositionEyes(1.0F).zCoord);
+	}
+	
+	public static V3D getHeadPos() {
+		return new V3D(mc.player.getPositionEyes(0));
 	}
 	
 	public static int getHeading() {

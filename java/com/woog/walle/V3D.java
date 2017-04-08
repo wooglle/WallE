@@ -280,7 +280,7 @@ public class V3D {
 	 * @return
 	 */
 	public static List<V3D> getCrossDelta(int distance) {
-		V3D[] cross = APIPlayer.getFoot2().getCrossClockWise();
+		V3D[] cross = APIPlayer.getFootWithOffset().getCrossClockWise();
 		List<V3D> delta = new ArrayList<V3D>(distance * 4);
 		for(int i = 1; i <= distance; i++) {
 			for(int t = 0; t < 4; t++) {
@@ -318,7 +318,7 @@ public class V3D {
 	 * @return
 	 */
 	public Vec3d getCenterOfNearestSide() {
-		V3D diff = this.minus(APIPlayer.getFoot2());
+		V3D diff = this.minus(APIPlayer.getFootWithOffset());
 		Vec3d sideDiff = new Vec3d(this.x + 0.0D, this.y + 0.0D, this.z + 0.0D);
 		if(diff.x > 0) {
 			sideDiff = new Vec3d(this.x + 0.0D, this.y + 0.5D, this.z + 0.5D);
@@ -334,6 +334,38 @@ public class V3D {
 			sideDiff = new Vec3d(this.x + 0.5D, this.y + 1.0D, this.z + 0.5D);
 		}
 		return sideDiff;
+	}
+	
+	/**
+	 * 获取以玩家朝向为基础的坐标差数组
+	 * @return
+	 */
+	public V3D[] getDirectionDiff() {
+		V3D[] b = new V3D[4];
+		
+		return b;
+	}
+	
+	/**
+	 * 获得此位置周围距离为dis内的所有坐标，方向优先, 先正方向后斜方向， 由近至远
+	 * @param dis
+	 * @return
+	 */
+	public V3D[] getNeighborByDistance(int dis) {
+		V3D[] b = new V3D[(dis + 1) * dis * 4];
+		int index = 0;
+		for(int i = 1; i <= dis; i++) {
+			
+		}
+		for(int x = -1 * dis; x <= dis; x++) {
+			for(int z = -1 * dis; z <= dis; z++) {
+				if(x != 0 & z != 0) {
+					b[index] = new V3D(this.x + x, y, this.z + z);
+					index++;
+				}
+			}
+		}
+		return b;
 	}
 	
 	public BlockPos toBlockPos() {

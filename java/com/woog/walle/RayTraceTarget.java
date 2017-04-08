@@ -27,10 +27,10 @@ public class RayTraceTarget {
 		this.isDanger = this.isDanger(target);
 		if(distance < 2) {
 			foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
-			Astar= new AstarFindWay(APIPlayer.getFoot2(), foothold, canBreak);
+			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
 		}else{
 			foothold = getFoothold(target);
-			Astar= new AstarFindWay(APIPlayer.getFoot2(), foothold, canBreak);
+			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
 		}
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
@@ -42,9 +42,9 @@ public class RayTraceTarget {
 	}
 	
 	public RayTraceTarget(V3D targetV3D, boolean canBreak) {
-		System.out.println("现在1111:" + APIPlayer.getFoot2() + "  目标:" + targetV3D);
+		System.out.println("现在1111:" + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D);
 		WallE.way = null;
-		double dis = APIPlayer.getFoot2().centerDistance(targetV3D);
+		double dis = APIPlayer.getFootWithOffset().centerDistance(targetV3D);
 //		Vec3d vec1 = mc.player.getPositionEyes(1.0F);
 //		Vec3d vec2 = mc.player.getLook(1.0F);
 //		Vec3d vec3 = vec1.addVector(vec2.xCoord * dis, vec2.yCoord * dis, vec2.zCoord * dis);
@@ -53,16 +53,16 @@ public class RayTraceTarget {
 		this.isDanger = this.isDanger(target);
 		if(dis < 2.0D) {
 			foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
-			Astar= new AstarFindWay(APIPlayer.getFoot2(), foothold, canBreak);
+			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
 		}else{
 			foothold = getFoothold(target);
-			Astar= new AstarFindWay(APIPlayer.getFoot2(), foothold, canBreak);
+			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
 		}
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
 //			for(int i = 0; i < Astar.way.size(); i++) {
 //			}
-			System.out.println("现在2222:" + APIPlayer.getFoot2() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+			System.out.println("现在2222:" + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	
@@ -178,7 +178,7 @@ public class RayTraceTarget {
 	
 	public void info() {		
 		System.out.printf("【RayTraceTarget】  [%s]    now: (%s), target: (%s), foothold: (%s)\n", 
-				APIPlayer.getFoot2().toString(), this.target.toString(), this.foothold.toString());
+				APIPlayer.getFootWithOffset().toString(), this.target.toString(), this.foothold.toString());
 		if(!WallE.way.isEmpty()) {
 			for(int i = 0; i < Astar.way.size(); i++) {
 				System.out.printf("%s; ",Astar.way.get(i));

@@ -121,7 +121,6 @@ public class HandleEventChat implements Runnable {
 						new Walk2There();
 //						WallE.acts.add(w2t);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}}.start();
@@ -161,7 +160,7 @@ public class HandleEventChat implements Runnable {
 //						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
-						
+						System.out.println("【T】" + APIChunk.getWood());
 //						new Stuffing("pickaxe");
 //						V3D pos = new V3D(-990, 26, -1050);
 //						System.out.println("          " + mc.player.openContainer.getInventory());

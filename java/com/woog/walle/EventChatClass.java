@@ -108,7 +108,7 @@ public class EventChatClass
 			Crypto.enCrypt("sadhkjasdnklj");
 		}else if(chat.matches("^.*face.*$")){
 			V3D tar = new V3D(1, 0, 0);
-			new FaceTo(APIPlayer.getFoot2().add(tar), 1);
+			new FaceTo(APIPlayer.getFootWithOffset().add(tar), 1);
 		}else if(chat.matches("^.*walk.*$")) {
 			RayTraceTarget rtt = new RayTraceTarget(10, false);
 			Walk w= new Walk();
@@ -197,7 +197,7 @@ public class EventChatClass
 					}else if(chatInfo.matches("^disconnect$")) {
 						mc.world.sendQuittingDisconnectingPacket();
 					}else if(chatInfo.matches("^test$")) {
-						System.out.println(APIPlayer.getFoot2().getRadiantSquare(APIPlayer.getFoot2(), 3));
+						System.out.println(APIPlayer.getFootWithOffset().getRadiantSquare(APIPlayer.getFootWithOffset(), 3));
 //						System.out.println("重生点：" + mc.world.getSpawnPoint()); 你猜~~~~~
 //						System.out.println("  " + mc.world.getSpawnPoint().getDistanceSquared(0, 117, 0));
 //						System.out.println(APIInventory.getHeldItem().getItem().getUnlocalizedName());

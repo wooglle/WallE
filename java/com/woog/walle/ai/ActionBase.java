@@ -88,9 +88,9 @@ public class ActionBase {
 			}
 			if(flag && APIInventory.getHeldItemDamage() < WallE.minItemDamage) {
 				return true;
-			}else if(!flag) {
+			} else if(!flag) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
 		}

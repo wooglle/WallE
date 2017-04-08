@@ -49,9 +49,9 @@ public class Farming extends ActionBase{
 		for(int z = 0; z < n + 1; z++){
 			for(int x = 0; x < n + 1; n++){
 				Block block = Minecraft.getMinecraft().world.getBlockState(new BlockPos(
-						APIPlayer.getFoot2().x + x, APIPlayer.getFoot2().y, APIPlayer.getFoot2().z + z)).getBlock();
+						APIPlayer.getFootWithOffset().x + x, APIPlayer.getFootWithOffset().y, APIPlayer.getFootWithOffset().z + z)).getBlock();
 				if(block == Blocks.FARMLAND){
-					return new V3D(APIPlayer.getFoot2().x + x, APIPlayer.getFoot2().y, APIPlayer.getFoot2().z + z);
+					return new V3D(APIPlayer.getFootWithOffset().x + x, APIPlayer.getFootWithOffset().y, APIPlayer.getFootWithOffset().z + z);
 				}
 			}
 		}
@@ -64,14 +64,14 @@ public class Farming extends ActionBase{
 			return null;
 		}
 		if(isWart){
-			List<V3D> list = APIPlayer.getFoot2().getRadiantSquare(APIPlayer.getFoot2().addY(1), dis);
+			List<V3D> list = APIPlayer.getFootWithOffset().getRadiantSquare(APIPlayer.getFootWithOffset().addY(1), dis);
 			for(int i = 0; i < (dis + 1) * (dis + 1); i++){
 				if(Minecraft.getMinecraft().world.getBlockState(list.get(i).toBlockPos()) == Blocks.FARMLAND){
 					return list.get(i);
 				}
 			}
 		}else{
-			List<V3D> list = APIPlayer.getFoot2().getRadiantSquare(APIPlayer.getFoot2(), dis);
+			List<V3D> list = APIPlayer.getFootWithOffset().getRadiantSquare(APIPlayer.getFootWithOffset(), dis);
 			for(int i = 0; i < (dis + 1) * (dis + 1); i++){
 				if(Minecraft.getMinecraft().world.getBlockState(list.get(i).toBlockPos()) == Blocks.FARMLAND){
 					return list.get(i);
@@ -89,7 +89,7 @@ public class Farming extends ActionBase{
 		sides[2] = 0;
 		sides[3] = 0;
 		for(int i = 0; i < 5 * 4; i++){
-			BlockPos pos = APIPlayer.getFoot2().add(V3D.getCrossDelta(5).get(i)).toBlockPos();
+			BlockPos pos = APIPlayer.getFootWithOffset().add(V3D.getCrossDelta(5).get(i)).toBlockPos();
 			if(Minecraft.getMinecraft().world.getBlockState(pos) == Blocks.FARMLAND){
 				sides[i % 4]++; 
 			}
@@ -102,7 +102,7 @@ public class Farming extends ActionBase{
 				index = i;
 			}
 		}
-		return APIPlayer.getFoot2().add(cross.get(index));
+		return APIPlayer.getFootWithOffset().add(cross.get(index));
 	}
 	
 	@Override

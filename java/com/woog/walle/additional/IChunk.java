@@ -23,7 +23,7 @@ public class IChunk {
 	}
 	
 	public IChunk() {
-		this.postion = APIPlayer.getFoot2();
+		this.postion = APIPlayer.getFootWithOffset();
 	}
 	
 	public V3D[] getCorssHeight4() {
@@ -85,7 +85,7 @@ public class IChunk {
 	public V3D[] getDigSafe(V3D[] tar) {
 		List<Integer> list = new ArrayList<Integer>(tar.length);
 		int h = 6;
-		V3D foot = APIPlayer.getFoot2();
+		V3D foot = APIPlayer.getFootWithOffset();
 		for(int i = 0; i < tar.length; i++) {
 			if(!tar[i].isDangerAjacent()) {
 				list.add(i);

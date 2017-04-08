@@ -44,8 +44,8 @@ public class WalkOneStep extends ActionBase{
 	
 	@Override
 	public void action() {
-		this.blockFoot = APIPlayer.getFoot2();
-		V3D forward = APIPlayer.getFoot2().add(clockwise[APIPlayer.getHeading()]);
+		this.blockFoot = APIPlayer.getFootWithOffset();
+		V3D forward = APIPlayer.getFootWithOffset().add(clockwise[APIPlayer.getHeading()]);
 //		System.out.println("STEP=========" + APIPlayer.getFoot2() + "   " + forward);
 		V3D forward2 = forward.add(new V3D(0, 1, 0));
 		if(forward.getId() != 0 | forward2.getId() != 0) {
