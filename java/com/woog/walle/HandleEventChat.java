@@ -5,25 +5,16 @@ import java.util.Date;
 
 import com.woog.walle.additional.IDebug;
 import com.woog.walle.additional.LoginPassword;
+import com.woog.walle.additional.RebuildTree;
 import com.woog.walle.ai.AIManager;
-import com.woog.walle.ai.ActionBase;
 import com.woog.walle.ai.DigChunk;
 import com.woog.walle.ai.Digging;
 import com.woog.walle.ai.Fishing;
-import com.woog.walle.ai.KeepOnWatch;
 import com.woog.walle.ai.LogInIsland;
-import com.woog.walle.ai.Stuffing;
-import com.woog.walle.ai.Walk;
 import com.woog.walle.ai.Walk2There;
 import com.woog.walle.ai.WalkOneStep;
-import com.woog.walle.chatrobot.HttpRequest;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.CPacketClickWindow;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class HandleEventChat implements Runnable {
@@ -160,7 +151,12 @@ public class HandleEventChat implements Runnable {
 //						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
-						System.out.println("【T】" + APIChunk.getWood());
+						
+						;
+						;
+						
+						System.out.println("【T】" + new RebuildTree(APIChunk.getWood()).getRoot());
+//						System.out.println("【T】" + APIPlayer.getFacing().getDirectionVec());
 //						new Stuffing("pickaxe");
 //						V3D pos = new V3D(-990, 26, -1050);
 //						System.out.println("          " + mc.player.openContainer.getInventory());

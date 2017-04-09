@@ -3,9 +3,12 @@ package com.woog.walle;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.woog.walle.additional.IDirection;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.registry.GameData;
 
 public class V3D {
@@ -39,12 +42,22 @@ public class V3D {
 //		this.side = side;
 	}
 	
+	public V3D(Vec3i vec3i) {
+		this.x = vec3i.getX();
+		this.y = vec3i.getY();
+		this.z = vec3i.getZ();
+	}
+	
 	public Vec3d toVec3() {
 		return new Vec3d((double)this.x, (double)this.y, (double)this.z);
 	}
 	
 	public Vec3d getCenter() {
 		return new Vec3d((double)this.x + 0.5D, (double)this.y + 0.5D, (double)this.z + 0.5D);
+	}
+	
+	public V3D getOpposite() {
+		return new V3D(- this.x, - this.y, - this.z);
 	}
 	
 	public V3D(Vec3d position) {
@@ -59,6 +72,10 @@ public class V3D {
 		this.z = pos.getZ();
 	}
 	
+	/**
+	 * 相邻的6个坐标
+	 * @return
+	 */
 	public V3D[] targetsPhase() {
 		int x = this.x;
 		int y = this.y;
@@ -73,6 +90,10 @@ public class V3D {
 		return phase;
 	}
 	
+	/**
+	 * 此坐标 + 相邻的6个坐标
+	 * @return
+	 */
 	public V3D[] targetAndPhase() {
 		int x = this.x;
 		int y = this.y;
@@ -88,6 +109,10 @@ public class V3D {
 		return phase;
 	}
 	
+	/**
+	 * 相邻的6个坐标列表
+	 * @return
+	 */
 	public ArrayList<V3D> targetPhaseList() {
 		int x = this.x;
 		int y = this.y;
@@ -103,6 +128,10 @@ public class V3D {
 		return phase;
 	}
 	
+	/**
+	 * 相邻6个方块为中心点列表
+	 * @return
+	 */
 	public ArrayList<Vec3d> targetPhaseCenterList() {
 		int x = this.x;
 		int y = this.y;
@@ -150,6 +179,18 @@ public class V3D {
 		return new V3D(this.x - b.x, this.y - b.y, this.z - b.z);
 	}
 	
+	public V3D multiply(int i) {
+		return new V3D(this.x * i, this.y * i, this.z * i);
+	}
+	
+	public V3D multiplyX(int i) {
+		return new V3D(this.x * i, this.y, this.z);
+	}
+	
+	public V3D multiplyZ(int i) {
+		return new V3D(this.x, this.y, this.z * i);
+	}
+	
 	public double angle (V3D b) {
 		return Math.asin(Math.abs(this.y - b.y) / this.distance(b)) * Math.PI / 180;
 	}
@@ -164,11 +205,14 @@ public class V3D {
 	
 	@Override
 	public boolean equals(Object ob) {
-		if(ob.getClass().equals(this.getClass())) {
+		if(this == ob) {
+			return true;
+		}else if(!(ob instanceof V3D)){
+			return false;
+		}else{
 			V3D obj = (V3D)ob;
 			return this.x == obj.x && this.y == obj.y && this.z == obj.z;
 		}
-		return false;
 	}
 	
 	public boolean isDanger(int[] IDs) {
@@ -347,25 +391,50 @@ public class V3D {
 	}
 	
 	/**
-	 * 获得此位置周围距离为dis内的所有坐标，方向优先, 先正方向后斜方向， 由近至远
+	 * 获得此坐标水平面周围指定距离内的所有坐标，方向优先, 先正方向后斜方向，先前方向， 由近至远
 	 * @param dis
 	 * @return
 	 */
 	public V3D[] getNeighborByDistance(int dis) {
 		V3D[] b = new V3D[(dis + 1) * dis * 4];
 		int index = 0;
-		for(int i = 1; i <= dis; i++) {
-			
+		IDirection direction = new IDirection();
+		V3D[] wads = direction.getWADS();
+		for(int i = 0; i < wads.length; i++) {
+			for(int j = 1; j <= dis; j++) {
+				b[index] = this.add(wads[i].multiply(j));
+				index++;
+			}
 		}
-		for(int x = -1 * dis; x <= dis; x++) {
-			for(int z = -1 * dis; z <= dis; z++) {
-				if(x != 0 & z != 0) {
-					b[index] = new V3D(this.x + x, y, this.z + z);
+		V3D[] incline = direction.getIncline();
+		for(int i = 0; i < incline.length; i++) {
+//			System.out.println("           " + incline[i]);
+			for(int j = 1; j <= dis; j++) {
+				for(int k = 1; k < j; k++) {
+					b[index] = this.add(incline[i].multiplyXSetZ(k, j));
+//					System.out.println("    k:" + k + "  " + incline[i].multiplyXSetZ(k, j));
+//					System.out.println(incline[i].multiplyXSetZ(k, j));
+					index++;
+					b[index] = this.add(incline[i].multiplyZSetX(k, j));
+//					System.out.println(index + "    k:" + k + "  "  + incline[i].multiplyZSetX(k, j));
+//					System.out.println( incline[i].multiplyZSetX(k, j));
 					index++;
 				}
+				b[index] = this.add(incline[i].multiply(j));
+//				System.out.println(index + "    j:" + j + "  " + incline[i].multiply(j));
+//				System.out.println(incline[i].multiply(j));
+				index++;
 			}
 		}
 		return b;
+	}
+	
+	public V3D multiplyXSetZ(int i, int setz) {
+		return new V3D(this.x * i, this.y, this.z / Math.abs(this.z) * setz);
+	}
+	
+	public V3D multiplyZSetX(int i, int setx) {
+		return new V3D(this.x / Math.abs(this.x) * setx, this.y, this.z * i);
 	}
 	
 	public BlockPos toBlockPos() {

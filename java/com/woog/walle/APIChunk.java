@@ -1,5 +1,8 @@
 package com.woog.walle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
@@ -27,13 +30,15 @@ public class APIChunk {
 	}
 	
 	/**
-	 * 获取玩家头部高度平面内距离不大于5范围内的木头方块
+	 * 获取一个玩家头部高度平面内指定距离范围内的木头方块
 	 * @return
 	 */
-	public static Block getWood() {
+	public static V3D getWood() {
 		V3D[] neighbor = APIPlayer.getHeadPos().getNeighborByDistance(5);
 		for(V3D pos: neighbor) {
-			System.out.println("   " + pos);
+			if(getBlock(pos).getRegistryName().toString().matches("^.*minecraft:log.*")) {
+				return pos;
+			}
 		}
 		return null;
 	}

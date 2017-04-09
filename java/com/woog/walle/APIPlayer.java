@@ -3,6 +3,7 @@ package com.woog.walle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -67,6 +68,23 @@ public class APIPlayer {
 	public static int getHeading() {
 //		net.minecraftforge.client.GuiIngameForge;
 		return MathHelper.floor((double)(mc.player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+	}
+	
+	/**
+	 * 获取表示玩家朝向的坐标数据
+	 * @return
+	 */
+	public static Vec3d getDirectionDiff() {
+		return mc.player.getForward();
+	}
+	
+	/**
+	 * 获取玩家方向
+	 * @return
+	 */
+	public static EnumFacing getFacing() {
+		//GuiOverlayDebug
+		return mc.player.getHorizontalFacing();
 	}
 	
 	public static float yaw() {
