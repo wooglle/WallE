@@ -79,7 +79,7 @@ public class WallE {
 		MinecraftForge.EVENT_BUS.register(new EventChatClass());
 		MinecraftForge.EVENT_BUS.register(new EventSoundClass());
 		MinecraftForge.EVENT_BUS.register(new EventGuiClass());
-//		MinecraftForge.EVENT_BUS.register(new EventServerTestClass());
+//		MinecraftForge.EVENT_BUS.register(new EventItemClass());
 
 		// MinecraftForge.EVENT_BUS.register(new EventOfflineClass());
 		// System.out.println("客户端输出：" +

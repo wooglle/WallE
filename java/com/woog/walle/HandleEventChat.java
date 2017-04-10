@@ -167,7 +167,7 @@ public class HandleEventChat implements Runnable {
 //						Walk2There w2t = new Walk2There();
 //						new Walk2There();
 //						WallE.acts.add(w2t);
-						
+						mc.getBlockRendererDispatcher().getBlockModelShapes();
 //						new KeepOnWatch(new V3D(-940, 26, -1015), 1);
 						
 					} else if (chatInfo.matches("^.*(stop|停).*$")) {
