@@ -19,7 +19,7 @@ public class DigChunk extends ActionBase {
 	
 	@Override
 	public String getToolsKeyword() {
-		return "pickaxe";
+		return "_pickaxe";
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
@@ -35,6 +36,16 @@ public class APIChunk {
 	 */
 	public static boolean isLog(V3D pos) {
 		return getBlock(pos).getRegistryName().toString().equals("minecraft:log");
+	}
+	
+	/**
+	 * 判断指定位置是否空的
+	 * @param pos
+	 * @return
+	 */
+	public static boolean isEmpty(V3D pos) {
+		System.out.println("          " + getBlock(pos).getDefaultState().getMaterial().equals(Material.AIR));
+		return getBlock(pos).getDefaultState().getMaterial().equals(Material.AIR);
 	}
 	
 	/**

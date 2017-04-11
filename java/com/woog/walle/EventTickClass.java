@@ -13,6 +13,22 @@ public class EventTickClass {
 	public void Tick(ClientTickEvent e) {
 //		System.out.println("[IIIIII]     " + e);
 		if(doCheckTrees){
+			Thread thread = new Thread(new CheckTrees());
+			thread.setName("Check Trees");
+			thread.start();
+			
+		}
+	}
+	
+//	@SubscribeEvent
+//	public void Packet2(RenderTooltipEvent e) {
+//		System.out.println("[Item]     " + e.toString());
+//	}
+	
+	private class CheckTrees implements Runnable {
+
+		@Override
+		public void run() {
 			boolean findTree = false;
 			if(WallE.TreeRootPos.isEmpty()) {
 				V3D tree = APIChunk.getWood();
@@ -35,11 +51,6 @@ public class EventTickClass {
 				new CutTrees();
 			}
 		}
+		
 	}
-	
-//	@SubscribeEvent
-//	public void Packet2(RenderTooltipEvent e) {
-//		System.out.println("[Item]     " + e.toString());
-//	}
-	
 }

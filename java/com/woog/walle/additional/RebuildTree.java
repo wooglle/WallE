@@ -9,27 +9,63 @@ import com.woog.walle.V3D;
 public class RebuildTree {
 	private V3D pos;
 	private List<V3D> logs = new ArrayList<V3D>(10);
-	private List<V3D> leaves = new ArrayList<V3D>(10);
+	private List<V3D> leaves = new ArrayList<V3D>(20);
 	private V3D root;
+	private V3D top;
+	public boolean isStraight = true;
 	public RebuildTree(V3D pos) {
 		this.pos = pos;
 		this.rebuild(pos);
 	}
 	
 	private void rebuild(V3D p) {
+		List<V3D> tLogs = new ArrayList<V3D>(10);
+		List<V3D> tLeaves = new ArrayList<V3D>(20);
+		
 		for(V3D tem : p.getUDLRFB()) {
 			if(!hasRebuild(tem)) {
 				String name = APIChunk.getBlock(tem).getRegistryName().toString();
 				if(name.equals("minecraft:log")) {
-					this.logs.add(tem);
+					tLogs.add(tem);
 					rebuild(tem);
 				}
 				if(name.equals("minecraft:leaves")) {
-					this.leaves.add(tem);
+					tLeaves.add(tem);
 					rebuild(tem);
 				}
 			}
 		}
+		V3D min = this.logs.get(0);
+		V3D max = this.logs.get(0);
+		for(V3D t : this.logs) {
+			if(t.y < min.y) {
+				min = t;
+			}
+			if(t.y > max.y) {
+				max = t;
+			}
+			if(t.x != min.x | t.z != min.z) {
+				this.isStraight = false;
+			}
+		}
+		
+		this.root = min;
+		this.top = max;
+		this.logs = this.getFloors(tLogs);
+		this.leaves = tLeaves;
+	}
+	
+	private List<V3D> getFloors(List<V3D> list) {
+		List<V3D> b = new ArrayList<V3D>(list.size());
+		
+		for(int i = 0; i <= this.top.y - this.root.y; i++) {
+			for(V3D t : list) {
+				if(t.y == this.root.y + i) {
+					b.add(t);
+				}
+			}
+		}
+		return b;
 	}
 	
 	private boolean hasRebuild(V3D p) {
@@ -58,12 +94,6 @@ public class RebuildTree {
 	}
 	
 	public V3D getRoot() {
-		V3D min = new V3D(0, 999, 0);
-		for(V3D t : this.logs) {
-			if(t.y < min.y) {
-				min = t;
-			}
-		}
-		return min;
+		return this.root;
 	}
 }
