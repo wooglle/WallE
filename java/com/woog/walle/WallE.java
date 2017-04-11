@@ -50,6 +50,10 @@ public class WallE {
 //	public static boolean isWalking = false;
 	public static List<ActionBase> acts = new ArrayList(10);
 	public static ActionBase currentAct = null;
+	public static List<V3D> TreeRootPos = new ArrayList<V3D>(20);
+	/**砍树AI保存已经长成的树的坐标列表*/
+	public static List<V3D> TreePos = new ArrayList<V3D>(20);
+	public static boolean isCuttingTrees = false;
 
 	public void preLoad(FMLPreInitializationEvent event) throws FileNotFoundException, IOException {
 	}
@@ -79,7 +83,7 @@ public class WallE {
 		MinecraftForge.EVENT_BUS.register(new EventChatClass());
 		MinecraftForge.EVENT_BUS.register(new EventSoundClass());
 		MinecraftForge.EVENT_BUS.register(new EventGuiClass());
-//		MinecraftForge.EVENT_BUS.register(new EventItemClass());
+		MinecraftForge.EVENT_BUS.register(new EventTickClass());
 
 		// MinecraftForge.EVENT_BUS.register(new EventOfflineClass());
 		// System.out.println("客户端输出：" +

@@ -152,10 +152,9 @@ public class HandleEventChat implements Runnable {
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
 						
-						;
-						;
+						EventTickClass.doCheckTrees = true;
 						
-						System.out.println("【T】" + new RebuildTree(APIChunk.getWood()).getRoot());
+//						System.out.println("【T】" + new RebuildTree(APIChunk.getWood()).getRoot());
 //						System.out.println("【T】" + APIPlayer.getFacing().getDirectionVec());
 //						new Stuffing("pickaxe");
 //						V3D pos = new V3D(-990, 26, -1050);

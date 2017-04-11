@@ -12,12 +12,11 @@ public class APIChunk {
 	private static Minecraft mc = Minecraft.getMinecraft();
 
 	/**
-	 * 获取晚间视线落点的方块
+	 * 获取玩家视线落点的方块
 	 * @return
 	 */
 	public static Block getBlockEyesOn() {
-		return Minecraft.getMinecraft().world
-				.getBlockState(new BlockPos(APIPlayer.viewX(), APIPlayer.viewY(), APIPlayer.viewZ())).getBlock();
+		return getBlock(new V3D(APIPlayer.viewX(), APIPlayer.viewY(), APIPlayer.viewZ()));
 	}
 	
 	/**
@@ -30,13 +29,22 @@ public class APIChunk {
 	}
 	
 	/**
+	 * 判断指定位置是否原木
+	 * @param pos
+	 * @return
+	 */
+	public static boolean isLog(V3D pos) {
+		return getBlock(pos).getRegistryName().toString().equals("minecraft:log");
+	}
+	
+	/**
 	 * 获取一个玩家头部高度平面内指定距离范围内的木头方块
 	 * @return
 	 */
 	public static V3D getWood() {
 		V3D[] neighbor = APIPlayer.getHeadPos().getNeighborByDistance(5);
 		for(V3D pos: neighbor) {
-			if(getBlock(pos).getRegistryName().toString().matches("^.*minecraft:log.*")) {
+			if(isLog(pos)) {
 				return pos;
 			}
 		}

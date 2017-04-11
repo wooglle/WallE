@@ -1,12 +1,8 @@
 package com.woog.walle.additional;
 
-import com.woog.walle.EventChatClass;
-import com.woog.walle.EventGuiClass;
 import com.woog.walle.WallE;
-import com.woog.walle.WalleRuntime;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class LoginPassword {
 	private static Minecraft mc = Minecraft.getMinecraft();
