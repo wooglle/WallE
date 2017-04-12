@@ -14,7 +14,7 @@ public class CutTrees extends ActionBase {
 	
 	@Override
 	public String getToolsKeyword() {
-		return "_axe";
+		return "hatchet";
 	}
 	
 	@Override
@@ -78,9 +78,7 @@ public class CutTrees extends ActionBase {
 			}else{
 				startPos = tpos;
 			}
-			System.out.println("      " + APIPlayer.getHeadPos().distance(startPos));
 			if(APIPlayer.getHeadPos().distance(startPos) > 1.1D) {
-//				this.pause = true;
 				new RayTraceTarget(startPos, false);
 				new Walk2There();
 //				delay(100);

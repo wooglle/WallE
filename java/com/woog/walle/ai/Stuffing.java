@@ -26,13 +26,7 @@ public class Stuffing{
 		boolean isStuffed = false;
 		int n = APIInventory.getItemIndexByKeyword(itemKeyword);
 		if(n >= 0) {
-//			swapSlot2Hotbar(n, mc.player.inventory.currentItem);
 			swapSlot2Hotbar(this.getItemInBackbagByKeyword(itemKeyword), mc.player.inventory.currentItem);
-//			if(n < 9) {
-//				mc.player.inventory.currentItem = n;
-//			}else{
-//				swapSlot2Hotbar(this.getItemInBackbagByKeyword(itemKeyword), mc.player.inventory.currentItem);
-//			}
 			isStuffed = true;
 		}
 		if(!isStuffed) {
@@ -58,7 +52,6 @@ public class Stuffing{
 	 */
 	private int getItemInBackbagByKeyword(String keyword){
 		String currentItemName = keyword;
-//		System.out.println("     " + APIInventory.getPacketInventory().size());
 		NonNullList<ItemStack> packet = APIInventory.getPacketInventory();
 		for(int i = 9; i < 45; i++){
 			ItemStack item = packet.get(i);

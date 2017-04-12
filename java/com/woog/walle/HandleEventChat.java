@@ -11,6 +11,7 @@ import com.woog.walle.ai.DigChunk;
 import com.woog.walle.ai.Digging;
 import com.woog.walle.ai.Fishing;
 import com.woog.walle.ai.LogInIsland;
+import com.woog.walle.ai.Stuffing;
 import com.woog.walle.ai.Walk2There;
 import com.woog.walle.ai.WalkOneStep;
 
@@ -152,9 +153,16 @@ public class HandleEventChat implements Runnable {
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
 						
+//						EventTickClass.doCheckTrees = false;
 						EventTickClass.doCheckTrees = true;
+//						new Stuffing("hatchet");
 						
-//						System.out.println("【T】" + new RebuildTree(APIChunk.getWood()).getRoot());
+						
+						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getUnlocalizedName());
+//						System.out.println("【T】" + APIInventory.getHeldItem());
+//						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourceDomain());
+//						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourcePath());
+						
 //						System.out.println("【T】" + APIPlayer.getFacing().getDirectionVec());
 //						new Stuffing("pickaxe");
 //						V3D pos = new V3D(-990, 26, -1050);

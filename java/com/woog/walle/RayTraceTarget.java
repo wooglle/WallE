@@ -41,18 +41,23 @@ public class RayTraceTarget {
 		}
 	}
 	
+	/**
+	 * 自动获取指定坐标的落脚点及路线
+	 * @param targetV3D 指定目标
+	 * @param canBreak 是否破坏方块
+	 */
 	public RayTraceTarget(V3D targetV3D, boolean canBreak) {
-		System.out.println("现在1111:" + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D);
 		WallE.way = null;
 		double dis = APIPlayer.getFootWithOffset().centerDistance(targetV3D);
-//		Vec3d vec1 = mc.player.getPositionEyes(1.0F);
-//		Vec3d vec2 = mc.player.getLook(1.0F);
-//		Vec3d vec3 = vec1.addVector(vec2.xCoord * dis, vec2.yCoord * dis, vec2.zCoord * dis);
 		this.target = targetV3D;
 		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
 		this.isDanger = this.isDanger(target);
 		if(dis < 2.0D) {
-			foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
+			if(APIChunk.isEmpty(targetV3D)) {
+				foothold = targetV3D;
+			}else{
+				foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
+			}
 			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
 		}else{
 			foothold = getFoothold(target);
@@ -60,9 +65,24 @@ public class RayTraceTarget {
 		}
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-//			for(int i = 0; i < Astar.way.size(); i++) {
-//			}
-			System.out.println("现在2222:" + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+			System.out.println("RayTraceTarget1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+		}
+	}
+	
+	/**
+	 * 自动获取到达指定坐标的路线
+	 * @param targetV3D 目标（即落脚点）
+	 */
+	public RayTraceTarget(V3D targetV3D) {
+		WallE.way = null;
+		double dis = APIPlayer.getFootWithOffset().centerDistance(targetV3D);
+		this.target = targetV3D;
+		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
+		this.isDanger = this.isDanger(target);
+		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), target, false);
+		if(!Astar.way.isEmpty()) {
+			WallE.way = Astar.way;
+			System.out.println("RayTraceTarget2:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	
