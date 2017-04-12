@@ -44,7 +44,6 @@ public class APIChunk {
 	 * @return
 	 */
 	public static boolean isEmpty(V3D pos) {
-		System.out.println("          " + getBlock(pos).getDefaultState().getMaterial().equals(Material.AIR));
 		return getBlock(pos).getDefaultState().getMaterial().equals(Material.AIR);
 	}
 	

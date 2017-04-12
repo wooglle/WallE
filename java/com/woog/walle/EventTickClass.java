@@ -8,15 +8,15 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 public class EventTickClass {
 	public static boolean doCheckTrees = false;
 	public static boolean doCheckFram = false;
+	private static boolean doing = false;
 	
 	@SubscribeEvent
 	public void Tick(ClientTickEvent e) {
-//		System.out.println("[IIIIII]     " + e);
-		if(doCheckTrees){
+		if(doCheckTrees & !doing){
+			doing = true;
 			Thread thread = new Thread(new CheckTrees());
 			thread.setName("Check Trees");
 			thread.start();
-			
 		}
 	}
 	
@@ -50,6 +50,7 @@ public class EventTickClass {
 				WallE.isCuttingTrees = true;
 				new CutTrees();
 			}
+			doing = false;
 		}
 		
 	}

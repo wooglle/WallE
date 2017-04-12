@@ -10,18 +10,18 @@ public class RebuildTree {
 	private V3D pos;
 	private List<V3D> logs = new ArrayList<V3D>(10);
 	private List<V3D> leaves = new ArrayList<V3D>(20);
+	List<V3D> tLogs = new ArrayList<V3D>(10);
+	List<V3D> tLeaves = new ArrayList<V3D>(20);
 	private V3D root;
 	private V3D top;
 	public boolean isStraight = true;
 	public RebuildTree(V3D pos) {
 		this.pos = pos;
 		this.rebuild(pos);
+		this.setTree();
 	}
 	
 	private void rebuild(V3D p) {
-		List<V3D> tLogs = new ArrayList<V3D>(10);
-		List<V3D> tLeaves = new ArrayList<V3D>(20);
-		
 		for(V3D tem : p.getUDLRFB()) {
 			if(!hasRebuild(tem)) {
 				String name = APIChunk.getBlock(tem).getRegistryName().toString();
@@ -35,9 +35,12 @@ public class RebuildTree {
 				}
 			}
 		}
-		V3D min = this.logs.get(0);
-		V3D max = this.logs.get(0);
-		for(V3D t : this.logs) {
+	}
+	
+	private void setTree() {
+		V3D min = this.tLogs.get(0);
+		V3D max = this.tLogs.get(0);
+		for(V3D t : this.tLogs) {
 			if(t.y < min.y) {
 				min = t;
 			}
@@ -69,15 +72,15 @@ public class RebuildTree {
 	}
 	
 	private boolean hasRebuild(V3D p) {
-		if(this.logs == null) {
+		if(this.tLogs == null) {
 			return false;
 		}
-		for(V3D t : this.logs) {
+		for(V3D t : this.tLogs) {
 			if(p.isEqual(t)) {
 				return true;
 			}
 		}
-		for(V3D t : this.leaves) {
+		for(V3D t : this.tLeaves) {
 			if(p.isEqual(t)) {
 				return true;
 			}
@@ -96,4 +99,5 @@ public class RebuildTree {
 	public V3D getRoot() {
 		return this.root;
 	}
+	
 }

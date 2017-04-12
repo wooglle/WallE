@@ -9,6 +9,9 @@ import com.woog.walle.WallE;
 import com.woog.walle.additional.RebuildTree;
 
 public class CutTrees extends ActionBase {
+	private static RebuildTree currentTree = null;
+	private static int hasCutted = 0;
+	
 	@Override
 	public String getToolsKeyword() {
 		return "_axe";
@@ -25,12 +28,31 @@ public class CutTrees extends ActionBase {
 	}
 	
 	private void cutATree(RebuildTree tree) {
+		System.out.println("  tree.isStraight    " + tree.isStraight);
 		if(tree.isStraight) {
 			for(V3D pos : tree.getLogs()) {
 				this.cutOneLog(pos);
-				
+				V3D foothold = getBetterFoothold(tree.getRoot(), pos);
+				if(foothold != null) {
+					new RayTraceTarget(foothold, false);
+					new Walk2There();
+					return;
+				}
 			}
 		}
+	}
+	
+	private V3D getBetterFoothold(V3D treeRoot, V3D pos) {
+		V3D foot = APIPlayer.getFootWithOffset();
+		V3D better = null;
+		if(pos.y > foot.y ) {
+			if(pos.y < foot.y + 7) {
+				if(!foot.isEqual(treeRoot)) {
+					better = treeRoot;
+				}
+			}
+		}
+		return better;
 	}
 	
 	private void cutOneLog(V3D pos) {
@@ -41,24 +63,37 @@ public class CutTrees extends ActionBase {
 			delay(20);
 		}
 		mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
+		hasCutted++;
 	}
 	
 	@Override
 	public void action() {
 		WallE.isCuttingTrees = true;
-		while(this.condition() && !WallE.TreePos.isEmpty()) {
-			RebuildTree tree = new RebuildTree(WallE.TreePos.get(0));
-			System.out.println("      " + APIPlayer.getHeadPos().distance(tree.getRoot()));
-			if(APIPlayer.getHeadPos().distance(tree.getRoot()) > 2.1D) {
+		if(this.condition() && !WallE.TreePos.isEmpty()) {
+			V3D startPos = null;
+			V3D tpos = WallE.TreePos.get(0);
+			V3D t = new V3D(tpos.x, APIPlayer.getHeadPos().y, tpos.z);
+			if(APIChunk.isLog(t)) {
+				startPos = t;
+			}else{
+				startPos = tpos;
+			}
+			System.out.println("      " + APIPlayer.getHeadPos().distance(startPos));
+			if(APIPlayer.getHeadPos().distance(startPos) > 1.1D) {
 //				this.pause = true;
-				new RayTraceTarget(tree.getRoot(), false);
+				new RayTraceTarget(startPos, false);
 				new Walk2There();
-				this.cutATree(tree);
 //				delay(100);
 				return;
 			}else{
-				if(!APIChunk.isLog(WallE.TreePos.get(0))) {
+				if(currentTree == null) {
+					currentTree = new RebuildTree(WallE.TreePos.get(0));
+					hasCutted = 0;
+				}
+				this.cutATree(currentTree);
+				if(currentTree.getLogs().size() <= hasCutted) {
 					WallE.TreePos.remove(0);
+					currentTree = null;
 					WallE.isCuttingTrees = false;
 				}
 			}

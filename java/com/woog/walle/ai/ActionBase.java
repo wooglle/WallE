@@ -59,6 +59,7 @@ public class ActionBase {
 	 * 手持物重装
 	 */
 	protected void holdStuff() {
+		System.out.println("BASE   " + this.canStuff());
 		if(this.canStuff()) {
 			if(mc.gameSettings.keyBindAttack.isKeyDown()) {
 				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
@@ -83,7 +84,8 @@ public class ActionBase {
 			return true;
 		}else{
 			boolean flag = false;
-			if(APIInventory.getHeldItem().getItem().getUnlocalizedName().matches("^.*" + toolsKeyword + ".*")) {
+			System.out.println("base   " + APIInventory.getHeldItem().getItem().getRegistryName().toString());
+			if(!APIInventory.getHeldItem().getItem().getRegistryName().toString().matches("^.*" + toolsKeyword + ".*")) {
 				flag = true;
 			}
 			if(flag && APIInventory.getHeldItemDamage() < WallE.minItemDamage) {
