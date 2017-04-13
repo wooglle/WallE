@@ -16,6 +16,9 @@ public class RebuildTree {
 	private V3D top;
 	public boolean isStraight = true;
 	public RebuildTree(V3D pos) {
+		if(pos == null) {
+			return;
+		}
 		this.pos = pos;
 		this.rebuild(pos);
 		this.setTree();
