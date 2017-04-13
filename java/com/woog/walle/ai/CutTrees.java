@@ -10,6 +10,7 @@ import com.woog.walle.additional.RebuildTree;
 
 public class CutTrees extends ActionBase {
 	private static RebuildTree currentTree = null;
+	private static V3D originPos = null;
 	private static int hasCutted = 0;
 	
 	@Override
@@ -86,12 +87,21 @@ public class CutTrees extends ActionBase {
 			}else{
 				if(currentTree == null) {
 					currentTree = new RebuildTree(WallE.TreePos.get(0));
+					this.originPos = APIPlayer.getFootWithOffset();
 					hasCutted = 0;
 				}
 				this.cutATree(currentTree);
 				if(currentTree.getLogs().size() <= hasCutted) {
+					new FaceTo(currentTree.getRoot(), 1);
+					new Stuffing("sapling");
+					mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
+					delay(50);
+					mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
+					new RayTraceTarget(this.originPos, false);
+					new Walk2There();
 					WallE.TreePos.remove(0);
 					currentTree = null;
+					originPos = null;
 					WallE.isCuttingTrees = false;
 				}
 			}

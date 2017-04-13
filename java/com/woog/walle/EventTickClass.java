@@ -9,15 +9,21 @@ public class EventTickClass {
 	public static boolean doCheckTrees = false;
 	public static boolean doCheckFram = false;
 	private static boolean doing = false;
+	private static int n = 0;
 	
 	@SubscribeEvent
 	public void Tick(ClientTickEvent e) {
+		n++;
+		if(n < 50) {
+			return;
+		}
 		if(doCheckTrees & !doing){
 			doing = true;
 			Thread thread = new Thread(new CheckTrees());
 			thread.setName("Check Trees");
 			thread.start();
 		}
+		n = 0;
 	}
 	
 //	@SubscribeEvent

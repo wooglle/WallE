@@ -60,7 +60,11 @@ public class RayTraceTarget {
 			}
 			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
 		}else{
-			foothold = getFoothold(target);
+			if(APIChunk.isEmpty(targetV3D)) {
+				foothold = targetV3D;
+			}else{
+				foothold = getFoothold(target);
+			}
 			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
 		}
 		if(!Astar.way.isEmpty()) {
@@ -75,10 +79,11 @@ public class RayTraceTarget {
 	 */
 	public RayTraceTarget(V3D targetV3D) {
 		WallE.way = null;
+		this.foothold = targetV3D;
 		double dis = APIPlayer.getFootWithOffset().centerDistance(targetV3D);
 		this.target = targetV3D;
-		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
-		this.isDanger = this.isDanger(target);
+		this.targetBlock = APIChunk.getBlock(targetV3D);
+		this.isDanger = false;
 		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), target, false);
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
