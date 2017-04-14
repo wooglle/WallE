@@ -69,7 +69,7 @@ public class RayTraceTarget {
 		}
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-			System.out.println("RayTraceTarget1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	
@@ -87,7 +87,7 @@ public class RayTraceTarget {
 		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), target, false);
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-			System.out.println("RayTraceTarget2:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+			System.out.println("RayTraceTarget 2:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	

@@ -58,12 +58,12 @@ public class CutTrees extends ActionBase {
 	
 	private void cutOneLog(V3D pos) {
 		this.holdStuff();
-		mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
+		this.util.leftDown();
 		while(!APIChunk.isEmpty(pos)) {
 			new FaceTo(pos, 1);
 			delay(20);
 		}
-		mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
+		this.util.leftUp();
 		hasCutted++;
 	}
 	
@@ -94,9 +94,9 @@ public class CutTrees extends ActionBase {
 				if(currentTree.getLogs().size() <= hasCutted) {
 					new FaceTo(currentTree.getRoot(), 1);
 					new Stuffing("sapling");
-					mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
+					this.util.leftDown();
 					delay(50);
-					mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
+					this.util.leftUp();
 					new RayTraceTarget(this.originPos, false);
 					new Walk2There();
 					WallE.TreePos.remove(0);
