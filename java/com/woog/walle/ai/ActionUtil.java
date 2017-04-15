@@ -49,7 +49,6 @@ public class ActionUtil {
 		mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), true);
 	}
 	
-	
 	public void setMouse() {
 		
 	}
@@ -73,6 +72,29 @@ public class ActionUtil {
 	
 	public void mouseDefault() {
 		mc.mouseHelper = new MouseHelper();
+	}
+	
+	public void leftDown() {
+		mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
+	}
+	
+	public void leftUp() {
+		mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
+	}
+	
+	public void leftClick() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
+			}
+		}).start();
 	}
 	
 	private class GazeAtBlock extends Thread {

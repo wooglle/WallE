@@ -9,15 +9,16 @@ import net.minecraftforge.fml.common.registry.GameData;
 public class RayTraceTarget {
 	private Minecraft mc = Minecraft.getMinecraft();
 	public Block targetBlock;
-//	public double dis;
 	private boolean isDanger;
 	private V3D foothold = null;
 	public AstarFindWay Astar;
 	public V3D target;
+	private boolean canEditeBlock = false;
 //	public List<V3D> way;
 	
 	public RayTraceTarget(int distance, boolean canBreak) {
-		WallE.way = null;
+		this.canEditeBlock = canBreak;
+		WallE.way.clear();
 		double dis = (double)distance;
 		Vec3d vec1 = mc.player.getPositionEyes(1.0F);
 		Vec3d vec2 = mc.player.getLook(1.0F);
@@ -27,10 +28,10 @@ public class RayTraceTarget {
 		this.isDanger = this.isDanger(target);
 		if(distance < 2) {
 			foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
-			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
+			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 		}else{
 			foothold = getFoothold(target);
-			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
+			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 		}
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
@@ -47,29 +48,30 @@ public class RayTraceTarget {
 	 * @param canBreak 是否破坏方块
 	 */
 	public RayTraceTarget(V3D targetV3D, boolean canBreak) {
-		WallE.way = null;
+		this.canEditeBlock = canBreak;
+		WallE.way.clear();
 		double dis = APIPlayer.getFootWithOffset().centerDistance(targetV3D);
 		this.target = targetV3D;
 		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
 		this.isDanger = this.isDanger(target);
-		if(dis < 2.0D) {
-			if(APIChunk.isEmpty(targetV3D)) {
+		if(dis < 2.9D) {
+			if(APIChunk.isSafeForStand(targetV3D)) {
 				foothold = targetV3D;
 			}else{
 				foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
 			}
-			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
+			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 		}else{
-			if(APIChunk.isEmpty(targetV3D)) {
+			if(APIChunk.isSafeForStand(targetV3D)) {
 				foothold = targetV3D;
 			}else{
 				foothold = getFoothold(target);
 			}
-			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, canBreak);
+			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 		}
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-			System.out.println("RayTraceTarget1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	
@@ -78,8 +80,9 @@ public class RayTraceTarget {
 	 * @param targetV3D 目标（即落脚点）
 	 */
 	public RayTraceTarget(V3D targetV3D) {
-		WallE.way = null;
 		this.foothold = targetV3D;
+		this.canEditeBlock = false;
+		WallE.way.clear();
 		double dis = APIPlayer.getFootWithOffset().centerDistance(targetV3D);
 		this.target = targetV3D;
 		this.targetBlock = APIChunk.getBlock(targetV3D);
@@ -87,19 +90,19 @@ public class RayTraceTarget {
 		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), target, false);
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-			System.out.println("RayTraceTarget2:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+			System.out.println("RayTraceTarget 2:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	
-	private V3D[] foots = new V3D[13];
-	private double[] socre = new double[13];
 	private V3D getFoothold(V3D targetPos) {
+		V3D[] foots = new V3D[13];
+		double[] socre = new double[13];
 		int x = targetPos.x;
 		int y = targetPos.y;
 		int z = targetPos.z;
 		double max = -9999.0D;
 		int s = 1;
-		foots[0] = new V3D(mc.player.getPositionEyes(1.0F)).minus(new V3D(0, 1, 0));
+		foots[0] = new V3D(mc.player.getPositionEyes(1.0F)).addY(1);
 		foots[1] = new V3D(x - 1, y - 1, z);
 		foots[2] = new V3D(x + 1, y - 1, z);
 		foots[3] = new V3D(x, y - 1, z - 1);

@@ -12,7 +12,6 @@ public class CutTrees extends ActionBase {
 	private static RebuildTree currentTree = null;
 	private static V3D originPos = null;
 	private static int hasCutted = 0;
-	private static boolean hasArrived = false;
 	
 	@Override
 	public String getToolsKeyword() {
@@ -36,7 +35,7 @@ public class CutTrees extends ActionBase {
 				this.cutOneLog(pos);
 				V3D foothold = getBetterFoothold(tree.getRoot(), pos);
 				if(foothold != null) {
-					new RayTraceTarget(foothold);
+					new RayTraceTarget(foothold, false);
 					new Walk2There();
 					return;
 				}
@@ -47,10 +46,10 @@ public class CutTrees extends ActionBase {
 	private V3D getBetterFoothold(V3D treeRoot, V3D pos) {
 		V3D foot = APIPlayer.getFootWithOffset();
 		V3D better = null;
-		if(pos.y > foot.y + 1) {
-			if(pos.y < foot.y + 6) {
+		if(pos.y > foot.y ) {
+			if(pos.y < foot.y + 7) {
 				if(!foot.isEqual(treeRoot)) {
-					better = new V3D(pos.x, pos.y - 2, pos.z);
+					better = treeRoot;
 				}
 			}
 		}
@@ -59,12 +58,12 @@ public class CutTrees extends ActionBase {
 	
 	private void cutOneLog(V3D pos) {
 		this.holdStuff();
-		mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
+		this.util.leftDown();
 		while(!APIChunk.isEmpty(pos)) {
 			new FaceTo(pos, 1);
 			delay(20);
 		}
-		mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
+		this.util.leftUp();
 		hasCutted++;
 	}
 	
@@ -72,40 +71,39 @@ public class CutTrees extends ActionBase {
 	public void action() {
 		WallE.isCuttingTrees = true;
 		if(this.condition() && !WallE.TreePos.isEmpty()) {
-			if(!hasArrived) {
-				V3D startPos = null;
-				V3D tpos = WallE.TreePos.get(0);
-				V3D t = new V3D(tpos.x, APIPlayer.getHeadPos().y, tpos.z);
-				if(APIChunk.isLog(t)) {
-					startPos = t;
-				}else{
-					startPos = tpos;
-				}
-				if(APIPlayer.getHeadPos().distance(startPos) > 1.8D) {
-					new RayTraceTarget(startPos, false);
-					hasArrived = true;
-					new Walk2There();
-					return;
-				}
+			V3D startPos = null;
+			V3D tpos = WallE.TreePos.get(0);
+			V3D t = new V3D(tpos.x, APIPlayer.getHeadPos().y, tpos.z);
+			if(APIChunk.isLog(t)) {
+				startPos = t;
+			}else{
+				startPos = tpos;
 			}
-			if(currentTree == null) {
-				currentTree = new RebuildTree(WallE.TreePos.get(0));
-				originPos = APIPlayer.getFootWithOffset();
-				hasCutted = 0;
-			}
-			this.cutATree(currentTree);
-			if(currentTree.getLogs().size() <= hasCutted) {
-				new FaceTo(currentTree.getRoot(), 1);
-				new Stuffing("sapling");
-				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
-				delay(50);
-				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
-				new RayTraceTarget(this.originPos, false);
+			if(APIPlayer.getHeadPos().distance(startPos) > 1.1D) {
+				new RayTraceTarget(startPos, false);
 				new Walk2There();
-				WallE.TreePos.remove(0);
-				currentTree = null;
-				originPos = null;
-				WallE.isCuttingTrees = false;
+//				delay(100);
+				return;
+			}else{
+				if(currentTree == null) {
+					currentTree = new RebuildTree(WallE.TreePos.get(0));
+					this.originPos = APIPlayer.getFootWithOffset();
+					hasCutted = 0;
+				}
+				this.cutATree(currentTree);
+				if(currentTree.getLogs().size() <= hasCutted) {
+					new FaceTo(currentTree.getRoot(), 1);
+					new Stuffing("sapling");
+					this.util.leftDown();
+					delay(50);
+					this.util.leftUp();
+					new RayTraceTarget(this.originPos, false);
+					new Walk2There();
+					WallE.TreePos.remove(0);
+					currentTree = null;
+					originPos = null;
+					WallE.isCuttingTrees = false;
+				}
 			}
 		}
 	}
