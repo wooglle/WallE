@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.woog.walle.APIChunk;
+import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
 
 public class RebuildTree {
@@ -81,6 +82,19 @@ public class RebuildTree {
 			}
 		}
 		return b;
+	}
+	
+	public V3D getLeafCanBreak() {
+		for(V3D tem : this.leaves) {
+			if(tem.y <= APIPlayer.getHeadPos().y + 5) {
+				return tem;
+			}
+		}
+		return null;
+	}
+	
+	public void removeFirstLeaf() {
+		this.leaves.remove(0);
 	}
 	
 	private boolean hasRebuild(V3D p) {

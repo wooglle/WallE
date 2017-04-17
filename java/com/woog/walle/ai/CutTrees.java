@@ -75,6 +75,17 @@ public class CutTrees extends ActionBase {
 		hasCutted++;
 	}
 	
+	private void plantingTree() {
+		while(APIChunk.isEmpty(CutTrees.currentTree.getRoot())) {
+			new FaceTo(CutTrees.currentTree.getRoot().addY(-1), 1);
+			new Stuffing("sapling");
+			this.util.rightDown();
+			delay(50);
+			this.util.rightUp();
+			delay(1000);
+		}
+	}
+	
 	@Override
 	public void action() {
 		WallE.isCuttingTrees = true;
@@ -99,22 +110,50 @@ public class CutTrees extends ActionBase {
 			this.cutATree(CutTrees.currentTree);
 			if(CutTrees.currentTree.getLogs().size() <= CutTrees.hasCutted) {
 				if(APIChunk.isEmpty(CutTrees.currentTree.getRoot())) {
-					new FaceTo(CutTrees.currentTree.getRoot().addY(-1), 1);
-					new Stuffing("sapling");
-					this.util.rightDown();
-					delay(50);
-					this.util.rightUp();
-					new RayTraceTarget(CutTrees.originPos, false);
-					new Walk2There();
-				}else{
+					this.plantingTree();
+//					new RayTraceTarget(CutTrees.originPos, false);
+//					new Walk2There();
+//					return;
+				}
+//				else{
+					while(CutTrees.currentTree.getLeafCanBreak() != null) {
+						V3D leaf = CutTrees.currentTree.getLeafCanBreak();
+						RayTraceTarget rayTrace = new RayTraceTarget(leaf, false);
+						if(!APIPlayer.getFootWithOffset().isEqual(rayTrace.foothold)) {
+							new Walk2There();
+							return;
+						}else{
+							new FaceTo(leaf, 1);
+							this.util.leftDown();
+							while(!APIChunk.isEmpty(leaf)) {
+								delay(20);
+							}
+							this.util.leftUp();
+							CutTrees.currentTree.removeFirstLeaf();
+						}
+					}
+					if(!APIPlayer.getFootWithOffset().isEqual(CutTrees.originPos)) {
+						new RayTraceTarget(CutTrees.originPos, false);
+						new Walk2There();
+						return;
+					}
 					new FaceTo(CutTrees.currentTree.getRoot(), 1);
 					WallE.TreePos.remove(0);
 					CutTrees.currentTree = null;
 					CutTrees.originPos = null;
 					CutTrees.hasCutted = 0;
 					WallE.isCuttingTrees = false;
-				}
+//				}
+//				else{
+//					new FaceTo(CutTrees.currentTree.getRoot(), 1);
+//					WallE.TreePos.remove(0);
+//					CutTrees.currentTree = null;
+//					CutTrees.originPos = null;
+//					CutTrees.hasCutted = 0;
+//					WallE.isCuttingTrees = false;
+//				}
 			}
+			
 		}
 	}
 }

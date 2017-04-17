@@ -13,7 +13,7 @@ public class RayTraceTarget {
 	private Minecraft mc = Minecraft.getMinecraft();
 	public Block targetBlock;
 	private boolean isDanger;
-	private V3D foothold = null;
+	public V3D foothold = null;
 	public AstarFindWay Astar;
 	public V3D target;
 	private boolean canEditeBlock = false;
@@ -57,21 +57,21 @@ public class RayTraceTarget {
 		this.target = targetV3D;
 		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
 		this.isDanger = this.isDanger(target);
-		if(dis < 2.9D) {
-			if(APIChunk.isSafeForStand(targetV3D)) {
-				foothold = targetV3D;
-			}else{
-				foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
-			}
-			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-		}else{
+//		if(dis < 2.9D) {
+//			if(APIChunk.isSafeForStand(targetV3D)) {
+//				foothold = targetV3D;
+//			}else{
+//				foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
+//			}
+//			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
+//		}else{
 			if(APIChunk.isSafeForStand(targetV3D)) {
 				foothold = targetV3D;
 			}else{
 				foothold = getFoothold(target);
 			}
 			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-		}
+//		}
 		if(Astar.way != null && !Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
 			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
@@ -111,7 +111,6 @@ public class RayTraceTarget {
 		List<Double> list2Socre = new ArrayList<Double>(4);
 		List<Double> list3Socre = new ArrayList<Double>(list1.size());
 		boolean hasUpPos = false;
-		int list2Index = 0;
 		if(!list1.isEmpty()) {
 			for(int i = 0; i < list1.size(); i++) {
 				if(list1.get(i).y == footNow.y) {

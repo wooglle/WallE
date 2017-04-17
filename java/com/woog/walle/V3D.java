@@ -3,6 +3,8 @@ package com.woog.walle;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.concurrent.Immutable;
+
 import com.woog.walle.additional.IDirection;
 
 import net.minecraft.client.Minecraft;
@@ -11,6 +13,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.registry.GameData;
 
+@Immutable
 public class V3D {
 	public int x;
 	public int y;

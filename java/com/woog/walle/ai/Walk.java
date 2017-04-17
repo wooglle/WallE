@@ -21,8 +21,6 @@ public class Walk
 	}
 	
 	public void run() {
-//		System.out.println("get(0)=" + WallE.way.get(0));
-//		new FaceTo(WallE.way.get(0), 2);
 		Thread t = new stepThread();
 		t.start();
 	}
@@ -33,7 +31,6 @@ public class Walk
 	
 	public void forwardstop() {
 		util.setMovement(0, false, false);
-//			mc.gameSettings.keyBindForward.setKeyBindState(keyForward, false);
 	}
 	
 	class stepThread extends Thread {

@@ -14,7 +14,7 @@ public class EventTickClass {
 	@SubscribeEvent
 	public void Tick(ClientTickEvent e) {
 		n++;
-		if(n < 50) {
+		if(n < 100) {
 			return;
 		}
 		if(doCheckTrees & !doing){

@@ -77,8 +77,8 @@ public class APIChunk {
 	
 	/**
 	 * 获取指定位置的立足点模型
-	 * topView:     ■    +1     sideView:     ■    +1
-	 *            ■ □ ■   0                 ■ □ ■   0
+	 * topView:     ■    +1     sideView:     ■    +1 
+	 *            ■ □ ■   0                 ■ □ ■   0 
 	 *              ■    -1                 ■ ■ ■  -1
 	 *                                        ■    -2
 	 *                                        ■    -3
