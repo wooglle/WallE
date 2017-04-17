@@ -96,7 +96,7 @@ public class KeepOnWatch {
 //				setAngle();
 				try {
 					faceTo(getPoint());
-					Thread.sleep(50);
+					Thread.sleep(5);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

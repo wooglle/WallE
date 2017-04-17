@@ -9,9 +9,13 @@ import com.woog.walle.WallE;
 import com.woog.walle.additional.RebuildTree;
 
 public class CutTrees extends ActionBase {
-	private static RebuildTree currentTree = null;
-	private static V3D originPos = null;
-	private static int hasCutted = 0;
+	/*【记者】叁只逗比比比比比比比比比比比比比比比比比 2017/4/15 23:37:12
+	       总之在必须初始化地方前面初始化不用初始化就别初始化
+	 * 
+	 */
+	public static RebuildTree currentTree;
+	public static V3D originPos;
+	public static int hasCutted;
 	
 	@Override
 	public String getToolsKeyword() {
@@ -29,12 +33,15 @@ public class CutTrees extends ActionBase {
 	}
 	
 	private void cutATree(RebuildTree tree) {
-		System.out.println("  tree.isStraight    " + tree.isStraight);
 		if(tree.isStraight) {
-			for(V3D pos : tree.getLogs()) {
-				this.cutOneLog(pos);
-				V3D foothold = getBetterFoothold(tree.getRoot(), pos);
-				if(foothold != null) {
+			for(int i = hasCutted; i < tree.getLogs().size(); i++) {
+				this.cutOneLog(tree.getLogs().get(i));
+				delay(100);
+				if(!APIChunk.isEmpty(tree.getLogs().get(i))) {
+					this.cutOneLog(tree.getLogs().get(i));
+				}
+				V3D foothold = getBetterFoothold(tree.getRoot(), tree.getLogs().get(i));
+				if(foothold != null && !foothold.isEqual(APIPlayer.getFootWithOffset())) {
 					new RayTraceTarget(foothold, false);
 					new Walk2There();
 					return;
@@ -64,6 +71,7 @@ public class CutTrees extends ActionBase {
 			delay(20);
 		}
 		this.util.leftUp();
+		delay(50);
 		hasCutted++;
 	}
 	
@@ -79,29 +87,31 @@ public class CutTrees extends ActionBase {
 			}else{
 				startPos = tpos;
 			}
-			if(APIPlayer.getHeadPos().distance(startPos) > 1.1D) {
+			if(CutTrees.hasCutted == 0 & APIPlayer.getFootWithOffset().distance(startPos) > 2.9D) {
+				CutTrees.originPos = APIPlayer.getFootWithOffset();
 				new RayTraceTarget(startPos, false);
 				new Walk2There();
-//				delay(100);
 				return;
-			}else{
-				if(currentTree == null) {
-					currentTree = new RebuildTree(WallE.TreePos.get(0));
-					this.originPos = APIPlayer.getFootWithOffset();
-					hasCutted = 0;
-				}
-				this.cutATree(currentTree);
-				if(currentTree.getLogs().size() <= hasCutted) {
-					new FaceTo(currentTree.getRoot(), 1);
+			}
+			if(CutTrees.hasCutted == 0) {
+				CutTrees.currentTree = new RebuildTree(WallE.TreePos.get(0));
+			}
+			this.cutATree(CutTrees.currentTree);
+			if(CutTrees.currentTree.getLogs().size() <= CutTrees.hasCutted) {
+				if(APIChunk.isEmpty(CutTrees.currentTree.getRoot())) {
+					new FaceTo(CutTrees.currentTree.getRoot().addY(-1), 1);
 					new Stuffing("sapling");
-					this.util.leftDown();
+					this.util.rightDown();
 					delay(50);
-					this.util.leftUp();
-					new RayTraceTarget(this.originPos, false);
+					this.util.rightUp();
+					new RayTraceTarget(CutTrees.originPos, false);
 					new Walk2There();
+				}else{
+					new FaceTo(CutTrees.currentTree.getRoot(), 1);
 					WallE.TreePos.remove(0);
-					currentTree = null;
-					originPos = null;
+					CutTrees.currentTree = null;
+					CutTrees.originPos = null;
+					CutTrees.hasCutted = 0;
 					WallE.isCuttingTrees = false;
 				}
 			}

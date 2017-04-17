@@ -153,12 +153,17 @@ public class HandleEventChat implements Runnable {
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
 						
+//						new RayTraceTarget(new V3D(872, 21, 247), false);
+//						new Walk2There();
+						
+						
+//						System.out.println("       " + APIChunk.isSafeForStand(new V3D(872, 21, 247)));
+						
 //						EventTickClass.doCheckTrees = false;
 						EventTickClass.doCheckTrees = true;
 //						new Stuffing("hatchet");
 						
 						
-						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getUnlocalizedName());
 //						System.out.println("【T】" + APIInventory.getHeldItem());
 //						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourceDomain());
 //						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourcePath());

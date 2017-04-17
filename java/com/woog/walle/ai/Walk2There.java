@@ -17,7 +17,7 @@ public class Walk2There extends ActionBase{
 	
 	@Override
 	public boolean showMsg() {
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class Walk2There extends ActionBase{
 				if(mc.player.getEntityBoundingBox().isVecInside(WallE.way.get(0).toVec3())) {
 					System.out.println("bounding====================");
 				}
-				delay(50);
+				delay(5);
 				if(WallE.way.get(0).isEqual(new V3D(APIPlayer.getFoot()))) {
 					forwardstop();
 					WallE.way.remove(0);

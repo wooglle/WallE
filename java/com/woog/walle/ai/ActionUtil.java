@@ -82,6 +82,14 @@ public class ActionUtil {
 		mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
 	}
 	
+	public void rightDown() {
+		mc.gameSettings.keyBindUseItem.setKeyBindState(mc.gameSettings.keyBindUseItem.getKeyCode(), true);
+	}
+	
+	public void rightUp() {
+		mc.gameSettings.keyBindUseItem.setKeyBindState(mc.gameSettings.keyBindUseItem.getKeyCode(), false);
+	}
+	
 	public void leftClick() {
 		new Thread(new Runnable() {
 			@Override

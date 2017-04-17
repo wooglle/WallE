@@ -23,6 +23,9 @@ public class AstarFindWay {
 	public AstarFindWay(V3D start, V3D end, boolean canBreak) {
 		this.start = start;
 		this.end = end;
+		if(this.start.isEqual(this.end)) {
+			return;
+		}
 		this.canBreak = canBreak;
 //		System.out.printf("[S-E]	%s		%s	 \n",start, end);
 		double sToe = start.distance(end);
@@ -38,7 +41,8 @@ public class AstarFindWay {
 			if(i > 1) {
 				father = way.get(way.size() - 2);
 			}
-			if(current.isEqual(end)) {
+			if(son == null || son.isEqual(end)) {
+//				System.out.printf("[%d]	%s		%s	%s \n",i,father, son,getId(son));
 				break;
 			}
 			current = son;
@@ -53,7 +57,7 @@ public class AstarFindWay {
 		ArrayList<V3D> list = new ArrayList(7);
 		ArrayList<V3D> list1 = new ArrayList(7);
 		ArrayList<V3D> list2 = new ArrayList(7);
-		list1 = current.targetPhaseList();		
+		list1 = current.targetPhaseList();
 		boolean[] bool = new boolean[list1.size()];
 		if(!closeList.isEmpty()) {
 			for(int j = 1; j < list1.size(); j++) {
@@ -73,8 +77,14 @@ public class AstarFindWay {
 		}
 		for(int i = 0; i < list2.size(); i++) {
 			buff = list2.get(i);
-			if(!isDanger(buff) && !buff.isEqual(current) && !buff.isEqual(father)) {
-				list.add(list2.get(i));
+			if(!buff.isEqual(current) & !buff.isEqual(father)) {
+				if(this.canBreak) {
+					list.add(list2.get(i));
+				}else{
+					if(APIChunk.isSafeForStand(buff)) {
+						list.add(list2.get(i));
+					}
+				}
 			}
 		}
 		double[] score = new double[list.size()];	//评价函数

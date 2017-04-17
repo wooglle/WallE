@@ -1,5 +1,8 @@
 package com.woog.walle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
@@ -69,7 +72,7 @@ public class RayTraceTarget {
 			}
 			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 		}
-		if(!Astar.way.isEmpty()) {
+		if(Astar.way != null && !Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
 			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
@@ -82,9 +85,9 @@ public class RayTraceTarget {
 	public RayTraceTarget(V3D targetV3D) {
 		this.foothold = targetV3D;
 		this.canEditeBlock = false;
+		this.target = targetV3D;
 		WallE.way.clear();
 		double dis = APIPlayer.getFootWithOffset().centerDistance(targetV3D);
-		this.target = targetV3D;
 		this.targetBlock = APIChunk.getBlock(targetV3D);
 		this.isDanger = false;
 		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), target, false);
@@ -95,51 +98,58 @@ public class RayTraceTarget {
 	}
 	
 	private V3D getFoothold(V3D targetPos) {
-		V3D[] foots = new V3D[13];
-		double[] socre = new double[13];
-		int x = targetPos.x;
-		int y = targetPos.y;
-		int z = targetPos.z;
-		double max = -9999.0D;
-		int s = 1;
-		foots[0] = new V3D(mc.player.getPositionEyes(1.0F)).addY(1);
-		foots[1] = new V3D(x - 1, y - 1, z);
-		foots[2] = new V3D(x + 1, y - 1, z);
-		foots[3] = new V3D(x, y - 1, z - 1);
-		foots[4] = new V3D(x, y - 1, z + 1);
-		foots[5] = new V3D(x - 1, y, z);
-		foots[6] = new V3D(x + 1, y, z);
-		foots[7] = new V3D(x , y, z - 1);
-		foots[8] = new V3D(x , y, z + 1);
-		foots[9] = new V3D(x , y + 1, z);
-		foots[10] = new V3D(x , y - 2, z);
-		foots[11] = new V3D(x , y - 3, z);
-		foots[12] = new V3D(x , y - 4, z);
-		int firsty = getFirstFootholdy(foots[0]);
-		for(int i = 1; i < foots.length; i++) {
-			socre[i] = socre[i] - Math.abs(foots[i].y - foots[0].y) * 10;
-			if(foots[i].y == firsty) {
-				int num = (int)socre[i],count = 0;
-				while(num > 0) {
-					num /= 10;
-					count++;
+		V3D[] foots = APIChunk.getStandModel(targetPos);
+		V3D footNow = APIPlayer.getFootWithOffset();
+		List<V3D> list1 = new ArrayList<V3D>(foots.length);
+		for(V3D tem : foots) {
+			if(APIChunk.isSafeForStand(tem)) {
+				list1.add(tem);
+			}
+		}
+		List<V3D> list2 = new ArrayList<V3D>(4);
+		List<V3D> list3 = new ArrayList<V3D>(list1.size());
+		List<Double> list2Socre = new ArrayList<Double>(4);
+		List<Double> list3Socre = new ArrayList<Double>(list1.size());
+		boolean hasUpPos = false;
+		int list2Index = 0;
+		if(!list1.isEmpty()) {
+			for(int i = 0; i < list1.size(); i++) {
+				if(list1.get(i).y == footNow.y) {
+					list2.add(list1.get(i));
+					list2Socre.add(list1.get(i).distance(footNow));
 				}
-				socre[i] = socre[i] + Math.pow(10, num + 1) ;
-			}
-			socre[i] = socre[i] - foots[0].distance(foots[i]);
-//			System.out.printf("	%s", socre[i]);
-//			if(i % 5 == 0) {
-//				System.out.printf(" \n");
-//			}
-		}
-//		System.out.printf(" \n");
-		for(int i = 1; i < socre.length; i++) {
-			if(socre[i] > max) {
-				s = i;
-				max = socre[i];
+				if(list1.get(i).y == targetPos.y + 1) {
+					hasUpPos = true;
+				}
+				list3.add(list1.get(i));
+				list3Socre.add(list1.get(i).addY(1).distance(targetPos));
 			}
 		}
-		return foots[s];
+		if(!list2.isEmpty()) {
+			if(list2.size() > 1) {
+				int index = getFirstMin(list2Socre);
+				return list2.get(index);
+			}else{
+				return list2.get(0);
+			}
+		}
+		if(!list3.isEmpty()) {
+			int index = getFirstMin(list3Socre);
+			return list3.get(index);
+		}
+		return null;
+	}
+	
+	private int getFirstMin(List<Double> list) {
+		double min = 999999D;
+		int index = 0;
+		for(int i = 0; i < list.size(); i++) {
+			if(list.get(i) < min) {
+				min = list.get(i);
+				index = i;
+			}
+		}
+		return index;
 	}
 	
 	private int getFirstFootholdy(V3D position) {

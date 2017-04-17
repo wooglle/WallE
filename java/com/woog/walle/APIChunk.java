@@ -89,20 +89,25 @@ public class APIChunk {
 	 * @return
 	 */
 	public static V3D[] getStandModel(V3D pos) {
-		V3D[] b = new V3D[13];
-		b[0] = pos;
-		b[1] = new V3D(pos.x - 1, pos.y - 1, pos.z);
-		b[2] = new V3D(pos.x + 1, pos.y - 1, pos.z);
-		b[3] = new V3D(pos.x, pos.y - 1, pos.z - 1);
-		b[4] = new V3D(pos.x, pos.y - 1, pos.z + 1);
-		b[5] = new V3D(pos.x - 1, pos.y, pos.z);
-		b[6] = new V3D(pos.x + 1, pos.y, pos.z);
-		b[7] = new V3D(pos.x , pos.y, pos.z - 1);
-		b[8] = new V3D(pos.x , pos.y, pos.z + 1);
-		b[9] = new V3D(pos.x , pos.y + 1, pos.z);
-		b[10] = new V3D(pos.x , pos.y - 2, pos.z);
-		b[11] = new V3D(pos.x , pos.y - 3, pos.z);
-		b[12] = new V3D(pos.x , pos.y - 4, pos.z);
+		List<V3D> list = new ArrayList<V3D>(16);
+		list.add(pos);
+		list.add(pos.addY(1));
+		list.add(pos.add(1, 0, 0));
+		list.add(pos.add(-1, 0, 0));
+		list.add(pos.add(0, 0, 1));
+		list.add(pos.add(0, 0, -1));
+		list.add(pos.addY(-1));
+		list.add(pos.add(1, -1, 0));
+		list.add(pos.add(-1, -1, 0));
+		list.add(pos.add(0, -1, 1));
+		list.add(pos.add(0, -1, -1));
+		list.add(pos.addY(-2));
+		list.add(pos.addY(-3));
+		list.add(pos.addY(-4));
+		list.add(pos.addY(-5));
+		list.add(pos.addY(-6));
+		V3D[] b = new V3D[list.size()];
+		list.toArray(b);
 		return b;
 	}
 	

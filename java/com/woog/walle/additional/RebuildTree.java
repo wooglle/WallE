@@ -54,17 +54,26 @@ public class RebuildTree {
 				this.isStraight = false;
 			}
 		}
-		
 		this.root = min;
 		this.top = max;
-		this.logs = this.getFloors(tLogs);
-		this.leaves = tLeaves;
+		this.logs = this.getFloors(tLogs, max, min);
+		
+		V3D leavesMin = this.tLeaves.get(0);
+		V3D leavesMax = this.tLeaves.get(0);
+		for(V3D t : this.tLeaves) {
+			if(t.y < leavesMin.y) {
+				leavesMin = t;
+			}
+			if(t.y > leavesMax.y) {
+				leavesMax = t;
+			}
+		}
+		this.leaves = this.getFloors(tLeaves, leavesMax, leavesMin);
 	}
 	
-	private List<V3D> getFloors(List<V3D> list) {
+	private List<V3D> getFloors(List<V3D> list, V3D max, V3D min) {
 		List<V3D> b = new ArrayList<V3D>(list.size());
-		
-		for(int i = 0; i <= this.top.y - this.root.y; i++) {
+		for(int i = 0; i <= max.y - min.y; i++) {
 			for(V3D t : list) {
 				if(t.y == this.root.y + i) {
 					b.add(t);

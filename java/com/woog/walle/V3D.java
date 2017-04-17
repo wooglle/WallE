@@ -171,6 +171,10 @@ public class V3D {
 		return new V3D(this.x + b.x, this.y + b.y, this.z + b.z);
 	}
 	
+	public V3D add(int dx, int dy, int dz) {
+		return new V3D(this.x + dx, this.y + dy, this.z + dz);
+	}
+	
 	public V3D addY(int y) {
 		return new V3D(this.x, this.y + y, this.z);
 	}

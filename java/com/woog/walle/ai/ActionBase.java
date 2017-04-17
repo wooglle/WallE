@@ -17,7 +17,6 @@ public class ActionBase {
 	private String stop = getActName() + " has stopped!";
 	private String suspend = getActName() + " has suspended!";
 	private String resume = getActName() + " has resume!";
-//	private Item[] holds = this.getHolds(); 
 	private String toolsKeyword = this.getToolsKeyword();
 	
 	public static ActionUtil util;
