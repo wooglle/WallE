@@ -128,18 +128,22 @@ public class RayTraceTarget {
 				list3.add(list1.get(i));
 				list3Socre.add(list1.get(i).addY(1).distance(targetPos));
 			}
-		}
-		if(!list2.isEmpty()) {
-			if(list2.size() > 1) {
-				int index = getFirstMin(list2Socre);
-				return list2.get(index);
-			}else{
-				return list2.get(0);
+			if(!list2.isEmpty()) {
+				if(list2.size() > 1) {
+					int index = getFirstMin(list2Socre);
+					return list2.get(index);
+				}else{
+					return list2.get(0);
+				}
 			}
-		}
-		if(!list3.isEmpty()) {
-			int index = getFirstMin(list3Socre);
-			return list3.get(index);
+			if(!list3.isEmpty()) {
+				int index = getFirstMin(list3Socre);
+				return list3.get(index);
+			}
+		}else{
+			if(APIPlayer.getHeadPos().distance(targetPos) < 5.99 ) {
+				return APIPlayer.getFootWithOffset();
+			}
 		}
 		return null;
 	}
