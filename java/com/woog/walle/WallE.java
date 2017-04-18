@@ -31,6 +31,7 @@ public class WallE {
 	public static final String MODVERSION = "1.11";
 	public static final String MODID = "wall-e";
 	public static final String MODNAME = "人形自走全能挂机苦工-瓦力";
+	public static WallERuntime runtime = new WallERuntime();
 //	public static Timer timer = null;
 //	public static final String mcTitle = Display.getTitle();
 	public static String wallepath = Minecraft.getMinecraft().mcDataDir.toString() + "/mods/WallE/";

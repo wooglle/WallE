@@ -17,7 +17,7 @@ public class Walk2There extends ActionBase{
 	
 	@Override
 	public boolean showMsg() {
-		return true;
+		return false;
 	}
 	
 	@Override

@@ -10,9 +10,9 @@ import com.woog.walle.V3D;
 public class RebuildTree {
 	private V3D pos;
 	private List<V3D> logs = new ArrayList<V3D>(10);
-	private List<V3D> leaves = new ArrayList<V3D>(20);
+	private List<V3D> leaves = new ArrayList<V3D>(30);
 	List<V3D> tLogs = new ArrayList<V3D>(10);
-	List<V3D> tLeaves = new ArrayList<V3D>(20);
+	List<V3D> tLeaves = new ArrayList<V3D>(30);
 	private V3D root;
 	private V3D top;
 	public boolean isStraight = true;
@@ -76,7 +76,7 @@ public class RebuildTree {
 		List<V3D> b = new ArrayList<V3D>(list.size());
 		for(int i = 0; i <= max.y - min.y; i++) {
 			for(V3D t : list) {
-				if(t.y == this.root.y + i) {
+				if(t.y == min.y + i) {
 					b.add(t);
 				}
 			}
@@ -85,6 +85,9 @@ public class RebuildTree {
 	}
 	
 	public V3D getLeafCanBreak() {
+		if(this.leaves == null || this.leaves.isEmpty()) {
+			return null;
+		}
 		for(V3D tem : this.leaves) {
 			if(tem.y <= APIPlayer.getHeadPos().y + 5) {
 				return tem;

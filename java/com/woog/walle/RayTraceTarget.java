@@ -67,14 +67,19 @@ public class RayTraceTarget {
 //		}else{
 			if(APIChunk.isSafeForStand(targetV3D)) {
 				foothold = targetV3D;
+				Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
+				if(Astar.way == null) {
+					foothold = getFoothold(target);
+					Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
+				}
 			}else{
 				foothold = getFoothold(target);
+				Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 			}
-			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 //		}
 		if(Astar.way != null && !Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+//			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	

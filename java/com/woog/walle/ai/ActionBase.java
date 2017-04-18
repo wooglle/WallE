@@ -141,7 +141,9 @@ public class ActionBase {
 		pause = false;
 		new Monitor().start();
 //		mc.player.addChatComponentMessage(resume);
-		IDebug.PrintYellow(resume);
+		if(this.showMsg()) {
+			IDebug.PrintYellow(resume);
+		}
 	}
 	
 	/**
@@ -177,7 +179,9 @@ public class ActionBase {
 				}else if(WallE.acts.size() > 1 | pause) {
 					pause = true;
 					util.allDefault();
-					IDebug.PrintYellow(suspend);
+					if(showMsg()) {
+						IDebug.PrintYellow(suspend);
+					}
 					if(mc.gameSettings.keyBindAttack.isKeyDown()) {
 						mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
 					}
