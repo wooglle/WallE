@@ -14,4 +14,6 @@ public class WallERuntime {
 	public static V3D originPos;
 	//当前正在砍的树已经砍掉木块的数量
 	public static int hasCutted;
+	//是否正在砍树
+	public static boolean isCuttingTree;
 }

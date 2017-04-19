@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
@@ -27,6 +28,15 @@ public class APIChunk {
 	 */
 	public static Block getBlock(V3D blockV3D) {
 		return Minecraft.getMinecraft().world.getBlockState(blockV3D.toBlockPos()).getBlock();
+	}
+	
+	/**
+	 * 获取指定位置的方块状态
+	 * @param blockV3D
+	 * @return
+	 */
+	public static IBlockState getBlockState(V3D blockV3D) {
+		return Minecraft.getMinecraft().world.getBlockState(blockV3D.toBlockPos());
 	}
 	
 	/**
@@ -55,23 +65,33 @@ public class APIChunk {
 	 * @return
 	 */
 	public static boolean isSafeForStand(V3D pos) {
-		Material upperMaterial = getMaterial(pos.addY(1));
-		if(!upperMaterial.equals(Material.AIR)) {
-			return false;
-		}
-		Material posMaterial = getMaterial(pos);
-		if(!(posMaterial.equals(Material.AIR) | posMaterial.equals(Material.PLANTS) | posMaterial.equals(Material.CIRCUITS)
-				| posMaterial.equals(Material.GRASS) | posMaterial.equals(Material.CARPET))) {
-			return false;
-		}
-		if(posMaterial.equals(Material.FIRE) | posMaterial.equals(Material.WATER) | posMaterial.equals(Material.LAVA)) {
-			return false;
-		}
+		Block upperBlock = getBlock(pos.addY(1));
+		Block posBlock = getBlock(pos);
+//		Block lowerBlock = getBlock(pos);
+		
 		Material lowerMaterial = getMaterial(pos.addY(-1));
-		if(lowerMaterial.equals(Material.AIR) | lowerMaterial.equals(Material.FIRE) | lowerMaterial.equals(Material.WATER) 
-				| lowerMaterial.equals(Material.LAVA) | lowerMaterial.equals(Material.CACTUS)) {
+		if(!(getBlock(pos).canSpawnInBlock() & getBlock(pos.addY(1)).canSpawnInBlock())) {
 			return false;
 		}
+		if(!lowerMaterial.isSolid()) {
+			return false;
+		}
+//		System.out.println(" SAFE 2    "  + Material.LEAVES + "   " + Material.LEAVES + "   "  + "   " + lowerMaterial);
+		
+//		if(!upperMaterial.equals(Material.AIR)) {
+//			return false;
+//		}
+//		if(!(posMaterial.equals(Material.AIR) | posMaterial.equals(Material.PLANTS) | posMaterial.equals(Material.CIRCUITS)
+//				| posMaterial.equals(Material.GRASS) | posMaterial.equals(Material.CARPET))) {
+//			return false;
+//		}
+//		if(posMaterial.equals(Material.FIRE) | posMaterial.equals(Material.WATER) | posMaterial.equals(Material.LAVA)) {
+//			return false;
+//		}
+//		if(lowerMaterial.equals(Material.AIR) | lowerMaterial.equals(Material.FIRE) | lowerMaterial.equals(Material.WATER) 
+//				| lowerMaterial.equals(Material.LAVA) | lowerMaterial.equals(Material.CACTUS)) {
+//			return false;
+//		}
 		return true;
 	}
 	
@@ -88,7 +108,7 @@ public class APIChunk {
 	 * @param pos
 	 * @return
 	 */
-	public static V3D[] getStandModel(V3D pos) {
+	public static List<V3D> getStandModel(V3D pos) {
 		List<V3D> list = new ArrayList<V3D>(16);
 		list.add(pos);
 		list.add(pos.addY(1));
@@ -106,13 +126,20 @@ public class APIChunk {
 		list.add(pos.addY(-4));
 		list.add(pos.addY(-5));
 		list.add(pos.addY(-6));
+//		V3D[] b = new V3D[list.size()];
+//		list.toArray(b);
+		return list;
+	}
+	
+	public static V3D[] getPosByDistance(int dis) {
+		List<V3D> list = new ArrayList<V3D>(dis * dis * dis);
 		V3D[] b = new V3D[list.size()];
 		list.toArray(b);
 		return b;
 	}
 	
 	public static Material getMaterial(V3D pos) {
-		return getBlock(pos).getDefaultState().getMaterial();
+		return getBlockState(pos).getMaterial();
 	}
 	
 	/**

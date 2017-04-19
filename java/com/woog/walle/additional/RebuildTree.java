@@ -15,6 +15,7 @@ public class RebuildTree {
 	List<V3D> tLeaves = new ArrayList<V3D>(30);
 	private V3D root;
 	private V3D top;
+	public int leavesLowest = -99;
 	public boolean isStraight = true;
 	public RebuildTree(V3D pos) {
 		if(pos == null) {
@@ -69,6 +70,7 @@ public class RebuildTree {
 				leavesMax = t;
 			}
 		}
+		this.leavesLowest = leavesMin.y;
 		this.leaves = this.getFloors(tLeaves, leavesMax, leavesMin);
 	}
 	
@@ -82,6 +84,18 @@ public class RebuildTree {
 			}
 		}
 		return b;
+	}
+	
+	public V3D getLeafLowerEye() {
+		if(this.leaves == null || this.leaves.isEmpty()) {
+			return null;
+		}
+		for(V3D tem : this.leaves) {
+			if(tem.y <= APIPlayer.getHeadPos().y) {
+				return tem;
+			}
+		}
+		return null;
 	}
 	
 	public V3D getLeafCanBreak() {

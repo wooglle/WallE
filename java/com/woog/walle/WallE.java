@@ -54,7 +54,6 @@ public class WallE {
 	public static List<V3D> TreeRootPos = new ArrayList<V3D>(20);
 	/**砍树AI保存已经长成的树的坐标列表*/
 	public static List<V3D> TreePos = new ArrayList<V3D>(20);
-	public static boolean isCuttingTrees = false;
 
 	public void preLoad(FMLPreInitializationEvent event) throws FileNotFoundException, IOException {
 	}

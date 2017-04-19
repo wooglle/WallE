@@ -153,7 +153,8 @@ public class HandleEventChat implements Runnable {
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
 						
-//						new RayTraceTarget(new V3D(872, 21, 247), false);
+//						new RayTraceTarget(new V3D(-991, 27, -1050), false);
+//						System.out.println("CHAT   " + APIChunk.isSafeForStand(new V3D(-991, 26, -1053)));
 //						new Walk2There();
 						
 						
@@ -179,7 +180,9 @@ public class HandleEventChat implements Runnable {
 //						Walk2There w2t = new Walk2There();
 //						new Walk2There();
 //						WallE.acts.add(w2t);
-						mc.getBlockRendererDispatcher().getBlockModelShapes();
+						
+//						mc.getBlockRendererDispatcher().getBlockModelShapes();
+						
 //						new KeepOnWatch(new V3D(-940, 26, -1015), 1);
 						
 					} else if (chatInfo.matches("^.*(stop|停).*$")) {

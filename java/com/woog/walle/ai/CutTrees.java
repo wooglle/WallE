@@ -55,6 +55,7 @@ public class CutTrees extends ActionBase {
 		}else{
 			this.running = false;
 			EventTickClass.doCheckTrees = false;
+			System.out.println(this.getActName() + "错误！！！！！！！！！！！！！！");
 		}
 	}
 	
@@ -94,9 +95,13 @@ public class CutTrees extends ActionBase {
 		}
 	}
 	
+	private void breakLeaves() {
+		
+	}
+	
 	@Override
 	public void action() {
-		WallE.isCuttingTrees = true;
+		WallE.runtime.isCuttingTree = true;
 		if(this.condition() && !WallE.TreePos.isEmpty()) {
 			V3D startPos = null;
 			V3D tpos = WallE.TreePos.get(0);
@@ -106,60 +111,69 @@ public class CutTrees extends ActionBase {
 			}else{
 				startPos = tpos;
 			}
-			if(WallE.runtime.hasCutted == 0 & APIPlayer.getFootWithOffset().distance(startPos) > 2.9D) {
+			if(WallE.runtime.hasCutted == 0) {
+				WallE.runtime.currentTree = new RebuildTree(WallE.TreePos.get(0));
+			}
+			while(this.condition() && WallE.runtime.currentTree.getLeafLowerEye() != null) {
 				WallE.runtime.originPos = APIPlayer.getFootWithOffset();
+				V3D leaf = WallE.runtime.currentTree.getLeafLowerEye();
+				RayTraceTarget rayTrace = new RayTraceTarget(leaf, false);
+				delay(50);
+				if(!APIPlayer.getFootWithOffset().isEqual(rayTrace.foothold)) {
+					new Walk2There();
+					return;
+				}else{
+					new FaceTo(leaf, 1);
+					this.util.leftDown();
+					while(!APIChunk.isEmpty(leaf)) {
+						delay(40);
+					}
+					this.util.leftUp();
+					WallE.runtime.currentTree.removeFirstLeaf();
+				}
+			}
+			
+			if(WallE.runtime.hasCutted == 0 & APIPlayer.getFootWithOffset().distance(startPos) > 2.9D) {
+				if(WallE.runtime.originPos == null) {
+					WallE.runtime.originPos = APIPlayer.getFootWithOffset();
+				}
 				new RayTraceTarget(startPos, false);
 				new Walk2There();
 				return;
-			}
-			if(WallE.runtime.hasCutted == 0) {
-				WallE.runtime.currentTree = new RebuildTree(WallE.TreePos.get(0));
 			}
 			this.cutATree(WallE.runtime.currentTree);
 			if(WallE.runtime.currentTree.getLogs().size() <= WallE.runtime.hasCutted) {
 				if(APIChunk.isEmpty(WallE.runtime.currentTree.getRoot())) {
 					this.plantingTree();
-//					new RayTraceTarget(CutTrees.originPos, false);
-//					new Walk2There();
-//					return;
 				}
-//				else{
-					while(this.condition() && WallE.runtime.currentTree.getLeafCanBreak() != null) {
-						V3D leaf = WallE.runtime.currentTree.getLeafCanBreak();
-						RayTraceTarget rayTrace = new RayTraceTarget(leaf, false);
-						if(!APIPlayer.getFootWithOffset().isEqual(rayTrace.foothold)) {
-							new Walk2There();
-							return;
-						}else{
-							new FaceTo(leaf, 1);
-							this.util.leftDown();
-							while(!APIChunk.isEmpty(leaf)) {
-								delay(40);
-							}
-							this.util.leftUp();
-							WallE.runtime.currentTree.removeFirstLeaf();
-						}
-					}
-					if(!APIPlayer.getFootWithOffset().isEqual(WallE.runtime.originPos)) {
-						new RayTraceTarget(WallE.runtime.originPos, false);
+				while(this.condition() && WallE.runtime.currentTree.getLeafCanBreak() != null) {
+					V3D leaf = WallE.runtime.currentTree.getLeafCanBreak();
+					RayTraceTarget rayTrace = new RayTraceTarget(leaf, false);
+					if(!APIPlayer.getFootWithOffset().isEqual(rayTrace.foothold)) {
 						new Walk2There();
 						return;
+					}else{
+						new FaceTo(leaf, 1);
+						this.util.leftDown();
+						while(!APIChunk.isEmpty(leaf)) {
+							delay(40);
+						}
+						this.util.leftUp();
+						WallE.runtime.currentTree.removeFirstLeaf();
 					}
-					new FaceTo(WallE.runtime.currentTree.getRoot(), 1);
-					WallE.TreePos.remove(0);
-					WallE.runtime.currentTree = null;
-					WallE.runtime.originPos = null;
-					WallE.runtime.hasCutted = 0;
-					WallE.isCuttingTrees = false;
-//				}
-//				else{
-//					new FaceTo(CutTrees.currentTree.getRoot(), 1);
-//					WallE.TreePos.remove(0);
-//					CutTrees.currentTree = null;
-//					CutTrees.originPos = null;
-//					CutTrees.hasCutted = 0;
-//					WallE.isCuttingTrees = false;
-//				}
+				}
+				if(!APIPlayer.getFootWithOffset().isEqual(WallE.runtime.originPos)) {
+					new RayTraceTarget(WallE.runtime.originPos, false);
+					new Walk2There();
+					return;
+				}
+				new FaceTo(WallE.runtime.currentTree.getRoot(), 1);
+				WallE.TreePos.remove(0);
+				WallE.runtime.currentTree = null;
+				WallE.runtime.originPos = null;
+				WallE.runtime.hasCutted = 0;
+				WallE.runtime.isCuttingTree = false;
+				System.out.println("CUTTING   结束了~~~~~~~~~~~~~~~~~~~~~~");
 			}
 			
 		}

@@ -271,7 +271,48 @@ public class V3D {
 	}
 	
 	/**
-	 * 以origin为中心点呈 (2 * distance + 1)^2 的矩形向外辐射扩散， 返回数值遵循由近至远、先中间后两边的原则
+	 * 返回一个以此坐标为原点， 以2 * dis为棱长的正方体
+	 * @param dis
+	 * @return
+	 */
+	public List<V3D> getCubeByDistance(int dis) {
+		List<V3D> b = new ArrayList<V3D>(dis * dis * dis);
+		for(int i = - dis; i <= dis; i++) {
+			for(int j = - dis; j <= dis; j++) {
+				for(int k = - dis; k <= dis; k++) {
+					b.add(new V3D(this.x + i, this.y + j, this.z + k));
+				}
+			}
+		}
+		return b;
+	}
+	
+	/**
+	 * 以此坐标为球心，指定球体半径， 返回球体内的整数坐标点
+	 * @param dis
+	 * @return
+	 */
+	public List<V3D> getPosByDistance(int dis) {
+		if(dis == 0) {
+			return null;
+		}
+		List<V3D> b = new ArrayList<V3D>(dis * dis * dis);
+		V3D temp;
+		for(int i = - dis; i <= dis; i++) {
+			for(int j = - dis; j <= dis; j++) {
+				for(int k = - dis; k <= dis; k++) {
+					temp = new V3D(this.x + i, this.y + j, this.z + k);
+					if(this.distance(temp) <= dis) {
+						b.add(temp);
+					}
+				}
+			}
+		}
+		return b;
+	}
+	
+	/**
+	 * 以origin为中心点呈 (2 * distance + 1)^2 的矩形水平向外辐射扩散， 返回数值遵循由近至远、先中间后两边的原则
 	 * @param origin 作为中心点的V3D坐标
 	 * @param distance 向外扩散的距离
 	 * @return 方块的V3D坐标

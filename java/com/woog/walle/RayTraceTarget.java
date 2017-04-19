@@ -53,7 +53,7 @@ public class RayTraceTarget {
 	public RayTraceTarget(V3D targetV3D, boolean canBreak) {
 		this.canEditeBlock = canBreak;
 		WallE.way.clear();
-		double dis = APIPlayer.getFootWithOffset().centerDistance(targetV3D);
+		double dis = APIPlayer.getFootWithOffset().distance(targetV3D);
 		this.target = targetV3D;
 		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
 		this.isDanger = this.isDanger(target);
@@ -65,21 +65,29 @@ public class RayTraceTarget {
 //			}
 //			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 //		}else{
-			if(APIChunk.isSafeForStand(targetV3D)) {
-				foothold = targetV3D;
-				Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-				if(Astar.way == null) {
-					foothold = getFoothold(target);
-					Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-				}
-			}else{
-				foothold = getFoothold(target);
-				Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-			}
+//		}
+//		System.out.println("RAY   " + getFoothold(target));
+//		return;
+		foothold = getFoothold(target);
+		if(foothold == null) {
+			return;
+		}
+		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
+		
+//		if(APIChunk.isSafeForStand(targetV3D)) {
+//			foothold = targetV3D;
+//			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
+//			if(Astar.way == null) {
+//				foothold = getFoothold(target);
+//				Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
+//			}
+//		}else{
+//			foothold = getFoothold(target);
+//			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 //		}
 		if(Astar.way != null && !Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-//			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	
@@ -103,24 +111,36 @@ public class RayTraceTarget {
 	}
 	
 	private V3D getFoothold(V3D targetPos) {
-		V3D[] foots = APIChunk.getStandModel(targetPos);
+		List<V3D> foots = APIChunk.getStandModel(targetPos);
 		V3D footNow = APIPlayer.getFootWithOffset();
-		List<V3D> list1 = new ArrayList<V3D>(foots.length);
+		List<V3D> list1 = new ArrayList<V3D>(foots.size());
 		for(V3D tem : foots) {
 			if(APIChunk.isSafeForStand(tem)) {
 				list1.add(tem);
 			}
 		}
+		if(list1 == null || list1.isEmpty()) {
+			foots = targetPos.getPosByDistance(5);
+			list1 = new ArrayList<V3D>(foots.size());
+			for(V3D tem : foots) {
+				if(APIChunk.isSafeForStand(tem)) {
+					list1.add(tem);
+				}
+			}
+		}
+		
 		List<V3D> list2 = new ArrayList<V3D>(4);
 		List<V3D> list3 = new ArrayList<V3D>(list1.size());
 		List<Double> list2Socre = new ArrayList<Double>(4);
 		List<Double> list3Socre = new ArrayList<Double>(list1.size());
 		boolean hasUpPos = false;
+		
+		
 		if(!list1.isEmpty()) {
 			for(int i = 0; i < list1.size(); i++) {
 				if(list1.get(i).y == footNow.y) {
 					list2.add(list1.get(i));
-					list2Socre.add(list1.get(i).distance(footNow));
+					list2Socre.add(list1.get(i).distance(targetPos));
 				}
 				if(list1.get(i).y == targetPos.y + 1) {
 					hasUpPos = true;
@@ -141,9 +161,7 @@ public class RayTraceTarget {
 				return list3.get(index);
 			}
 		}else{
-			if(APIPlayer.getHeadPos().distance(targetPos) < 5.99 ) {
-				return APIPlayer.getFootWithOffset();
-			}
+			return APIPlayer.getFootWithOffset();
 		}
 		return null;
 	}
