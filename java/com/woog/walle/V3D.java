@@ -75,81 +75,6 @@ public class V3D {
 		this.z = pos.getZ();
 	}
 	
-	/**
-	 * 相邻的6个坐标
-	 * @return
-	 */
-	public V3D[] targetsPhase() {
-		int x = this.x;
-		int y = this.y;
-		int z = this.z;
-		V3D[] phase =new V3D[6];
-		phase[0] = new V3D(x - 1, y, z);
-		phase[1] = new V3D(x + 1, y, z);
-		phase[2] = new V3D(x, y - 1, z);
-		phase[3] = new V3D(x, y + 1, z);
-		phase[4] = new V3D(x, y, z - 1);
-		phase[5] = new V3D(x, y, z + 1);
-		return phase;
-	}
-	
-	/**
-	 * 此坐标 + 相邻的6个坐标
-	 * @return
-	 */
-	public V3D[] targetAndPhase() {
-		int x = this.x;
-		int y = this.y;
-		int z = this.z;
-		V3D[] phase =new V3D[7];
-		phase[0] = new V3D(x, y, z);
-		phase[1] = new V3D(x - 1, y, z);
-		phase[2] = new V3D(x + 1, y, z);
-		phase[3] = new V3D(x, y, z - 1);
-		phase[4] = new V3D(x, y, z + 1);
-		phase[5] = new V3D(x, y - 1, z);
-		phase[6] = new V3D(x, y + 1, z);
-		return phase;
-	}
-	
-	/**
-	 * 相邻的6个坐标列表
-	 * @return
-	 */
-	public ArrayList<V3D> targetPhaseList() {
-		int x = this.x;
-		int y = this.y;
-		int z = this.z;
-		ArrayList<V3D> phase = new ArrayList();
-		phase.add(new V3D(x, y, z));
-		phase.add(new V3D(x - 1, y, z));
-		phase.add(new V3D(x + 1, y, z));
-		phase.add(new V3D(x, y, z - 1));
-		phase.add(new V3D(x, y, z + 1));
-		phase.add(new V3D(x, y - 1, z));
-		phase.add(new V3D(x, y + 1, z));
-		return phase;
-	}
-	
-	/**
-	 * 相邻6个方块为中心点列表
-	 * @return
-	 */
-	public ArrayList<Vec3d> targetPhaseCenterList() {
-		int x = this.x;
-		int y = this.y;
-		int z = this.z;
-		ArrayList<Vec3d> phase = new ArrayList();
-		phase.add(new Vec3d(x + 0.5, y + 0.5, z + 0.5));
-		phase.add(new Vec3d(x - 0.5, y + 0.5, z + 0.5));
-		phase.add(new Vec3d(x + 1.5, y + 0.5, z + 0.5));
-		phase.add(new Vec3d(x + 0.5, y + 0.5, z - 0.5));
-		phase.add(new Vec3d(x + 0.5, y + 0.5, z + 1.5));
-		phase.add(new Vec3d(x + 0.5, y - 0.5, z + 0.5));
-		phase.add(new Vec3d(x + 0.5, y + 1.5, z + 0.5));
-		return phase;
-	}
-	
 	public double distance(V3D b) {
 		double ax = (double)this.x;
 		double ay = (double)this.y;
@@ -252,23 +177,61 @@ public class V3D {
 	}
 	
 	/**
-	 * 站立是否危险
-	 * @return true 危险， false 安全
+	 * 此坐标 + 相邻的6个坐标
+	 * @return
 	 */
-	public boolean isDangerStand() {
-		for(int i = 0; i < WallE.dangerId.length; i++) {
-			if(this.getId() == WallE.dangerId[i]) {
-				return true;
-			}
-		}
-		for(int i = 0; i < WallE.dangerStand.length; i++) {
-			int id =GameData.getBlockRegistry().getIDForObject(Minecraft.getMinecraft().world.getBlockState(new BlockPos(this.x, this.y - 1, this.z)).getBlock());
-			if(id == WallE.dangerStand[i]) {
-				return true;
-			}
-		}
-		return false;
+	public V3D[] getNeighborsAndThis() {
+		int x = this.x;
+		int y = this.y;
+		int z = this.z;
+		V3D[] phase =new V3D[7];
+		phase[0] = new V3D(x, y, z);
+		phase[1] = new V3D(x - 1, y, z);
+		phase[2] = new V3D(x + 1, y, z);
+		phase[3] = new V3D(x, y, z - 1);
+		phase[4] = new V3D(x, y, z + 1);
+		phase[5] = new V3D(x, y - 1, z);
+		phase[6] = new V3D(x, y + 1, z);
+		return phase;
 	}
+	
+	/**
+	 * 相邻的6个坐标列表
+	 * @return
+	 */
+	public ArrayList<V3D> getNeighbors() {
+		int x = this.x;
+		int y = this.y;
+		int z = this.z;
+		ArrayList<V3D> phase = new ArrayList();
+		phase.add(new V3D(x - 1, y, z));
+		phase.add(new V3D(x + 1, y, z));
+		phase.add(new V3D(x, y, z - 1));
+		phase.add(new V3D(x, y, z + 1));
+		phase.add(new V3D(x, y - 1, z));
+		phase.add(new V3D(x, y + 1, z));
+		return phase;
+	}
+	
+	/**
+	 * 相邻6个方块的中心点列表
+	 * @return
+	 */
+	public ArrayList<Vec3d> targetPhaseCenterList() {
+		int x = this.x;
+		int y = this.y;
+		int z = this.z;
+		ArrayList<Vec3d> phase = new ArrayList();
+		phase.add(new Vec3d(x + 0.5, y + 0.5, z + 0.5));
+		phase.add(new Vec3d(x - 0.5, y + 0.5, z + 0.5));
+		phase.add(new Vec3d(x + 1.5, y + 0.5, z + 0.5));
+		phase.add(new Vec3d(x + 0.5, y + 0.5, z - 0.5));
+		phase.add(new Vec3d(x + 0.5, y + 0.5, z + 1.5));
+		phase.add(new Vec3d(x + 0.5, y - 0.5, z + 0.5));
+		phase.add(new Vec3d(x + 0.5, y + 1.5, z + 0.5));
+		return phase;
+	}
+	
 	
 	/**
 	 * 返回一个以此坐标为原点， 以2 * dis为棱长的正方体
@@ -367,7 +330,7 @@ public class V3D {
 	}
 	
 	/**
-	 * 由内向外呈十字形辐射， 每侧长度为distance， 不含中心点
+	 * 在水平方向上由内向外呈十字形辐射， 每侧长度为distance， 不含中心点
 	 * @param distance 十字每侧的长度
 	 * @return
 	 */
@@ -381,6 +344,35 @@ public class V3D {
 		}
 		return delta;
 	}
+	
+	/**
+	 * 以此坐标为原点向x、y、z正方向、负方向延伸距离为distance， 不含中心点
+	 * @param distance 辐射长度
+	 * @return
+	 */
+	public List<V3D> getCrossCube(int distance) {
+		V3D[] cross = APIPlayer.getFootWithOffset().getCrossClockWise();
+		List<V3D> b = new ArrayList<V3D>(distance * distance * 8 + distance * 6);
+		for(int i = - distance; i <= distance; i++) {
+			for(int j = - distance; j <= distance; j++) {
+				for(int k = - distance; k <= distance; k++) {
+//					if(i * j * k == 0) {
+//						if(!(i == 0 & j == 0 & k ==0)) {
+//							b.add(new V3D(this.x + i, this.y + j, this.z + k));
+//						}
+//					}
+					if((i == 0 & j * k != 0) | (j == 0 & i * k == 0) | (k == 0 & i * j != 0)) {
+						b.add(new V3D(this.x + i, this.y + j, this.z + k));
+//						if(!(i == 0 & j == 0 & k ==0)) {
+//						}
+					}
+				}
+			}
+		}
+		return b;
+	}
+	
+	
 	
 	/**
 	 * 获取玩家当前视角状态下， 东西南北方向的顺时针排序
@@ -456,21 +448,14 @@ public class V3D {
 		}
 		V3D[] incline = direction.getIncline();
 		for(int i = 0; i < incline.length; i++) {
-//			System.out.println("           " + incline[i]);
 			for(int j = 1; j <= dis; j++) {
 				for(int k = 1; k < j; k++) {
 					b[index] = this.add(incline[i].multiplyXSetZ(k, j));
-//					System.out.println("    k:" + k + "  " + incline[i].multiplyXSetZ(k, j));
-//					System.out.println(incline[i].multiplyXSetZ(k, j));
 					index++;
 					b[index] = this.add(incline[i].multiplyZSetX(k, j));
-//					System.out.println(index + "    k:" + k + "  "  + incline[i].multiplyZSetX(k, j));
-//					System.out.println( incline[i].multiplyZSetX(k, j));
 					index++;
 				}
 				b[index] = this.add(incline[i].multiply(j));
-//				System.out.println(index + "    j:" + j + "  " + incline[i].multiply(j));
-//				System.out.println(incline[i].multiply(j));
 				index++;
 			}
 		}
@@ -491,6 +476,6 @@ public class V3D {
 	
 	@Override
 	public String toString() {
-		return this.x + ", " + this.y + ", " + this.z;
+		return this.x + ", " + this.y + ", " + this.z + ";  ";
 	}
 }

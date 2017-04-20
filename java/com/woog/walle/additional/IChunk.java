@@ -3,6 +3,7 @@ package com.woog.walle.additional;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.woog.walle.APIChunk;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
 import com.woog.walle.ai.AIManager;
@@ -145,7 +146,7 @@ public class IChunk {
 		List<Integer> list = new ArrayList<Integer>(4);
 		int n = 0;
 		for(int i = 0; i < cross.length; i++) {
-			if(!cross[i].isDangerStand()) {
+			if(APIChunk.isSafeForStand(cross[i])) {
 				if(i > 0) {
 					AIManager.addCorner(cross[i]);
 					AIManager.setIsLoop();
@@ -163,7 +164,7 @@ public class IChunk {
 			aims[i] = this.postion.add(FRLB[i]);
 		}
 		for(int i = 0; i < 4; i++) {
-			if(!aims[i].isDangerStand()) {
+			if(APIChunk.isSafeForStand(aims[i])) {
 				canStand.add(i);
 			}
 		}
@@ -189,7 +190,7 @@ public class IChunk {
 		List<Integer> list = new ArrayList<Integer>(3);
 		int n = 0;
 		for(int i = 0; i < cross.length - 1; i++) {
-			if(!cross[i].isDangerStand()) {
+			if(APIChunk.isSafeForStand(cross[i])) {
 				if(i > 0) {
 					AIManager.addCorner(cross[i]);
 					AIManager.setIsLoop();
@@ -213,8 +214,8 @@ public class IChunk {
 		int n = 0;
 		V3D[] clock = this.toClockWise();
 		for(int i = 0;clock[i] != null && i < clock.length; i++) {
-			boolean boo = clock[i].isDangerStand();
-			if(!boo) {
+//			boolean boo = clock[i].isDangerStand();
+			if(APIChunk.isSafeForStand(clock[i])) {
 				return clock[i];
 			}
 		}
@@ -226,7 +227,7 @@ public class IChunk {
 		int n = 0;
 		V3D[] clock = this.toClockWise();
 		for(int i = 0;clock[i] != null && i < clock.length; i++) {
-			if(!clock[i].isDangerStand()) {
+			if(APIChunk.isSafeForStand(clock[i])) {
 				list.add(i);
 			}
 		}

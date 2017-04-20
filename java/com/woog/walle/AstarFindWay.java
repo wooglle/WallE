@@ -35,18 +35,29 @@ public class AstarFindWay {
 		V3D father,son;	
 		father = current;					//father路点设置为current路点
 		for(int i = 0; i < 200; i++) {		//路线长度限制200步
-			son = getRightPoint(current, father);
+//			son = getRightPoint(current, father);
+			son = getNextPoint(current, father);
+			if(son.isEqual(father)) {
+				System.out.println("Astar            ==============================");
+				closeList.clear();
+//				son = getRightPoint(current, null);
+//				son = getNextPoint(current, null);
+				closeList.add(current);
+			}
+			if(son.isEqual(start)) {
+				way.clear();
+			}
 			way.add(son);
 			closeList.add(son);
-			if(i > 1) {
+			if(way != null && way.size() > 1) {
 				father = way.get(way.size() - 2);
 			}
-			if(son == null || son.isEqual(end)) {
-//				System.out.printf("[%d]	%s		%s	%s \n",i,father, son,getId(son));
+			if(son.isEqual(end)) {
+				System.out.printf("[%d]	%s		%s	%s \n",i,father, son, end);
 				break;
 			}
 			current = son;
-//			System.out.printf("[%d]	%s		%s	%s	%s \n",i,father, son,getId(son),isDanger(son));
+			System.out.printf("[%d]	%s		%s		%s\n",i,father, son, end);
 		}
 	}
 	
@@ -57,7 +68,7 @@ public class AstarFindWay {
 		ArrayList<V3D> list = new ArrayList(7);
 		ArrayList<V3D> list1 = new ArrayList(7);
 		ArrayList<V3D> list2 = new ArrayList(7);
-		list1 = current.targetPhaseList();
+		list1 = current.getNeighbors();
 		boolean[] bool = new boolean[list1.size()];
 		if(!closeList.isEmpty()) {
 			for(int j = 1; j < list1.size(); j++) {
@@ -116,97 +127,46 @@ public class AstarFindWay {
 			return null;
 		}
 	}
-
-	private boolean isNear() {
-		return false;
-	}
 	
-	private boolean isEmpty(V3D target) {
-		int x = target.x;
-		int y = target.y + 1;
-		int z = target.z;
-//		if(getId(target) == 0 && getId(x, y, z) == 0) {
-//			return true;
-//		}
-		if(isNullBlock(target) && isNullBlock(new V3D(x, y, z))) {
-			System.out.println("isNull: " + target + "    " + x + " " + y + " " + z);
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean isNullBlock(V3D target) {
-		switch(getId(target)) {
-		case 0: return true;
-		case 31: return true;
-		case 32: return true;
-		case 37: return true;
-		case 38: return true;
-		case 39: return true;
-		case 40: return true;
-		case 50: return true;
-		case 55: return true;
-		case 59: return true;
-		case 63: return true;
-		case 66: return true;
-		case 68: return true;
-		case 69: return true;
-		case 70: return true;
-		case 72: return true;
-		case 75: return true;
-		case 76: return true;
-		case 77: return true;
-		case 83: return true;
-		case 115: return true;
-		case 141: return true;
-		case 142: return true;
-		case 171: return true;
-		case 175: return true;
-		}
-		return false;
-	}
-	
-	private boolean isDanger(V3D target) {
-		int id,id2;
-		V3D[] phase = target.targetAndPhase();
-		V3D target2 = new V3D(target.x, target.y + 1, target.z);
-		V3D[] phase2 = target2.targetAndPhase();
-		if(this.isBelongtoBlock(APIChunk.getBlock(phase[0])) && this.isBelongtoBlock(APIChunk.getBlock(phase2[0]))) {return false;}
-//		if(getId(phase[0]) == 0 && getId(phase2[0]) == 0) {return false;}
-		for(int i = 1; i <= 6; i++) {
-			id = getId(phase[i]);
-			id2 = getId(phase2[i]);
-			if(this.canBreak) {
-				if(id == 8 || id == 9 || id == 10 || id == 11) {
-					return true;
-				}
-				if(id2 == 8 || id2 == 9 || id2 == 10 || id2 == 11) {
-					return true;
-				}
-			} else {
-				if(!isNullBlock(target)) {
-					return true;
-				}
+	private V3D getNextPoint(V3D current, V3D father) {
+		double reference = current.distance(this.end);
+		List<V3D> crossCube = current.getCrossCube(1);
+		List<V3D> list1 = new ArrayList<V3D>(crossCube.size());
+		for(V3D temp : crossCube) {
+			if(APIChunk.isSafeForStand(temp) & !this.existInCloseList(temp)) {
+				list1.add(temp);
 			}
 		}
-		
-		return false;
+		if(list1.size() > 1) {
+			double[] list1Evaluate = new double[list1.size()];
+			for(int i = 0; i < list1.size(); i++) {
+				list1Evaluate[i] = list1.get(i).distance(this.end);
+			}
+			List<V3D> list2 = new ArrayList<V3D>(list1.size());
+			return list1.get(getMin(list1Evaluate));
+		}else{
+			return father;
+		}
 	}
 	
-	private boolean isBelongtoBlock(Block block) {
-		for(int i = 0; i < this.air.length; i++) {
-			if(block == this.air[i]) {
+	private int getMin(double[] array) {
+		double min = array[0];
+		int b = 0;
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] < min) {
+				min = array[i];
+				b = i;
+			}
+		}
+		return b;
+	}
+	
+	private boolean existInCloseList(V3D pos) {
+		for(V3D temp : this.closeList) {
+			if(temp.isEqual(pos)) {
 				return true;
 			}
 		}
 		return false;
-	} 
-	
-	private int getId(V3D target) {
-		return GameData.getBlockRegistry().getIDForObject(Minecraft.getMinecraft().world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock());
-	}
-	
-	private int getId(int x, int y, int z) {
-		return GameData.getBlockRegistry().getIDForObject(Minecraft.getMinecraft().world.getBlockState(new BlockPos(x, y, z)).getBlock());
 	}
 }

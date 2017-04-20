@@ -99,7 +99,6 @@ public class APIPlayer {
 		return pitch;
 	}
 	public static int viewX(){
-		//world绫绘湁涓猺ayTraceBlocks  鑷充簬鎬庝箞鐢╟trl+shift+g鍚�
 		return mc.objectMouseOver.getBlockPos().getX();
 	}
 	public static int viewY(){

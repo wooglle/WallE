@@ -57,34 +57,11 @@ public class RayTraceTarget {
 		this.target = targetV3D;
 		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
 		this.isDanger = this.isDanger(target);
-//		if(dis < 2.9D) {
-//			if(APIChunk.isSafeForStand(targetV3D)) {
-//				foothold = targetV3D;
-//			}else{
-//				foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
-//			}
-//			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-//		}else{
-//		}
-//		System.out.println("RAY   " + getFoothold(target));
-//		return;
 		foothold = getFoothold(target);
 		if(foothold == null) {
 			return;
 		}
 		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-		
-//		if(APIChunk.isSafeForStand(targetV3D)) {
-//			foothold = targetV3D;
-//			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-//			if(Astar.way == null) {
-//				foothold = getFoothold(target);
-//				Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-//			}
-//		}else{
-//			foothold = getFoothold(target);
-//			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
-//		}
 		if(Astar.way != null && !Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
 			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
@@ -106,7 +83,7 @@ public class RayTraceTarget {
 		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), target, false);
 		if(!Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-			System.out.println("RayTraceTarget 2:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+//			System.out.println("RayTraceTarget 2:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	
@@ -134,7 +111,6 @@ public class RayTraceTarget {
 		List<Double> list2Socre = new ArrayList<Double>(4);
 		List<Double> list3Socre = new ArrayList<Double>(list1.size());
 		boolean hasUpPos = false;
-		
 		
 		if(!list1.isEmpty()) {
 			for(int i = 0; i < list1.size(); i++) {
@@ -191,7 +167,7 @@ public class RayTraceTarget {
 	
 	private boolean isDanger(V3D target) {
 		int id;
-		V3D[] phase = target.targetAndPhase();
+		V3D[] phase = target.getNeighborsAndThis();
 		if(getId(phase[0]) == 0) return false;
 		for(int i = 1; i <= 6; i++) {
 			id = getId(phase[i]);
@@ -199,48 +175,12 @@ public class RayTraceTarget {
 		}
 		return false;
 	}
-
-	private boolean isDanger(int x, int y, int z) {
-		int id = getId(x, y, z);
-		if(id == 8 || id == 9 || id == 10 || id == 11) {
-			return true;
-		}
-		id = getId(x - 1, y, z);
-		if(id == 8 || id == 9 || id == 10 || id == 11) {
-			return true;
-		}
-		id = getId(x + 1, y, z);
-		if(id == 8 || id == 9 || id == 10 || id == 11) {
-			return true;
-		}
-		id = getId(x, y - 1, z);
-		if(id == 8 || id == 9 || id == 10 || id == 11) {
-			return true;
-		}
-		id = getId(x, y + 1, z);
-		if(id == 8 || id == 9 || id == 10 || id == 11) {
-			return true;
-		}
-		id = getId(x, y, z - 1);
-		if(id == 8 || id == 9 || id == 10 || id == 11) {
-			return true;
-		}
-		id = getId(x, y, z + 1);
-		if(id == 8 || id == 9 || id == 10 || id == 11) {
-			return true;
-		}
-		return false;
-	}
-	
-	private int getId(int x, int y, int z) {
-		return GameData.getBlockRegistry().getIDForObject(mc.world.getBlockState(new BlockPos(x, y, z)).getBlock());
-	}
 	
 	private int getId(V3D target) {
 		return GameData.getBlockRegistry().getIDForObject(mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock());
 	}
 	
-	public void info() {		
+	public void info() {
 		System.out.printf("【RayTraceTarget】  [%s]    now: (%s), target: (%s), foothold: (%s)\n", 
 				APIPlayer.getFootWithOffset().toString(), this.target.toString(), this.foothold.toString());
 		if(!WallE.way.isEmpty()) {

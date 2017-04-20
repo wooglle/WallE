@@ -52,7 +52,7 @@ public class EventTickClass {
 				}
 			}
 			if(findTree & (!WallE.runtime.isCuttingTree)) {
-				System.out.println("+++++++++++++++++++++++++++++++++++++++");
+				System.out.println("TICK   +++++++++++++++++++++++++++++++++++++++");
 				WallE.runtime.isCuttingTree = true;
 				new CutTrees();
 			}
