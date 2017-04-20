@@ -126,7 +126,7 @@ public class CutTrees extends ActionBase {
 					new FaceTo(leaf, 1);
 					this.util.leftDown();
 					while(!APIChunk.isEmpty(leaf)) {
-						delay(40);
+						delay(30);
 					}
 					this.util.leftUp();
 					WallE.runtime.currentTree.removeFirstLeaf();

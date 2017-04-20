@@ -348,23 +348,14 @@ public class V3D {
 	/**
 	 * 以此坐标为原点向x、y、z正方向、负方向延伸距离为distance， 不含中心点
 	 * @param distance 辐射长度
-	 * @return
 	 */
 	public List<V3D> getCrossCube(int distance) {
-		V3D[] cross = APIPlayer.getFootWithOffset().getCrossClockWise();
 		List<V3D> b = new ArrayList<V3D>(distance * distance * 8 + distance * 6);
 		for(int i = - distance; i <= distance; i++) {
 			for(int j = - distance; j <= distance; j++) {
 				for(int k = - distance; k <= distance; k++) {
-//					if(i * j * k == 0) {
-//						if(!(i == 0 & j == 0 & k ==0)) {
-//							b.add(new V3D(this.x + i, this.y + j, this.z + k));
-//						}
-//					}
-					if((i == 0 & j * k != 0) | (j == 0 & i * k == 0) | (k == 0 & i * j != 0)) {
+					if(i * j * k == 0 & !(i == 0 & j == 0 & k ==0) & !(j == 0 & i * k != 0)) {
 						b.add(new V3D(this.x + i, this.y + j, this.z + k));
-//						if(!(i == 0 & j == 0 & k ==0)) {
-//						}
 					}
 				}
 			}

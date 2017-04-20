@@ -37,19 +37,22 @@ public class AstarFindWay {
 		for(int i = 0; i < 200; i++) {		//路线长度限制200步
 //			son = getRightPoint(current, father);
 			son = getNextPoint(current, father);
-			if(son.isEqual(father)) {
+			if(son == null) {
 				System.out.println("Astar            ==============================");
-				closeList.clear();
+				way.clear();
+				son = getNextPoint(start, null);
+//				closeList.clear();
 //				son = getRightPoint(current, null);
 //				son = getNextPoint(current, null);
-				closeList.add(current);
+//				closeList.add(current);
+//				closeList.add(father);
 			}
 			if(son.isEqual(start)) {
 				way.clear();
 			}
 			way.add(son);
 			closeList.add(son);
-			if(way != null && way.size() > 1) {
+			if(way != null && way.size() > 2) {
 				father = way.get(way.size() - 2);
 			}
 			if(son.isEqual(end)) {
@@ -129,7 +132,7 @@ public class AstarFindWay {
 	}
 	
 	private V3D getNextPoint(V3D current, V3D father) {
-		double reference = current.distance(this.end);
+//		double reference = current.distance(this.end);
 		List<V3D> crossCube = current.getCrossCube(1);
 		List<V3D> list1 = new ArrayList<V3D>(crossCube.size());
 		for(V3D temp : crossCube) {
@@ -145,7 +148,7 @@ public class AstarFindWay {
 			List<V3D> list2 = new ArrayList<V3D>(list1.size());
 			return list1.get(getMin(list1Evaluate));
 		}else{
-			return father;
+			return null;
 		}
 	}
 	
