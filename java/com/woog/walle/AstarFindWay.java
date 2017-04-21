@@ -29,24 +29,15 @@ public class AstarFindWay {
 		this.canBreak = canBreak;
 //		System.out.printf("[S-E]	%s		%s	 \n",start, end);
 		double sToe = start.distance(end);
-		way  = new ArrayList((int)(sToe * 3));
-		closeList = new ArrayList((int)(sToe * 5));
+		this.way  = new ArrayList<V3D>(200);
+		this.closeList = new ArrayList<V3D>(200);
+		this.closeList.add(start);
 		V3D current = start;					//初始化current路点
-		V3D father,son;	
+		V3D father,son = null;	
 		father = current;					//father路点设置为current路点
-		for(int i = 0; i < 200; i++) {		//路线长度限制200步
-//			son = getRightPoint(current, father);
-			son = getNextPoint(current, father);
-			if(son == null) {
-				System.out.println("Astar            ==============================");
-				way.clear();
-				son = getNextPoint(start, null);
-//				closeList.clear();
-//				son = getRightPoint(current, null);
-//				son = getNextPoint(current, null);
-//				closeList.add(current);
-//				closeList.add(father);
-			}
+		
+		for(int i = 0; i < 100; i++) {		//路线长度限制200步
+			son = this.getSon(current, father);
 			if(son.isEqual(start)) {
 				way.clear();
 			}
@@ -56,12 +47,29 @@ public class AstarFindWay {
 				father = way.get(way.size() - 2);
 			}
 			if(son.isEqual(end)) {
-				System.out.printf("[%d]	%s		%s	%s \n",i,father, son, end);
+				System.out.printf("[%d]	%s		%s	到达：%s \n",i,father, son, end);
 				break;
 			}
 			current = son;
 			System.out.printf("[%d]	%s		%s		%s\n",i,father, son, end);
 		}
+	}
+	
+	private V3D getSon(V3D curr, V3D fa) {
+		V3D b = getNextPoint(curr, fa);
+		if(b == null) {
+			if(this.way != null && this.way.size() > 0) {
+				System.out.println("Astar  " + curr + "   " + fa);
+				curr = this.way.get(this.way.size() - 1);
+				System.out.println("Astar  " + curr + "   " + fa);
+				this.way.remove(this.way.size() - 1);
+				fa = null;
+				b = this.getSon(curr, fa);
+			}else{
+				b = this.getSon(start, null);
+			}
+		}
+		return b;
 	}
 	
 	private V3D getRightPoint(V3D current, V3D father) {	//下一路点选取函数
@@ -140,7 +148,7 @@ public class AstarFindWay {
 				list1.add(temp);
 			}
 		}
-		if(list1.size() > 1) {
+		if(!list1.isEmpty()) {
 			double[] list1Evaluate = new double[list1.size()];
 			for(int i = 0; i < list1.size(); i++) {
 				list1Evaluate[i] = list1.get(i).distance(this.end);

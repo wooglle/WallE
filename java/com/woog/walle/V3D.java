@@ -346,7 +346,7 @@ public class V3D {
 	}
 	
 	/**
-	 * 以此坐标为原点向x、y、z正方向、负方向延伸距离为distance， 不含中心点
+	 * 以此坐标为原点向x、z正方向、负方向延伸距离为distance， 不含中心点, 所形成的十字高度为2 * distance + 1
 	 * @param distance 辐射长度
 	 */
 	public List<V3D> getCrossCube(int distance) {

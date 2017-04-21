@@ -156,8 +156,9 @@ public class HandleEventChat implements Runnable {
 //						System.out.println("CHAT    " + new V3D(0, 0, 0).getCrossCube(1));
 						
 //						new RayTraceTarget(new V3D(-991, 27, -1051), false);
-//						new RayTraceTarget(new V3D(867, 22, 252), false); 
-						new RayTraceTarget(new V3D(873, 22, 252), false); 
+						new AstarFindWay(APIPlayer.getFootWithOffset(), new V3D(-1005, 26, -1053), false);
+//						new RayTraceTarget(new V3D(-1005, 26, -1053), false); 
+//						new RayTraceTarget(new V3D(873, 22, 252), false); 
 //						System.out.println("CHAT   " + APIChunk.isSafeForStand(new V3D(-991, 26, -1053)));
 //						new Walk2There();
 						
