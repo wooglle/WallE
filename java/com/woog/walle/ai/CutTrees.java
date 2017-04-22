@@ -55,6 +55,7 @@ public class CutTrees extends ActionBase {
 		}else{
 			this.running = false;
 			EventTickClass.doCheckTrees = false;
+			WallE.runtime.isCuttingTree = false;
 			System.out.println(this.getActName() + "错误！！！！！！！！！！！！！！");
 		}
 	}
@@ -88,10 +89,11 @@ public class CutTrees extends ActionBase {
 		while(this.condition() && APIChunk.isEmpty(WallE.runtime.currentTree.getRoot())) {
 			new FaceTo(WallE.runtime.currentTree.getRoot().addY(-1), 1);
 			new Stuffing("sapling");
+			delay(100);
 			this.util.rightDown();
 			delay(50);
 			this.util.rightUp();
-			delay(1000);
+			delay(100);
 		}
 	}
 	
@@ -126,7 +128,7 @@ public class CutTrees extends ActionBase {
 					new FaceTo(leaf, 1);
 					this.util.leftDown();
 					while(!APIChunk.isEmpty(leaf)) {
-						delay(30);
+						delay(40);
 					}
 					this.util.leftUp();
 					WallE.runtime.currentTree.removeFirstLeaf();

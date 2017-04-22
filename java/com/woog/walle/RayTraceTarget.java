@@ -64,7 +64,7 @@ public class RayTraceTarget {
 		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
 		if(Astar.way != null && !Astar.way.isEmpty()) {
 			WallE.way = Astar.way;
-			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
+//			System.out.println("RayTraceTarget 1:  " + APIPlayer.getFootWithOffset() + "  目标:" + targetV3D + "  落脚点:" + foothold);
 		}
 	}
 	

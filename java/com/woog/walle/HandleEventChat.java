@@ -131,12 +131,9 @@ public class HandleEventChat implements Runnable {
 			String chatName = buff[0];
 			String chatInfo = buff[1];
 //			System.out.println(chatName + "     +++++       " + chatInfo + "  " + chatInfo.matches("^\\W+$"));
-			if(chatInfo.matches("^\\W+$")) {
-				return;
-			}
 //			System.out.println("-----" + chatInfo.substring(0, this.myName.length()));
 			if(chatName != null && this.isController(chatName)) { 	// 控制指令
-				if (chatInfo.substring(0, this.myName.length()).equals(myName)) { // 指令格式：name + 指令
+				if (chatInfo.length() > myName.length() && chatInfo.substring(0, this.myName.length()).equals(myName)) { // 指令格式：name + 指令
 					if (chatInfo.matches("^.*test.*$")) {
 //						new Stuffing();
 //						APIInventory.printInventory();
@@ -156,7 +153,7 @@ public class HandleEventChat implements Runnable {
 //						System.out.println("CHAT    " + new V3D(0, 0, 0).getCrossCube(1));
 						
 //						new RayTraceTarget(new V3D(-991, 27, -1051), false);
-						new AstarFindWay(APIPlayer.getFootWithOffset(), new V3D(-1005, 26, -1053), false);
+//						new AstarFindWay(APIPlayer.getFootWithOffset(), new V3D(-1005, 26, -1053), false);
 //						new RayTraceTarget(new V3D(-1005, 26, -1053), false); 
 //						new RayTraceTarget(new V3D(873, 22, 252), false); 
 //						System.out.println("CHAT   " + APIChunk.isSafeForStand(new V3D(-991, 26, -1053)));
@@ -166,7 +163,8 @@ public class HandleEventChat implements Runnable {
 //						System.out.println("       " + APIChunk.isSafeForStand(new V3D(872, 21, 247)));
 						
 //						EventTickClass.doCheckTrees = false;
-//						EventTickClass.doCheckTrees = true;
+//						WallE.runtime.isCuttingTree = false;
+						EventTickClass.doCheckTrees = true;
 //						new Stuffing("hatchet");
 						
 						

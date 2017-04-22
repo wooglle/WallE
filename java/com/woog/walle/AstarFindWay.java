@@ -36,7 +36,7 @@ public class AstarFindWay {
 		V3D father,son = null;	
 		father = current;					//father路点设置为current路点
 		
-		for(int i = 0; i < 100; i++) {		//路线长度限制200步
+		for(int i = 0; i < 200; i++) {		//路线长度限制200步
 			son = this.getSon(current, father);
 			if(son.isEqual(start)) {
 				way.clear();
@@ -47,11 +47,11 @@ public class AstarFindWay {
 				father = way.get(way.size() - 2);
 			}
 			if(son.isEqual(end)) {
-				System.out.printf("[%d]	%s		%s	到达：%s \n",i,father, son, end);
+//				System.out.printf("[%d]	%s		%s	到达：%s \n",i,father, son, end);
 				break;
 			}
 			current = son;
-			System.out.printf("[%d]	%s		%s		%s\n",i,father, son, end);
+//			System.out.printf("[%d]	%s		%s		%s\n",i,father, son, end);
 		}
 	}
 	
@@ -59,9 +59,9 @@ public class AstarFindWay {
 		V3D b = getNextPoint(curr, fa);
 		if(b == null) {
 			if(this.way != null && this.way.size() > 0) {
-				System.out.println("Astar  " + curr + "   " + fa);
+//				System.out.println("Astar  " + curr + "   " + fa);
 				curr = this.way.get(this.way.size() - 1);
-				System.out.println("Astar  " + curr + "   " + fa);
+//				System.out.println("Astar  " + curr + "   " + fa);
 				this.way.remove(this.way.size() - 1);
 				fa = null;
 				b = this.getSon(curr, fa);
