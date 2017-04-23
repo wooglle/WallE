@@ -32,17 +32,10 @@ public class V3D {
 		this.z = (int)Math.floor(z);
 	}
 	
-//	public V3D(float x, float y, float z) {
-//		this.x = (int)x;
-//		this.y = (int)y;
-//		this.z = (int)z;
-//	}
-	
 	public V3D(int x, int y, int z, int side) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-//		this.side = side;
 	}
 	
 	public V3D(Vec3i vec3i) {
@@ -315,6 +308,26 @@ public class V3D {
 	}
 	
 	/**
+	 * 获取以此坐标点为中心， 各边距离为dis的正方形的边
+	 * @param dis
+	 * @return
+	 */
+	public List<V3D> getSquareEdge(int dis) {
+		List<V3D> b = new ArrayList<V3D>(dis * 8);
+		b.add(new V3D(this.x - dis, this.y, this.z - dis));
+		b.add(new V3D(this.x + dis, this.y, this.z - dis));
+		b.add(new V3D(this.x + dis, this.y, this.z + dis));
+		b.add(new V3D(this.x - dis, this.y, this.z + dis));
+		for(int i = 1; i < 2 * dis; i++) {
+			b.add(b.get(0).add(i, 0, 0));
+			b.add(b.get(1).add(0, 0, i));
+			b.add(b.get(2).add(-i, 0, 0));
+			b.add(b.get(3).add(0, 0, -i));
+		}
+		return b;
+	}
+	
+	/**
 	 * 获得当前方块的上下及四周方块的坐标
 	 * @return V3D[6]
 	 */
@@ -334,15 +347,16 @@ public class V3D {
 	 * @param distance 十字每侧的长度
 	 * @return
 	 */
-	public static List<V3D> getCrossDelta(int distance) {
-		V3D[] cross = APIPlayer.getFootWithOffset().getCrossClockWise();
-		List<V3D> delta = new ArrayList<V3D>(distance * 4);
-		for(int i = 1; i <= distance; i++) {
-			for(int t = 0; t < 4; t++) {
-				delta.add(new V3D(cross[t].x * i, cross[t].y, cross[t].z * i));
+	public List<V3D> getCrossPlane(int distance) {
+		List<V3D> b = new ArrayList<V3D>(distance * 4);
+		for(int i = - distance; i <= distance; i++) {
+			for(int j = - distance; j <= distance; j++) {
+				if(i * j == 0 & !(i == 0 & j == 0)) {
+					b.add(new V3D(this.x + i, this.y, this.z + j));
+				}
 			}
 		}
-		return delta;
+		return b;
 	}
 	
 	/**
@@ -412,13 +426,12 @@ public class V3D {
 	}
 	
 	/**
-	 * 获取以玩家朝向为基础的坐标差数组
+	 * 获取此坐标点指向指定坐标点的方向坐标
 	 * @return
 	 */
-	public V3D[] getDirectionDiff() {
-		V3D[] b = new V3D[4];
-		
-		return b;
+	public V3D getDirection(V3D origin) {
+		V3D t = origin.minus(this);
+		return new V3D(t.x / Math.abs(t.x), t.y / Math.abs(t.y), t.z / Math.abs(t.z));
 	}
 	
 	/**

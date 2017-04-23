@@ -3,6 +3,8 @@ package com.woog.walle;
 import java.io.IOException;
 import java.util.Date;
 
+import com.woog.walle.additional.GLDraw;
+import com.woog.walle.additional.IChunkFlooring;
 import com.woog.walle.additional.IDebug;
 import com.woog.walle.additional.LoginPassword;
 import com.woog.walle.additional.RebuildTree;
@@ -164,9 +166,13 @@ public class HandleEventChat implements Runnable {
 						
 //						EventTickClass.doCheckTrees = false;
 //						WallE.runtime.isCuttingTree = false;
-						EventTickClass.doCheckTrees = true;
+//						EventTickClass.doCheckTrees = true;
 //						new Stuffing("hatchet");
 						
+						GLDraw.drawLine(200, 100, 20, 20, 1342177280);
+						
+//						System.out.println("       " + new V3D(0, 0, 0).getSquareEdge(10));
+//						System.out.println("       " + new IChunkFlooring().square);
 						
 //						System.out.println("【T】" + APIInventory.getHeldItem());
 //						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourceDomain());

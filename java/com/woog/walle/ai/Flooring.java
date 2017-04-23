@@ -28,7 +28,20 @@ public class Flooring extends ActionBase{
 	 * @return
 	 */
 	private V3D getStartPos() {
-		
+		V3D foot = APIPlayer.getFootWithOffset();
+		boolean b1 = true, b2 = true, b3 = true, b4 = true;
+		for(int i = 0; i < 48; i++) {
+			if(b1) {
+				
+			}
+		}
+		return null;
+	}
+	
+	private V3D RayTrace(V3D pos) {
+		for(int i = 0; i < 48; i++) {
+			
+		}
 		return null;
 	}
 	

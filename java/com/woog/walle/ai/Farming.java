@@ -88,8 +88,9 @@ public class Farming extends ActionBase{
 		sides[1] = 0;
 		sides[2] = 0;
 		sides[3] = 0;
+		List<V3D> list = APIPlayer.getFootWithOffset().getCrossPlane(5);
 		for(int i = 0; i < 5 * 4; i++){
-			BlockPos pos = APIPlayer.getFootWithOffset().add(V3D.getCrossDelta(5).get(i)).toBlockPos();
+			BlockPos pos = list.get(i).toBlockPos();
 			if(Minecraft.getMinecraft().world.getBlockState(pos) == Blocks.FARMLAND){
 				sides[i % 4]++; 
 			}

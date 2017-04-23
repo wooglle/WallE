@@ -70,7 +70,6 @@ public class IChunk {
 	public V3D[] getCorssHeight3() {
 		V3D[] cross = new V3D[13];
 		cross[0] = new V3D(this.postion.x, this.postion.y + 2, this.postion.z);
-//		cross[1] = new V3D(this.postion.x, this.postion.y + 3, this.postion.z);
 		int index = 0;
 		int startIndex = APIPlayer.getHeading();
 		for(int i = 0; i < 4; i++) {
@@ -93,11 +92,8 @@ public class IChunk {
 			}else{
 				if(tar[i].x == foot.x && tar[i].z == foot.z) {
 					h =3;
-//					System.out.println("Danger: !!!!!!!!!!!!!!  "  + tar[i]);
 				}else{
 					V3D forward = this.postion.add(this.clockwise[APIPlayer.getHeading()]);
-//					System.out.println("sadadsd   " + forward);
-					
 					if(tar[i].isEqual(forward) | tar[i].isEqual(forward.add(new V3D(0, 1, 0)))) {
 						this.isTurn  = true;
 					}
