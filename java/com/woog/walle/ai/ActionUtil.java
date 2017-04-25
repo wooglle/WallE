@@ -49,8 +49,16 @@ public class ActionUtil {
 		mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), true);
 	}
 	
-	public void setMouse() {
-		
+	public void moveLeftStop() {
+		mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), false);
+	}
+	
+	public void moveRight() {
+		mc.gameSettings.keyBindRight.setKeyBindState(mc.gameSettings.keyBindRight.getKeyCode(), true);
+	}
+	
+	public void moveRightStop() {
+		mc.gameSettings.keyBindRight.setKeyBindState(mc.gameSettings.keyBindRight.getKeyCode(), false);
 	}
 	
 	public void gazeOnBlock(V3D gazeAt) {

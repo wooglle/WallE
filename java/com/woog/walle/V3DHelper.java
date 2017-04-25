@@ -6,6 +6,7 @@ import java.util.List;
 import com.woog.walle.additional.IDirection;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.registry.GameData;
@@ -60,6 +61,11 @@ public class V3DHelper {
 			}
 		}
 		return false;
+	}
+	
+	public static Vec3d getFaceCenter(V3D posA, EnumFacing face) {
+		Vec3d center = posA.getCenter();
+		return center.addVector(face.getFrontOffsetX() * 0.5, face.getFrontOffsetY() * 0.5, face.getFrontOffsetZ() * 0.5);
 	}
 	
 	/**

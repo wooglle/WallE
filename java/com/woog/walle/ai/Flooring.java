@@ -10,7 +10,9 @@ import net.minecraft.util.math.Vec3d;
 
 public class Flooring extends ActionBase{
 	private V3D[] lastTen = new V3D[10];
-	private EnumFacing strtFace;
+	private EnumFacing startFace;
+	private EnumFacing transverseFace;
+	private boolean pressRight;
 	private IChunkFlooring ichunk;
 	private V3D posBackOne;
 	
@@ -25,63 +27,97 @@ public class Flooring extends ActionBase{
 		return "hatchet";
 	}
 	
-	private V3D RayTrace(V3D pos) {
-		for(int i = 0; i < 48; i++) {
-			
-		}
-		return null;
-	}
-	
 	/**
 	 * 在起点位置做好姿势
 	 */
-	private void getReady() {
-		delay(100);
+	private void stepBackward() {
+		delay(200);
 		V3D posInt = APIPlayer.getFootWithOffset();
-		System.out.println("[Flooring]   " + this.ichunk.facing.getHorizontalAngle());
 		new FaceTo(this.ichunk.facing, 80);
+		delay(200);
 		this.util.setMovement(-0.1F, false, true);
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 500; i++) {
 			if(this.isGetReady(this.ichunk.firstEmpty)) {
 				break;
 			}
-			delay(10);
+			delay(5);
 		}
 		
-//		while(this.isGetReady(this.ichunk.firstStandPos.addY(-1))) {
-//			this.util.setMovement(-0.1F, false, true);
-//			delay(10);
-//		}
+		this.util.setMovement(0, false, true);
+		delay(200);
 		this.util.setMovement(0, false, false);
+		delay(200);
+		new FaceTo(this.ichunk.firstEmpty, this.ichunk.facing, 2);
+		
 	}
 	
 	private void go() {
-		
+		this.util.rightDown();
+		delay(500);
+		if(this.pressRight) {
+			this.util.moveRight();
+		}else{
+			this.util.moveLeft();
+		}
+		while(this.condition() && this.ichunk.isPosInside(APIPlayer.getFootWithOffset().addY(-1).add(new V3D(this.transverseFace)))) {
+			delay(20);
+		}
+		this.util.rightUp();
+		if(this.pressRight) {
+			this.util.moveRightStop();
+		}else{
+			this.util.moveLeftStop();
+		}
+		this.leftRightSwitch();
+//		while(this.ichunk.isPosInside(APIPlayer.getFootWithOffset().addY(-1).add(new V3D(this.ichunk.facing)))) {
+//		}
 	}
 	
 	private boolean isGetReady(V3D pos) {
-		EnumFacing face = this.ichunk.facing.getOpposite();
 		Vec3d foot = APIPlayer.getFoot();
-		if(face.getFrontOffsetX() == 0) {
-			System.out.println("[Flooring x]   " + foot.zCoord + "   " + (double)(pos.z  + face.getFrontOffsetZ() * 0.2D));
-			return foot.zCoord > (double)pos.z  + face.getFrontOffsetZ() * 0.2 ? true : false; 
-		}else if(face.getFrontOffsetZ() == 0) {
-			System.out.println("[Flooring z]   " + foot.xCoord + "   " + (pos.x - face.getFrontOffsetX() * 0.2));
-			return foot.xCoord > (double)pos.x  + (double)face.getFrontOffsetX() * 0.2 ? true : false; 
+		double next = 0;
+		if(this.ichunk.facing.equals(EnumFacing.SOUTH)) {
+			next = (double)pos.z - 0.12;
+			return foot.zCoord < next;
+		}else if(this.ichunk.facing.equals(EnumFacing.NORTH)){
+			next = (double)pos.z + 0.12;
+			return foot.zCoord > next;
+		}else if(this.ichunk.facing.equals(EnumFacing.EAST)) {
+			next = (double)pos.x - 0.12;
+			return foot.xCoord < next;
+		}else{
+			next = (double)pos.x + 0.12;
+			return foot.xCoord > next;
 		}
-		return false;
+	}
+	
+	private void leftRightSwitch() {
+		if(this.pressRight) {
+			this.pressRight = false;
+		}else{
+			this.pressRight = true;
+		}
+		this.transverseFace = this.transverseFace.getOpposite();
 	}
 	
 	@Override
 	public void action() {
-		this.ichunk = new IChunkFlooring();
-		if(!APIPlayer.getFootWithOffset().equals(this.ichunk.firstStandPos)) {
-			new RayTraceTarget(this.ichunk.firstStandPos, false);
-			new Walk2There();
-			return;
-		}else{
-			this.getReady();
-			this.go();
-		}
+		this.util.moveRight();
+//		this.ichunk = new IChunkFlooring();
+//		if(!APIPlayer.getFootWithOffset().equals(this.ichunk.firstStandPos)) {
+//			new RayTraceTarget(this.ichunk.firstStandPos, false);
+//			new Walk2There();
+//			return;
+//		}else{
+//			this.stepBackward();
+//			this.transverseFace = this.ichunk.facingTransverse;
+//			int rightIndex = (this.ichunk.facing.getHorizontalIndex() + 1) % 4;
+//			if(this.ichunk.facingTransverse.equals(EnumFacing.getHorizontal(rightIndex))) {
+//				this.pressRight = true;
+//			}else{
+//				this.pressRight = false;
+//			}
+//			this.go();
+//		}
 	}
 }

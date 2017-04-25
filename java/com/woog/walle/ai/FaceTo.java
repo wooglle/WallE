@@ -34,11 +34,23 @@ public class FaceTo {
 	 * 调整视线落点至目标方块指定面的中心
 	 * @param target 目标
 	 * @param face 指定面
+	 * @param type 1: yaw、pitch均改变； 2: 仅改变pitch
 	 */
-	public FaceTo(V3D target, EnumFacing face) {
-		Vec3d point = getFaceCenter(target, face);
-		yp = getAngleOfPoint(point);
-		mc.player.turn((float)(yp.yaw / 0.15D), (float)(yp.pitch / 0.15D));
+	public FaceTo(V3D target, EnumFacing face, int type) {
+		Vec3d point = V3DHelper.getFaceCenter(target, face);
+		if(type == 1) {
+			yp = getAngleOfPoint(point);
+			mc.player.turn((float)(yp.yaw / 0.15D), (float)(yp.pitch / 0.15D));
+		}else{
+			Vec3d centerLine; 
+			if(face.getFrontOffsetX() == 0) {
+				centerLine = new Vec3d(APIPlayer.getEye().xCoord, point.yCoord, point.zCoord);
+			}else{
+				centerLine = new Vec3d(point.xCoord, point.yCoord, APIPlayer.getEye().zCoord);
+			}
+			yp = getAngleOfPoint(centerLine);
+			mc.player.turn((float)0.0, (float)(yp.pitch / 0.15D));
+		}
 	}
 	
 	/**
@@ -48,7 +60,6 @@ public class FaceTo {
 	 */
 	public FaceTo(EnumFacing face, float pitch) {
 		this.yp = new YawPitch(face.getHorizontalAngle() - APIPlayer.yaw(), APIPlayer.pitch() - pitch);
-		System.out.println("FaceTo   " + this.yp.yaw + "   " + this.yp.pitch);
 		mc.player.turn((float)(yp.yaw / 0.15D), (float)(yp.pitch / 0.15D));
 	}
 	
@@ -224,11 +235,6 @@ public class FaceTo {
 		}
 		
 		return new YawPitch(yaw, pitch);
-	}
-	
-	private Vec3d getFaceCenter(V3D pos, EnumFacing face) {
-		Vec3d center = pos.getCenter();
-		return new Vec3d(center.xCoord + 0.5 * face.getFrontOffsetX(), center.yCoord + 0.5 * face.getFrontOffsetY(), center.zCoord + 0.5 * face.getFrontOffsetZ());
 	}
 	
 	private class YawPitch {

@@ -159,6 +159,9 @@ public class HandleEventChat implements Runnable {
 //						new Stuffing("hatchet");
 						
 						new Flooring();
+//						mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), false);
+						
+						
 //						new FaceTo(EnumFacing.WEST, 85);
 //						System.out.println("       " + new IChunkFlooring().firstStandPos);
 						

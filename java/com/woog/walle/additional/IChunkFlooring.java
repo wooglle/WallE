@@ -21,6 +21,7 @@ public class IChunkFlooring {
 	public V3D firstEmpty;
 	public V3D firstStandPos;
 	public EnumFacing facing;
+	public EnumFacing facingTransverse;
 	private int minX;
 	private int maxX;
 	private int minZ;
@@ -69,19 +70,21 @@ public class IChunkFlooring {
 			}
 		}
 		V3D direction = V3DHelper.getDirection(this.squareCenter, firstEmpty);
-		V3D direct;
+		V3D direct, directTransverse;
 		V3D directionOppsite = new V3D(direction.x * -1, 0, direction.z * -1);
 		V3D reference = this.firstEmpty.add(direction);
 		int x, z;
 		if(Math.max(this.maxX - reference.x, reference.x - this.minX) > Math.max(this.maxZ - reference.z, reference.z - this.minZ)) {
 			direct = new V3D(direction.x, 0, 0);
+			directTransverse = new V3D(0, 0, - direction.z);
 		}else{
 			direct = new V3D(0, 0, direction.z);
+			directTransverse = new V3D(- direction.x, 0, 0);
 		}
 		EnumFacing face = EnumFacing.getFacingFromVector(direct.x, direct.y, direct.z);
 		this.firstStandPos = this.firstEmpty.add(face.getFrontOffsetX(), face.getFrontOffsetY() + 1, face.getFrontOffsetZ());
 		this.facing = face;
-		System.out.println("[ICFlooring] " + this.facing.getDirectionVec());
+		this.facingTransverse = EnumFacing.getFacingFromVector(directTransverse.x, directTransverse.y, directTransverse.z);
 	}
 	
 	public boolean isPosInside(V3D pos) {
