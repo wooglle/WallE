@@ -6,6 +6,7 @@ import java.util.List;
 import com.woog.walle.APIChunk;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
+import com.woog.walle.V3DHelper;
 
 public class RebuildTree {
 	private V3D pos;
@@ -27,7 +28,8 @@ public class RebuildTree {
 	}
 	
 	private void rebuild(V3D p) {
-		for(V3D tem : p.getUDLRFB()) {
+		V3D[] list = V3DHelper.getUDLRFB(p);
+		for(V3D tem : list) {
 			if(!hasRebuild(tem)) {
 				String name = APIChunk.getBlock(tem).getRegistryName().toString();
 				if(name.equals("minecraft:log")) {
@@ -119,12 +121,12 @@ public class RebuildTree {
 			return false;
 		}
 		for(V3D t : this.tLogs) {
-			if(p.isEqual(t)) {
+			if(p.equals(t)) {
 				return true;
 			}
 		}
 		for(V3D t : this.tLeaves) {
-			if(p.isEqual(t)) {
+			if(p.equals(t)) {
 				return true;
 			}
 		}

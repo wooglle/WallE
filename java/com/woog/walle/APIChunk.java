@@ -67,8 +67,6 @@ public class APIChunk {
 	public static boolean isSafeForStand(V3D pos) {
 		Block upperBlock = getBlock(pos.addY(1));
 		Block posBlock = getBlock(pos);
-//		Block lowerBlock = getBlock(pos);
-		
 		Material lowerMaterial = getMaterial(pos.addY(-1));
 		if(!(getBlock(pos).canSpawnInBlock() & getBlock(pos.addY(1)).canSpawnInBlock())) {
 			return false;
@@ -76,22 +74,6 @@ public class APIChunk {
 		if(!lowerMaterial.isSolid()) {
 			return false;
 		}
-//		System.out.println(" SAFE 2    "  + Material.LEAVES + "   " + Material.LEAVES + "   "  + "   " + lowerMaterial);
-		
-//		if(!upperMaterial.equals(Material.AIR)) {
-//			return false;
-//		}
-//		if(!(posMaterial.equals(Material.AIR) | posMaterial.equals(Material.PLANTS) | posMaterial.equals(Material.CIRCUITS)
-//				| posMaterial.equals(Material.GRASS) | posMaterial.equals(Material.CARPET))) {
-//			return false;
-//		}
-//		if(posMaterial.equals(Material.FIRE) | posMaterial.equals(Material.WATER) | posMaterial.equals(Material.LAVA)) {
-//			return false;
-//		}
-//		if(lowerMaterial.equals(Material.AIR) | lowerMaterial.equals(Material.FIRE) | lowerMaterial.equals(Material.WATER) 
-//				| lowerMaterial.equals(Material.LAVA) | lowerMaterial.equals(Material.CACTUS)) {
-//			return false;
-//		}
 		return true;
 	}
 	
@@ -147,7 +129,7 @@ public class APIChunk {
 	 * @return
 	 */
 	public static V3D getWood() {
-		V3D[] neighbor = APIPlayer.getHeadPos().getNeighborByDistance(5);
+		V3D[] neighbor = V3DHelper.getNeighborByDistance(APIPlayer.getHeadPos(), 5);
 		for(V3D pos: neighbor) {
 			if(isLog(pos)) {
 				return pos;

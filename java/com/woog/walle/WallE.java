@@ -32,20 +32,15 @@ public class WallE {
 	public static final String MODID = "wall-e";
 	public static final String MODNAME = "人形自走全能挂机苦工-瓦力";
 	public static WallERuntime runtime = new WallERuntime();
-//	public static Timer timer = null;
-//	public static final String mcTitle = Display.getTitle();
 	public static String wallepath = Minecraft.getMinecraft().mcDataDir.toString() + "/mods/WallE/";
 	public static WalleConfig config = new WalleConfig();
 	public static String username = FMLClientHandler.instance().getClient().getSession().getUsername();
-//	public static World world;
 	public static Minecraft mc = Minecraft.getMinecraft();
 	public static String myfriends = "strideyouyou,mcfy,st_,woog,020";
 	public static String[] vip = { "woog", "sdsas", "mr_caigi", "lzd", "ck250", "ls", "panjy", "yunzhongyan",
 			"strideyouyou", "ann", "david", "fant", "st", "020", "ez12", "virginia", "reden", "touxin", "candy_1",
 			"mcfy" };
 	public static String[] master = {"foobar"};
-	public static int[] dangerId = { 8, 9, 10, 11 };
-	public static int[] dangerStand = { 0, 81, 90, 119, 209 };
 	public static int minItemDamage = -5;
 	public static List<V3D> way = new ArrayList(100);
 //	public static boolean isWalking = false;
@@ -84,10 +79,6 @@ public class WallE {
 		MinecraftForge.EVENT_BUS.register(new EventSoundClass());
 		MinecraftForge.EVENT_BUS.register(new EventGuiClass());
 		MinecraftForge.EVENT_BUS.register(new EventTickClass());
-
-		// MinecraftForge.EVENT_BUS.register(new EventOfflineClass());
-		// System.out.println("客户端输出：" +
-		// chat.matches("^\\<\\w+>\\s+~~\\s+\\w+\\s+.+~$"));
 	}
 
 	@EventHandler

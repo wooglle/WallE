@@ -329,7 +329,7 @@ public class APIInventory {
 			}
 			System.out.printf(" \n");
 		}else{
-			System.out.println("没有打开箱子货或箱子为空。");
+			System.out.println("[APIInventory]没有打开箱子货或箱子为空。");
 		}
 	}
 }

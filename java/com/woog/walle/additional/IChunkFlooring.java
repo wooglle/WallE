@@ -6,6 +6,7 @@ import java.util.List;
 import com.woog.walle.APIChunk;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
+import com.woog.walle.V3DHelper;
 
 import net.minecraft.util.EnumFacing;
 
@@ -24,8 +25,6 @@ public class IChunkFlooring {
 	private int maxX;
 	private int minZ;
 	private int maxZ;
-	private int squareWidth;
-	private int squareLenght;
 	
 	public IChunkFlooring() {
 		this.startPos = APIPlayer.getFootWithOffset().addY(-1);
@@ -34,6 +33,7 @@ public class IChunkFlooring {
 		this.maxX = Math.max(this.square.get(0).x, this.square.get(2).x);
 		this.minZ = Math.min(this.square.get(0).z, this.square.get(2).z);
 		this.maxZ = Math.max(this.square.get(0).z, this.square.get(2).z);
+		this.getStart();
 	}
 	
 	private void getSquare() {
@@ -57,18 +57,18 @@ public class IChunkFlooring {
 		V3D diff = this.squareCenter.minus(this.square.get(0));
 		int max = Math.max(Math.abs(diff.x), Math.abs(diff.z));
 		List<V3D> list = new ArrayList<V3D>(max * 8);
-		V3D firstEmpty;
-		for(int i = (int)(max / 2 - 1); i > 1; i--) {
+		aLoop:
+		for(int i = max - 1; i > 1; i--) {
 			list.clear();
-			list = this.squareCenter.getSquareEdge(i);
+			list = V3DHelper.getSquareEdge(this.squareCenter, i);
 			for(V3D pos : list) {
 				if(this.isPosInside(pos) && APIChunk.isEmpty(pos)) {
-					firstEmpty = pos;
-					break;
+					this.firstEmpty = pos;
+					break aLoop;
 				}
 			}
 		}
-		V3D direction = this.squareCenter.getDirection(this.firstEmpty);
+		V3D direction = V3DHelper.getDirection(this.squareCenter, firstEmpty);
 		V3D direct;
 		V3D directionOppsite = new V3D(direction.x * -1, 0, direction.z * -1);
 		V3D reference = this.firstEmpty.add(direction);
@@ -78,10 +78,13 @@ public class IChunkFlooring {
 		}else{
 			direct = new V3D(0, 0, direction.z);
 		}
-		this.facing = EnumFacing.getFacingFromVector(direct.x, direct.y, direct.z);
+		EnumFacing face = EnumFacing.getFacingFromVector(direct.x, direct.y, direct.z);
+		this.firstStandPos = this.firstEmpty.add(face.getFrontOffsetX(), face.getFrontOffsetY() + 1, face.getFrontOffsetZ());
+		this.facing = face;
+		System.out.println("[ICFlooring] " + this.facing.getDirectionVec());
 	}
 	
-	private boolean isPosInside(V3D pos) {
+	public boolean isPosInside(V3D pos) {
 		return pos.x > this.minX && pos.x < this.maxX && pos.z > this.minZ && pos.z < this.maxZ;
 	}
 	
@@ -117,7 +120,7 @@ public class IChunkFlooring {
 	
 	private boolean isGetSquare() {
 		if(this.list.size() > 4) {
-			if(this.list.get(this.list.size() - 1).isEqual(this.list.get(this.list.size() - 5))) {
+			if(this.list.get(this.list.size() - 1).equals(this.list.get(this.list.size() - 5))) {
 				this.isSquare = true;
 				return true;
 			}

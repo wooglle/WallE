@@ -46,7 +46,7 @@ public class CutTrees extends ActionBase {
 					this.cutOneLog(tree.getLogs().get(i));
 				}
 				V3D foothold = getBetterFoothold(tree.getRoot(), tree.getLogs().get(i));
-				if(foothold != null && !foothold.isEqual(APIPlayer.getFootWithOffset())) {
+				if(foothold != null && !foothold.equals(APIPlayer.getFootWithOffset())) {
 					new RayTraceTarget(foothold, false);
 					new Walk2There();
 					return;
@@ -65,7 +65,7 @@ public class CutTrees extends ActionBase {
 		V3D better = null;
 		if(pos.y > foot.y ) {
 			if(pos.y < foot.y + 7) {
-				if(!foot.isEqual(treeRoot)) {
+				if(!foot.equals(treeRoot)) {
 					better = treeRoot;
 				}
 			}
@@ -121,7 +121,7 @@ public class CutTrees extends ActionBase {
 				V3D leaf = WallE.runtime.currentTree.getLeafLowerEye();
 				RayTraceTarget rayTrace = new RayTraceTarget(leaf, false);
 				delay(50);
-				if(!APIPlayer.getFootWithOffset().isEqual(rayTrace.foothold)) {
+				if(!APIPlayer.getFootWithOffset().equals(rayTrace.foothold)) {
 					new Walk2There();
 					return;
 				}else{
@@ -151,7 +151,7 @@ public class CutTrees extends ActionBase {
 				while(this.condition() && WallE.runtime.currentTree.getLeafCanBreak() != null) {
 					V3D leaf = WallE.runtime.currentTree.getLeafCanBreak();
 					RayTraceTarget rayTrace = new RayTraceTarget(leaf, false);
-					if(!APIPlayer.getFootWithOffset().isEqual(rayTrace.foothold)) {
+					if(!APIPlayer.getFootWithOffset().equals(rayTrace.foothold)) {
 						new Walk2There();
 						return;
 					}else{
@@ -164,7 +164,7 @@ public class CutTrees extends ActionBase {
 						WallE.runtime.currentTree.removeFirstLeaf();
 					}
 				}
-				if(!APIPlayer.getFootWithOffset().isEqual(WallE.runtime.originPos)) {
+				if(!APIPlayer.getFootWithOffset().equals(WallE.runtime.originPos)) {
 					new RayTraceTarget(WallE.runtime.originPos, false);
 					new Walk2There();
 					return;

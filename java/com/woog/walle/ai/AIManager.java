@@ -50,12 +50,12 @@ public class AIManager {
 			isLoop = false;
 			return;
 		}
-		if(DigChunk.blockDigging != null && AIManager.blockLastDig != null && !DigChunk.blockDigging.isEqual(AIManager.blockLastDig)) {
+		if(DigChunk.blockDigging != null && AIManager.blockLastDig != null && !DigChunk.blockDigging.equals(AIManager.blockLastDig)) {
 			isLoop = false;
 			return;
 		}
 		for(int i = 0; i < 7; i++) {
-			if(corners[i + 3] != null && corners[0].isEqual(corners[i + 2]) && corners[1].isEqual(corners[i + 3])) {
+			if(corners[i + 3] != null && corners[0].equals(corners[i + 2]) && corners[1].equals(corners[i + 3])) {
 				isGhostWall = false;
 				isLoop = true;
 				return;
@@ -71,7 +71,7 @@ public class AIManager {
 //		return true;
 		int n = 0;
 		for(int i = 1; i < footPoints.length; i++) {
-			if(footPoints[0].isEqual(footPoints[i])) {
+			if(footPoints[0].equals(footPoints[i])) {
 				n++;
 			}
 		}
@@ -127,7 +127,7 @@ public class AIManager {
 						new FaceTo(chunk.getRandomFRLB(), 2);
 						new WalkOneStep();
 //						setCorners2Default();
-						if(!foot0.isEqual(APIPlayer.getFootWithOffset())) {
+						if(!foot0.equals(APIPlayer.getFootWithOffset())) {
 							isLoop = false;
 						}
 					}

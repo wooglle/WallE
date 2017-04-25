@@ -23,7 +23,7 @@ public class AstarFindWay {
 	public AstarFindWay(V3D start, V3D end, boolean canBreak) {
 		this.start = start;
 		this.end = end;
-		if(this.start.isEqual(this.end)) {
+		if(this.start.equals(this.end)) {
 			return;
 		}
 		this.canBreak = canBreak;
@@ -38,7 +38,7 @@ public class AstarFindWay {
 		
 		for(int i = 0; i < 200; i++) {		//路线长度限制200步
 			son = this.getSon(current, father);
-			if(son.isEqual(start)) {
+			if(son.equals(start)) {
 				way.clear();
 			}
 			way.add(son);
@@ -46,7 +46,7 @@ public class AstarFindWay {
 			if(way != null && way.size() > 2) {
 				father = way.get(way.size() - 2);
 			}
-			if(son.isEqual(end)) {
+			if(son.equals(end)) {
 //				System.out.printf("[%d]	%s		%s	到达：%s \n",i,father, son, end);
 				break;
 			}
@@ -72,76 +72,8 @@ public class AstarFindWay {
 		return b;
 	}
 	
-	private V3D getRightPoint(V3D current, V3D father) {	//下一路点选取函数
-		int right = 0;
-		V3D buff;
-		double refer = current.centerDistance(end);
-		ArrayList<V3D> list = new ArrayList(7);
-		ArrayList<V3D> list1 = new ArrayList(7);
-		ArrayList<V3D> list2 = new ArrayList(7);
-		list1 = current.getNeighbors();
-		boolean[] bool = new boolean[list1.size()];
-		if(!closeList.isEmpty()) {
-			for(int j = 1; j < list1.size(); j++) {
-				for(int i = 0; i < closeList.size(); i++) {
-					if(list1.get(j).isEqual(closeList.get(i))) {
-						bool[j] = true;
-					}
-				}
-			}
-			for(int i = 0; i < bool.length; i++) {
-				if(!bool[i]) {
-					list2.add(list1.get(i));
-				}
-			}
-		}else{
-			list2 = list1;
-		}
-		for(int i = 0; i < list2.size(); i++) {
-			buff = list2.get(i);
-			if(!buff.isEqual(current) & !buff.isEqual(father)) {
-				if(this.canBreak) {
-					list.add(list2.get(i));
-				}else{
-					if(APIChunk.isSafeForStand(buff)) {
-						list.add(list2.get(i));
-					}
-				}
-			}
-		}
-		double[] score = new double[list.size()];	//评价函数
-		for(int i = 0; i < list.size(); i++) {
-//			System.out.println("   22    " + list.get(i) + "  " + end + "   " + list.get(i).centerDistance(end));
-			score[i] = 1 / list.get(i).centerDistance(end);
-//			score[i] = (refer / list.get(i).centerDistance(end)) * 10 * Math.abs(Math.sin(current.angle(end)));
-//			if(isEmpty(list.get(i))) {
-//				score[i] = score[i] + current.distance(end) / start.distance(end);
-//			}
-//			if(list.get(i).y == current.y) {
-//				score[i] = score[i] * 10 * Math.abs(Math.cos(list1.get(i).angle(end)));
-//			}
-//			score[i] = score[i] ;
-		}
-		double buf = -9999999.0D;
-		for(int i = 0; i < score.length; i++) {	//取评价值最大的脚标
-//			System.out.printf("【%s】	%s %s \n", buf, score[i], list.get(i));
-			if(score[i] > buf) {
-				buf = score[i];
-				right = i;
-			}
-		}
-		
-		if(!list.isEmpty()) {
-			return list.get(right);
-		}else{
-//			System.out.printf("【ERROR】%b	%s ", list==null, right);
-			return null;
-		}
-	}
-	
 	private V3D getNextPoint(V3D current, V3D father) {
-//		double reference = current.distance(this.end);
-		List<V3D> crossCube = current.getCrossCube(1);
+		List<V3D> crossCube = V3DHelper.getCrossCube(current, 1);
 		List<V3D> list1 = new ArrayList<V3D>(crossCube.size());
 		for(V3D temp : crossCube) {
 			if(APIChunk.isSafeForStand(temp) & !this.existInCloseList(temp)) {
@@ -174,7 +106,7 @@ public class AstarFindWay {
 	
 	private boolean existInCloseList(V3D pos) {
 		for(V3D temp : this.closeList) {
-			if(temp.isEqual(pos)) {
+			if(temp.equals(pos)) {
 				return true;
 			}
 		}

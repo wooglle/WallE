@@ -2,6 +2,7 @@ package com.woog.walle.ai;
 
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
+import com.woog.walle.V3DHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumFacing;
@@ -37,6 +38,17 @@ public class FaceTo {
 	public FaceTo(V3D target, EnumFacing face) {
 		Vec3d point = getFaceCenter(target, face);
 		yp = getAngleOfPoint(point);
+		mc.player.turn((float)(yp.yaw / 0.15D), (float)(yp.pitch / 0.15D));
+	}
+	
+	/**
+	 * 调整视线至指定的角度和俯仰角
+	 * @param face
+	 * @param pitch
+	 */
+	public FaceTo(EnumFacing face, float pitch) {
+		this.yp = new YawPitch(face.getHorizontalAngle() - APIPlayer.yaw(), APIPlayer.pitch() - pitch);
+		System.out.println("FaceTo   " + this.yp.yaw + "   " + this.yp.pitch);
 		mc.player.turn((float)(yp.yaw / 0.15D), (float)(yp.pitch / 0.15D));
 	}
 	
@@ -91,7 +103,7 @@ public class FaceTo {
 	 */
 	private YawPitch getAngle(Vec3d target) {
 		V3D tar = new V3D(target);
-		Vec3d side = tar.getCenterOfNearestSide();
+		Vec3d side = V3DHelper.getCenterOfNearestSide(tar);
 		double yaw = 0, pitch = 0;
 		Vec3d look = mc.player.getLookVec();
 		double x0 = APIPlayer.getEye().xCoord;

@@ -11,13 +11,16 @@ import com.woog.walle.additional.RebuildTree;
 import com.woog.walle.ai.AIManager;
 import com.woog.walle.ai.DigChunk;
 import com.woog.walle.ai.Digging;
+import com.woog.walle.ai.FaceTo;
 import com.woog.walle.ai.Fishing;
+import com.woog.walle.ai.Flooring;
 import com.woog.walle.ai.LogInIsland;
 import com.woog.walle.ai.Stuffing;
 import com.woog.walle.ai.Walk2There;
 import com.woog.walle.ai.WalkOneStep;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class HandleEventChat implements Runnable {
@@ -57,8 +60,6 @@ public class HandleEventChat implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
 		if (message.matches("^.+/l.*(登|login).*$")) { // 非控制指令
 			if (!WallE.acts.isEmpty()) {
 				WallE.acts.get(0).pause = true;
@@ -106,7 +107,6 @@ public class HandleEventChat implements Runnable {
 			if (!WallE.acts.isEmpty()) {
 				new Thread(){public void run() {
 					try {
-						System.out.println("     " + WallE.acts.size());
 //						WallE.acts.get(0).pause = true;
 						sleep(10);
 						WallE.way.clear();
@@ -137,17 +137,6 @@ public class HandleEventChat implements Runnable {
 			if(chatName != null && this.isController(chatName)) { 	// 控制指令
 				if (chatInfo.length() > myName.length() && chatInfo.substring(0, this.myName.length()).equals(myName)) { // 指令格式：name + 指令
 					if (chatInfo.matches("^.*test.*$")) {
-//						new Stuffing();
-//						APIInventory.printInventory();
-						
-//						for(int i = 0; i < mc.player.inventory.mainInventory.size(); i++) {
-//							System.out.println( i + "       " + mc.player.inventory.mainInventory.get(i));
-//						}
-						
-//						short short1 = mc.player.openContainer.getNextTransactionID(mc.player.inventory);
-//						int slot = 44;
-//						ItemStack itemstack = mc.player.inventoryContainer.slotClick(slot, 6, ClickType.SWAP, mc.player);
-//						System.out.println("ssssssssss  " + itemstack);
 //						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
@@ -169,30 +158,13 @@ public class HandleEventChat implements Runnable {
 //						EventTickClass.doCheckTrees = true;
 //						new Stuffing("hatchet");
 						
-						GLDraw.drawLine(200, 100, 20, 20, 1342177280);
-						
-//						System.out.println("       " + new V3D(0, 0, 0).getSquareEdge(10));
-//						System.out.println("       " + new IChunkFlooring().square);
+						new Flooring();
+//						new FaceTo(EnumFacing.WEST, 85);
+//						System.out.println("       " + new IChunkFlooring().firstStandPos);
 						
 //						System.out.println("【T】" + APIInventory.getHeldItem());
 //						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourceDomain());
 //						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourcePath());
-						
-//						System.out.println("【T】" + APIPlayer.getFacing().getDirectionVec());
-//						new Stuffing("pickaxe");
-//						V3D pos = new V3D(-990, 26, -1050);
-//						System.out.println("          " + mc.player.openContainer.getInventory());
-						
-//						WallE.way.clear();
-//						new RayTraceTarget(new V3D(100, 4, -1837), false);
-//						new RayTraceTarget(new V3D(-990, 28, -1048), false);
-//						Walk2There w2t = new Walk2There();
-//						new Walk2There();
-//						WallE.acts.add(w2t);
-						
-//						mc.getBlockRendererDispatcher().getBlockModelShapes();
-						
-//						new KeepOnWatch(new V3D(-940, 26, -1015), 1);
 						
 					} else if (chatInfo.matches("^.*(stop|停).*$")) {
 						if (WallE.currentAct != null) {

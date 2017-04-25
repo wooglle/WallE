@@ -18,7 +18,6 @@ public class WallERuntime {
 	public static int hasCutted;
 	//是否正在砍树
 	public static boolean isCuttingTree;
-	
-	//铺地时的朝向, 玩家视向的反方向， 铺地时放置方块时点击的朝向， 进行下一行时后退的方向
+	//铺地时 玩家的视向
 	public static EnumFacing flooringFace;
 }

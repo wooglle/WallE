@@ -2,6 +2,7 @@ package com.woog.walle.ai;
 
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
+import com.woog.walle.V3DHelper;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -76,7 +77,7 @@ public class KeepOnWatch {
 	
 	private Vec3d getPoint() {
 		if(this.code == 1) {
-			return this.pos.getCenterOfNearestSide();
+			return V3DHelper.getCenterOfNearestSide(this.pos);
 		}else if(this.code == 2) {
 			return this.pos.getCenter();
 		}else {

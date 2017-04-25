@@ -107,7 +107,7 @@ public class ActionUtil {
 	
 	private class GazeAtBlock extends Thread {
 		private boolean isNear() {
-			if(APIPlayer.getEye().distanceTo(gazeBlockV3D.toVec3()) < 0.3D) {}
+			if(APIPlayer.getEye().distanceTo(gazeBlockV3D.toVec3d()) < 0.3D) {}
 			return false;
 		}
 		

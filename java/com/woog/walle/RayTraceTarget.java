@@ -28,7 +28,7 @@ public class RayTraceTarget {
 		Vec3d vec3 = vec1.addVector(vec2.xCoord * dis, vec2.yCoord * dis, vec2.zCoord * dis);
 		this.target = new V3D(vec3);
 		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
-		this.isDanger = this.isDanger(target);
+		this.isDanger = APIChunk.isSafeForStand(target);
 		if(distance < 2) {
 			foothold =new V3D(APIPlayer.posX(), APIPlayer.posY(), APIPlayer.posZ());
 			Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), foothold, this.canEditeBlock);
@@ -56,7 +56,7 @@ public class RayTraceTarget {
 		double dis = APIPlayer.getFootWithOffset().distance(targetV3D);
 		this.target = targetV3D;
 		this.targetBlock = mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock();
-		this.isDanger = this.isDanger(target);
+		this.isDanger = APIChunk.isSafeForStand(target);
 		foothold = getFoothold(target);
 		if(foothold == null) {
 			return;
@@ -77,7 +77,7 @@ public class RayTraceTarget {
 		this.canEditeBlock = false;
 		this.target = targetV3D;
 		WallE.way.clear();
-		double dis = APIPlayer.getFootWithOffset().centerDistance(targetV3D);
+		double dis = V3DHelper.centerDistance(APIPlayer.getFootWithOffset(), targetV3D);
 		this.targetBlock = APIChunk.getBlock(targetV3D);
 		this.isDanger = false;
 		Astar= new AstarFindWay(APIPlayer.getFootWithOffset(), target, false);
@@ -97,7 +97,7 @@ public class RayTraceTarget {
 			}
 		}
 		if(list1 == null || list1.isEmpty()) {
-			foots = targetPos.getPosByDistance(5);
+			foots = V3DHelper.getPosByDistance(targetPos, 5);
 			list1 = new ArrayList<V3D>(foots.size());
 			for(V3D tem : foots) {
 				if(APIChunk.isSafeForStand(tem)) {
@@ -163,21 +163,6 @@ public class RayTraceTarget {
 		}else{
 			return target.y + 1;
 		}
-	}
-	
-	private boolean isDanger(V3D target) {
-		int id;
-		V3D[] phase = target.getNeighborsAndThis();
-		if(getId(phase[0]) == 0) return false;
-		for(int i = 1; i <= 6; i++) {
-			id = getId(phase[i]);
-			if(id == 8 || id == 9 || id == 10 || id == 11) return true;
-		}
-		return false;
-	}
-	
-	private int getId(V3D target) {
-		return GameData.getBlockRegistry().getIDForObject(mc.world.getBlockState(new BlockPos(target.x, target.y, target.z)).getBlock());
 	}
 	
 	public void info() {

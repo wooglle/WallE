@@ -46,11 +46,11 @@ public class Walk2There extends ActionBase{
 			watch.SetPos(WallE.way.get(0));
 			forward();
 			while(this.condition()) {
-				if(mc.player.getEntityBoundingBox().isVecInside(WallE.way.get(0).toVec3())) {
+				if(mc.player.getEntityBoundingBox().isVecInside(WallE.way.get(0).toVec3d())) {
 					System.out.println("bounding====================");
 				}
 				delay(5);
-				if(WallE.way.get(0).isEqual(new V3D(APIPlayer.getFoot()))) {
+				if(WallE.way.get(0).equals(new V3D(APIPlayer.getFoot()))) {
 					forwardstop();
 					WallE.way.remove(0);
 					break;

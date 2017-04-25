@@ -1,5 +1,6 @@
 package com.woog.walle.ai;
 
+import com.woog.walle.APIChunk;
 import com.woog.walle.APIInventory;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
@@ -42,13 +43,13 @@ public class DigChunk extends ActionBase {
 			return;
 		}
 		Block block = mc.world.getBlockState(new BlockPos(t.x, t.y, t.z)).getBlock();
-		if(t.getId() != 0) {
+		if(!APIChunk.isEmpty(t)) {
 			new FaceTo(t, 1);
 			this.blockDigging = t;
 			delay(50);
 			mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
 			int n = 0;
-			while(t.getId() != 0 & n < 200) {
+			while(!APIChunk.isEmpty(t) & n < 200) {
 				++n;
 				delay(50);
 			}

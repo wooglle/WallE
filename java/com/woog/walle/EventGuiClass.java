@@ -40,7 +40,7 @@ public class EventGuiClass {
 	public void GuiEvent(GuiScreenEvent e) {
 		guiName = getGuiName(e.getGui());
 		if (e.getGui().hashCode() != oldHash) {
-			System.out.println(" 【GUI】 guiName = " + guiName + "  oldName = " + oldName);
+//			System.out.println(" 【GUI】 guiName = " + guiName + "  oldName = " + oldName);
 			isChange = true;
 			oldHash = e.getGui().hashCode();
 			oldName = guiName;
@@ -61,7 +61,7 @@ public class EventGuiClass {
 			new interval().start();
 		} else if (guiName.equals("inventory.GuiChest")) {
 			if (n == 200) {
-				System.out.println("          " + APIInventory.getBoxInventory().getSizeInventory());
+				System.out.println("[GUI]          " + APIInventory.getBoxInventory().getSizeInventory());
 				// if(lower.getName().equals("§6§l服务器快捷切换")) {
 				// mc.ingameGUI.getChatGUI().printChatMessage(new
 				// ChatComponentText("§e§o【Wall-E】" + "afdsnfjdshfjs"));
@@ -82,7 +82,7 @@ public class EventGuiClass {
 			// "+ mc.theWorld.getGameRules().getRules()[1]);
 			// System.out.println(APIInventory.getMainInventory()[0].toString());
 		} else if (guiName.equals("GuiMainMenu") && isChange) {
-			System.out.println("【】" + mc + "  " + mc.world + "  " + mc.player);
+			System.out.println("[GUI-2]" + mc + "  " + mc.world + "  " + mc.player);
 		}
 	}
 
@@ -158,7 +158,7 @@ public class EventGuiClass {
 			NBTTagList nbttaglist = nbttagcompound.getTagList("servers", 10);
 			for (int i = 0; i < nbttaglist.tagCount(); ++i) {
 				System.out.println(
-						"[000]" + ServerData.getServerDataFromNBTCompound(nbttaglist.getCompoundTagAt(i)).serverName);
+						"[GUI]" + ServerData.getServerDataFromNBTCompound(nbttaglist.getCompoundTagAt(i)).serverName);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

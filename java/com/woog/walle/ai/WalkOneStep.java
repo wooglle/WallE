@@ -1,5 +1,6 @@
 package com.woog.walle.ai;
 
+import com.woog.walle.APIChunk;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
 import com.woog.walle.additional.IChunk;
@@ -48,7 +49,7 @@ public class WalkOneStep extends ActionBase{
 		V3D forward = APIPlayer.getFootWithOffset().add(clockwise[APIPlayer.getHeading()]);
 //		System.out.println("STEP=========" + APIPlayer.getFoot2() + "   " + forward);
 		V3D forward2 = forward.add(new V3D(0, 1, 0));
-		if(forward.getId() != 0 | forward2.getId() != 0) {
+		if(!APIChunk.isEmpty(forward) | !APIChunk.isEmpty(forward2)) {
 			return;
 		}else{
 //			new FaceTo(forward2, 2);

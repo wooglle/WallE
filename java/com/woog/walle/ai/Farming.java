@@ -6,6 +6,7 @@ import java.util.List;
 import com.woog.walle.APIChunk;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
+import com.woog.walle.V3DHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -64,14 +65,15 @@ public class Farming extends ActionBase{
 			return null;
 		}
 		if(isWart){
-			List<V3D> list = APIPlayer.getFootWithOffset().getRadiantSquare(APIPlayer.getFootWithOffset().addY(1), dis);
+			
+			List<V3D> list = V3DHelper.getRadiantSquare(APIPlayer.getFootWithOffset().addY(1), dis);
 			for(int i = 0; i < (dis + 1) * (dis + 1); i++){
 				if(Minecraft.getMinecraft().world.getBlockState(list.get(i).toBlockPos()) == Blocks.FARMLAND){
 					return list.get(i);
 				}
 			}
 		}else{
-			List<V3D> list = APIPlayer.getFootWithOffset().getRadiantSquare(APIPlayer.getFootWithOffset(), dis);
+			List<V3D> list = V3DHelper.getRadiantSquare(APIPlayer.getFootWithOffset(), dis);
 			for(int i = 0; i < (dis + 1) * (dis + 1); i++){
 				if(Minecraft.getMinecraft().world.getBlockState(list.get(i).toBlockPos()) == Blocks.FARMLAND){
 					return list.get(i);
@@ -88,7 +90,7 @@ public class Farming extends ActionBase{
 		sides[1] = 0;
 		sides[2] = 0;
 		sides[3] = 0;
-		List<V3D> list = APIPlayer.getFootWithOffset().getCrossPlane(5);
+		List<V3D> list = V3DHelper.getCrossPlane(APIPlayer.getFootWithOffset(), 5);
 		for(int i = 0; i < 5 * 4; i++){
 			BlockPos pos = list.get(i).toBlockPos();
 			if(Minecraft.getMinecraft().world.getBlockState(pos) == Blocks.FARMLAND){

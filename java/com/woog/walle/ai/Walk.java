@@ -45,10 +45,10 @@ public class Walk
 				forward();
 				
 				while(true) {
-					if(mc.player.getEntityBoundingBox().isVecInside(WallE.way.get(0).toVec3())) {
+					if(mc.player.getEntityBoundingBox().isVecInside(WallE.way.get(0).toVec3d())) {
 						System.out.println("bounding====================");
 					}
-					if(WallE.way.get(0).isEqual(new V3D(APIPlayer.getFoot()))) {
+					if(WallE.way.get(0).equals(new V3D(APIPlayer.getFoot()))) {
 //						mc.gameSettings.keyBindForward.setKeyBindState(keyForward, false);
 						forwardstop();
 						WallE.way.remove(0);

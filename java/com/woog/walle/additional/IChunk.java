@@ -6,6 +6,7 @@ import java.util.List;
 import com.woog.walle.APIChunk;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.V3D;
+import com.woog.walle.V3DHelper;
 import com.woog.walle.ai.AIManager;
 
 import net.minecraft.client.Minecraft;
@@ -87,14 +88,14 @@ public class IChunk {
 		int h = 6;
 		V3D foot = APIPlayer.getFootWithOffset();
 		for(int i = 0; i < tar.length; i++) {
-			if(!tar[i].isDangerAjacent()) {
+			if(!V3DHelper.isDangerAjacent(tar[i])) {
 				list.add(i);
 			}else{
 				if(tar[i].x == foot.x && tar[i].z == foot.z) {
 					h =3;
 				}else{
 					V3D forward = this.postion.add(this.clockwise[APIPlayer.getHeading()]);
-					if(tar[i].isEqual(forward) | tar[i].isEqual(forward.add(new V3D(0, 1, 0)))) {
+					if(tar[i].equals(forward) | tar[i].equals(forward.add(new V3D(0, 1, 0)))) {
 						this.isTurn  = true;
 					}
 				}
@@ -125,8 +126,8 @@ public class IChunk {
 	
 	private boolean canGet(V3D tar) {
 //		System.out.println(tar.equals("canGet = " + new V3D(Minecraft.getMinecraft().thePlayer.rayTrace(5.0D, 1.0F).hitVec)));
-		System.out.println("canGe  1 = " + tar);
-		System.out.println("canGet 2 = " + new V3D(Minecraft.getMinecraft().player.rayTrace(5.0D, 5.0F).hitVec));
+		System.out.println("[IChunk] canGe  1 = " + tar);
+		System.out.println("[IChunk] canGet 2 = " + new V3D(Minecraft.getMinecraft().player.rayTrace(5.0D, 5.0F).hitVec));
 //		return tar.equals(new V3D(Minecraft.getMinecraft().thePlayer.rayTrace(5.0D, 1.0F).hitVec));
 		return true;
 	}
