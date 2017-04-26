@@ -26,11 +26,11 @@ public class Walk2There extends ActionBase{
 	}
 	
 	private void forward() {
-		util.setMovement(1, false, false);
+		util.setMovement(1, 0, false, false);
 	}
 	
 	private void forwardstop() {
-		util.setMovement(0, false, false);
+		util.setMovement(0, 0, false, false);
 	}
 	
 	@Override

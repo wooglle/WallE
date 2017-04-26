@@ -85,18 +85,18 @@ public class WalkToIsland extends ActionBase{
 		while(this.condition() & n < 20) {
 			n++;
 			delay(120);
-			util.setMovement(1.0F, true, false);
+			util.setMovement(1.0F, 0.0F, true, false);
 			delay(150);
-			util.setMovement(1.0F, false, false);
+			util.setMovement(1.0F, 0.0F, false, false);
 		}
 		while(this.condition()) {
 			delay(200);
-			util.setMovement(-1.0F, false, false);
+			util.setMovement(-1.0F, 0.0F, false, false);
 			delay(500);
-			util.setMovement(1.0F, false, false);
+			util.setMovement(1.0F, 0.0F, false, false);
 			delay(600);
 		}
-		util.setMovement(0.0F, false, false);
+		util.setMovement(0.0F, 0.0F, false, false);
 	}
 	
 	@Override

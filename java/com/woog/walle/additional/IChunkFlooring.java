@@ -18,9 +18,13 @@ public class IChunkFlooring {
 	private List<V3D> list = new ArrayList<V3D>(20);
 	public boolean isSquare = false;
 	public List<V3D> square = new ArrayList<V3D>(4);
+	//第一块空坐标
 	public V3D firstEmpty;
+	//第一块站立的坐标
 	public V3D firstStandPos;
+	//铺地时视线水平朝向
 	public EnumFacing facing;
+	//开始铺地时的横向移动的方向
 	public EnumFacing facingTransverse;
 	private int minX;
 	private int maxX;

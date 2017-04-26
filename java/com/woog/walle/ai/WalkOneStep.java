@@ -54,13 +54,13 @@ public class WalkOneStep extends ActionBase{
 		}else{
 //			new FaceTo(forward2, 2);
 			Vec3d foot = APIPlayer.getFoot();
-			util.setMovement(1.0F, false, false);
+			util.setMovement(1.0F, 0, false, false);
 			int n = 0;
 			while(condition() & !isGet(forward) & n < 300) {
 				n++;
 				delay(2);
 			}
-			util.setMovement(0, false, false);
+			util.setMovement(0, 0, false, false);
 		}
 	}
 	

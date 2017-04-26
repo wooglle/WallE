@@ -11,7 +11,7 @@ import net.minecraft.util.MovementInputFromOptions;
 public class ActionUtil {
 	Minecraft mc = Minecraft.getMinecraft();
 	private int keyForward = mc.gameSettings.keyBindForward.getKeyCode();
-	private MovementEntry movement = new MovementEntry(0, false, false);
+	private MovementEntry movement = new MovementEntry();
 	private MouseEntry mouse = new MouseEntry();
 	public boolean isShield = true;
 	private boolean shielding = false;
@@ -37,28 +37,12 @@ public class ActionUtil {
 //		mc.gameSettings.keyBindUseItem = new KeyBinding("key.UseItem", 39, "key.categories.movement");
 	}
 	
-	public void setMovement(float forward, boolean jump, boolean sneak) {
+	public void setMovement(float ws,float ad, boolean jump, boolean sneak) {
 		if(isShield) {
-			movement.set(forward, jump, sneak);
+			movement.set(ws, ad, jump, sneak);
 		}else{
 			mc.gameSettings.keyBindForward.setKeyBindState(keyForward, true);
 		}
-	}
-	
-	public void moveLeft() {
-		mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), true);
-	}
-	
-	public void moveLeftStop() {
-		mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), false);
-	}
-	
-	public void moveRight() {
-		mc.gameSettings.keyBindRight.setKeyBindState(mc.gameSettings.keyBindRight.getKeyCode(), true);
-	}
-	
-	public void moveRightStop() {
-		mc.gameSettings.keyBindRight.setKeyBindState(mc.gameSettings.keyBindRight.getKeyCode(), false);
 	}
 	
 	public void gazeOnBlock(V3D gazeAt) {

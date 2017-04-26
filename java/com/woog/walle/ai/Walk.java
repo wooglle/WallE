@@ -26,11 +26,11 @@ public class Walk
 	}
 	
 	public void forward() {
-		util.setMovement(1, false, false);
+		util.setMovement(1, 0, false, false);
 	}
 	
 	public void forwardstop() {
-		util.setMovement(0, false, false);
+		util.setMovement(0, 0, false, false);
 	}
 	
 	class stepThread extends Thread {

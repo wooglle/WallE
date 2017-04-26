@@ -54,6 +54,7 @@ public class APIChunk {
 	 * @return
 	 */
 	public static boolean isEmpty(V3D pos) {
+//		return getBlock(pos).getRegistryName().toString().equals("minecraft:air");
 		return getMaterial(pos).equals(Material.AIR);
 	}
 	
