@@ -21,6 +21,6 @@ public class WallERuntime {
 	public static boolean isCuttingTree;
 	//铺地时的地形
 	public static IChunkFlooring icFlooring;
-	//铺地时 玩家的视向
-	public static EnumFacing flooringFace;
+	//铺地时 玩家的手持物
+	public static String flooringBlock;
 }

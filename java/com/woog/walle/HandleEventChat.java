@@ -151,14 +151,14 @@ public class HandleEventChat implements Runnable {
 //						new Walk2There();
 						
 						
-//						System.out.println("       " + APIChunk.isEmpty(APIPlayer.getFootWithOffset().addY(-1)));
-						
+//						System.out.println("       " + APIInventory.getHeldName());
+//						new Stuffing("tile.glass");
 //						EventTickClass.doCheckTrees = false;
 //						WallE.runtime.isCuttingTree = false;
 //						EventTickClass.doCheckTrees = true;
 //						new Stuffing("hatchet");
 						
-						
+//						new IChunkFlooring();
 						new Flooring();
 //						mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), false);
 						
