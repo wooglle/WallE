@@ -1,11 +1,13 @@
 package com.woog.walle.ai;
 
 import com.woog.walle.APIChunk;
+import com.woog.walle.APIInventory;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.RayTraceTarget;
 import com.woog.walle.V3D;
 import com.woog.walle.WallE;
 import com.woog.walle.additional.IChunkFlooring;
+import com.woog.walle.additional.IChunkFlooring2;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;
@@ -14,7 +16,7 @@ public class Flooring extends ActionBase{
 	private V3D[] lastTen = new V3D[10];
 	private EnumFacing transverseFace;
 	private boolean pressRight;
-	private IChunkFlooring ichunk;
+	private IChunkFlooring2 ichunk;
 	private V3D posBackOne;
 	private V3D nextRenference;
 	private V3D footNextDiff;
@@ -22,12 +24,6 @@ public class Flooring extends ActionBase{
 	@Override
 	public String getActName() {
 		return "Flooring";
-	}
-	
-	@Override
-	public String getToolsKeyword() {
-		
-		return "block";
 	}
 	
 	/**
@@ -51,7 +47,7 @@ public class Flooring extends ActionBase{
 	}
 	
 	private void go() {
-//		while(this.condition() && this.isLongitudinal()) {
+		while(this.condition() && this.isLongitudinal()) {
 			this.stepBackward();
 			this.util.rightDown();
 			delay(200);
@@ -61,7 +57,21 @@ public class Flooring extends ActionBase{
 				this.util.setMovement(0.0F, 0.8F, false, false);
 			}
 			while(this.condition() && this.isTransverseInside()) {
-				this.holdStuff();
+				if(!APIPlayer.currentInHand().getItem().getUnlocalizedName().equals(WallE.runtime.flooringBlock)) {
+					this.util.setMovement(0.0F, 0.0F, false, false);
+					delay(60);
+					this.util.rightUp();
+					delay(60);
+					new Stuffing(WallE.runtime.flooringBlock);
+					delay(100);
+					this.util.rightDown();
+					delay(100);
+					if(this.pressRight) {
+						this.util.setMovement(0.0F, -0.8F, false, false);
+					}else{
+						this.util.setMovement(0.0F, 0.8F, false, false);
+					}
+				}
 				delay(20);
 			}
 			this.util.setMovement(0.0F, 0.0F, false, false);
@@ -69,8 +79,8 @@ public class Flooring extends ActionBase{
 			this.nextRenference = APIPlayer.getFootWithOffset();
 			this.leftRightSwitch();
 			this.isLongitudinal();
-//		}
-//		delay(500);
+		}
+		delay(500);
 		this.util.rightUp();
 	}
 	
@@ -126,8 +136,11 @@ public class Flooring extends ActionBase{
 	
 	@Override
 	public void action() {
+		if(WallE.runtime.flooringBlock == null) {
+			WallE.runtime.flooringBlock = APIPlayer.currentInHand().getItem().getUnlocalizedName();
+		}
 		if(WallE.runtime.icFlooring == null) {
-			WallE.runtime.icFlooring = new IChunkFlooring();
+			WallE.runtime.icFlooring = new IChunkFlooring2();
 			this.ichunk = WallE.runtime.icFlooring;
 		}
 		if(!APIPlayer.getFootWithOffset().equals(this.ichunk.firstStandPos)) {
@@ -148,6 +161,7 @@ public class Flooring extends ActionBase{
 			}
 			this.go();
 			WallE.runtime.icFlooring = null;
+			WallE.runtime.flooringBlock = null;
 		}
 	}
 }

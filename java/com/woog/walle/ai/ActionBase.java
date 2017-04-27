@@ -124,7 +124,7 @@ public class ActionBase {
 	 * @return
 	 */
 	protected boolean condition() {
-		return true;
+		return this.doing && !this.pause;
 	}
 	
 	/**

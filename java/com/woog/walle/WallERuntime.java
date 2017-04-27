@@ -3,6 +3,7 @@ package com.woog.walle;
 import java.util.List;
 
 import com.woog.walle.additional.IChunkFlooring;
+import com.woog.walle.additional.IChunkFlooring2;
 import com.woog.walle.additional.RebuildTree;
 
 import net.minecraft.util.EnumFacing;
@@ -20,7 +21,7 @@ public class WallERuntime {
 	//是否正在砍树
 	public static boolean isCuttingTree;
 	//铺地时的地形
-	public static IChunkFlooring icFlooring;
+	public static IChunkFlooring2 icFlooring;
 	//铺地时 玩家的手持物
 	public static String flooringBlock;
 }

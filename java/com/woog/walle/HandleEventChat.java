@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.woog.walle.additional.GLDraw;
 import com.woog.walle.additional.IChunkFlooring;
+import com.woog.walle.additional.IChunkFlooring2;
 import com.woog.walle.additional.IDebug;
 import com.woog.walle.additional.LoginPassword;
 import com.woog.walle.additional.RebuildTree;
@@ -151,20 +152,22 @@ public class HandleEventChat implements Runnable {
 //						new Walk2There();
 						
 						
+//						System.out.println("       " + APIPlayer.currentInHand().getItem().getUnlocalizedName());
 //						System.out.println("       " + APIInventory.getHeldName());
 //						new Stuffing("tile.glass");
 //						EventTickClass.doCheckTrees = false;
 //						WallE.runtime.isCuttingTree = false;
 //						EventTickClass.doCheckTrees = true;
-//						new Stuffing("hatchet");
+//						new Stuffing("tile.glass");
 						
 //						new IChunkFlooring();
 						new Flooring();
+						
 //						mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), false);
 						
 						
 //						new FaceTo(EnumFacing.WEST, 85);
-//						System.out.println("       " + new IChunkFlooring().firstStandPos);
+//						System.out.println("       " + new IChunkFlooring2().firstEmpty);
 						
 //						System.out.println("【T】" + APIInventory.getHeldItem());
 //						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourceDomain());
