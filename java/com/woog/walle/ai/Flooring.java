@@ -1,6 +1,6 @@
 package com.woog.walle.ai;
 
-import com.woog.walle.APIInventory;
+import com.woog.walle.APIChunk;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.RayTraceTarget;
 import com.woog.walle.V3D;
@@ -26,7 +26,8 @@ public class Flooring extends ActionBase{
 	
 	@Override
 	public String getToolsKeyword() {
-		return WallE.runtime.flooringBlock;
+		
+		return "block";
 	}
 	
 	/**
@@ -50,7 +51,7 @@ public class Flooring extends ActionBase{
 	}
 	
 	private void go() {
-		while(this.condition() && this.isLongitudinal()) {
+//		while(this.condition() && this.isLongitudinal()) {
 			this.stepBackward();
 			this.util.rightDown();
 			delay(200);
@@ -60,33 +61,23 @@ public class Flooring extends ActionBase{
 				this.util.setMovement(0.0F, 0.8F, false, false);
 			}
 			while(this.condition() && this.isTransverseInside()) {
-				if(!APIPlayer.currentInHand().getItem().getUnlocalizedName().equals(this.getToolsKeyword())) {
-					this.util.setMovement(0.0F, 0.0F, false, false);
-					new Stuffing(this.getToolsKeyword());
-					delay(1000);
-					if(this.pressRight) {
-						this.util.setMovement(0.0F, -0.8F, false, false);
-					}else{
-						this.util.setMovement(0.0F, 0.8F, false, false);
-					}
-				}
+				this.holdStuff();
 				delay(20);
 			}
 			this.util.setMovement(0.0F, 0.0F, false, false);
-			delay(200);
+			delay(60);
 			this.nextRenference = APIPlayer.getFootWithOffset();
 			this.leftRightSwitch();
 			this.isLongitudinal();
-		}
-		delay(500);
+//		}
+//		delay(500);
 		this.util.rightUp();
 	}
 	
 	private boolean isTransverseInside() {
 //		this.ichunk.isPosInside(APIPlayer.getFootWithOffset().addY(-1).add(new V3D(this.ichunk.facing).add(new V3D(this.transverseFace))));
 		V3D temp = APIPlayer.getFootWithOffset().add(new V3D(this.transverseFace).addY(-1));
-//		System.out.println("FLOR     " + temp);
-		return this.ichunk.isPosInside(temp);
+		return APIChunk.isEmpty(temp);
 	}
 	
 	private boolean isLongitudinal() {
@@ -94,7 +85,7 @@ public class Flooring extends ActionBase{
 		int difZ = this.ichunk.facing.getOpposite().getFrontOffsetZ();
 		V3D temp  = APIPlayer.getFootWithOffset().add(difX, -1, difZ);
 //		System.out.println("FLOOR   " + APIPlayer.getFootWithOffset() + temp);
-		return this.ichunk.isPosInside(temp);
+		return APIChunk.isEmpty(temp);
 	}
 	
 	/**
@@ -137,7 +128,6 @@ public class Flooring extends ActionBase{
 	public void action() {
 		if(WallE.runtime.icFlooring == null) {
 			WallE.runtime.icFlooring = new IChunkFlooring();
-			WallE.runtime.flooringBlock = APIPlayer.currentInHand().getItem().getUnlocalizedName();
 			this.ichunk = WallE.runtime.icFlooring;
 		}
 		if(!APIPlayer.getFootWithOffset().equals(this.ichunk.firstStandPos)) {
