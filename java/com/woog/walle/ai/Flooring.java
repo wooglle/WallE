@@ -1,5 +1,6 @@
 package com.woog.walle.ai;
 
+import com.woog.walle.APIChunk;
 import com.woog.walle.APIPlayer;
 import com.woog.walle.RayTraceTarget;
 import com.woog.walle.V3D;
@@ -76,15 +77,15 @@ public class Flooring extends ActionBase{
 	private boolean isTransverseInside() {
 //		this.ichunk.isPosInside(APIPlayer.getFootWithOffset().addY(-1).add(new V3D(this.ichunk.facing).add(new V3D(this.transverseFace))));
 		V3D temp = APIPlayer.getFootWithOffset().add(new V3D(this.transverseFace).addY(-1));
-		return this.ichunk.isPosInside(temp);
+		return APIChunk.isEmpty(temp);
 	}
 	
 	private boolean isLongitudinal() {
 		int difX = this.ichunk.facing.getOpposite().getFrontOffsetX();
 		int difZ = this.ichunk.facing.getOpposite().getFrontOffsetZ();
 		V3D temp  = APIPlayer.getFootWithOffset().add(difX, -1, difZ);
-		System.out.println("FLOOR   " + APIPlayer.getFootWithOffset() + temp);
-		return this.ichunk.isPosInside(temp);
+//		System.out.println("FLOOR   " + APIPlayer.getFootWithOffset() + temp);
+		return APIChunk.isEmpty(temp);
 	}
 	
 	/**

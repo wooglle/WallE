@@ -339,4 +339,13 @@ public class V3DHelper {
 	public static BlockPos toBlockPos(V3D posA) {
 		return new BlockPos(posA.x, posA.y, posA.z);
 	}
+	
+	public static EnumFacing toEnumFacing(V3D posA) {
+		for(EnumFacing face : EnumFacing.VALUES) {
+			if(new V3D(face).equals(posA)) {
+				return face;
+			}
+		}
+		return null;
+	}
 }
