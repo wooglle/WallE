@@ -10,6 +10,7 @@ import com.woog.walle.additional.IDebug;
 import com.woog.walle.additional.LoginPassword;
 import com.woog.walle.additional.RebuildTree;
 import com.woog.walle.ai.AIManager;
+import com.woog.walle.ai.CutTrees;
 import com.woog.walle.ai.DigChunk;
 import com.woog.walle.ai.Digging;
 import com.woog.walle.ai.FaceTo;
@@ -161,7 +162,7 @@ public class HandleEventChat implements Runnable {
 //						new Stuffing("tile.glass");
 						
 //						new IChunkFlooring();
-						new Flooring();
+//						new Flooring();
 						
 //						mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), false);
 						
@@ -198,11 +199,15 @@ public class HandleEventChat implements Runnable {
 						new DigChunk();
 					} else if (chatInfo.matches("^.*(cobble|石|stone).*$")) {
 						new Digging();
+					} else if (chatInfo.matches("^.*(floor|铺地).*$")) {
+						new Flooring();
+					}  else if (chatInfo.matches("^.*(cuttree|砍树).*$")) {
+						new CutTrees();
 					} else if (chatInfo.matches("^.*disconnect$")) {
 						if (!chatName.equals(myName)) {
 							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始下线！！！！！");
+							mc.world.sendQuittingDisconnectingPacket();
 						}
-						mc.world.sendQuittingDisconnectingPacket();
 					} else if (chatInfo.matches("^.*eyeson$")) {
 						mc.player.sendChatMessage(APIChunk.getBlockEyesOn().toString());
 					} else if (chatInfo.matches(".*(hold|切换).*")) {

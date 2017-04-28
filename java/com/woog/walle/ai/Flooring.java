@@ -56,7 +56,7 @@ public class Flooring extends ActionBase{
 			}else{
 				this.util.setMovement(0.0F, 0.8F, false, false);
 			}
-			while(this.condition() && this.isTransverseInside()) {
+			while(this.condition()&& this.isLongitudinal() && this.isTransverseInside()) {
 				if(!APIPlayer.currentInHand().getItem().getUnlocalizedName().equals(WallE.runtime.flooringBlock)) {
 					this.util.setMovement(0.0F, 0.0F, false, false);
 					delay(60);
@@ -141,27 +141,31 @@ public class Flooring extends ActionBase{
 		}
 		if(WallE.runtime.icFlooring == null) {
 			WallE.runtime.icFlooring = new IChunkFlooring2();
+			if(WallE.runtime.icFlooring.firstEmpty == null) {
+				WallE.runtime.icFlooring = null;
+				WallE.runtime.flooringBlock = null;
+				return;
+			}
 			this.ichunk = WallE.runtime.icFlooring;
 		}
-		if(!APIPlayer.getFootWithOffset().equals(this.ichunk.firstStandPos)) {
-			new RayTraceTarget(this.ichunk.firstStandPos, false);
-			new Walk2There();
-			return;
+//		if(!APIPlayer.getFootWithOffset().equals(this.ichunk.firstStandPos)) {
+//			new RayTraceTarget(this.ichunk.firstStandPos, false);
+//			new Walk2There();
+//			return;
+//		}
+		this.footNextDiff = new V3D(this.ichunk.facing.getOpposite().getFrontOffsetX(), -1, this.ichunk.facing.getOpposite().getFrontOffsetZ());
+		this.nextRenference = this.ichunk.firstStandPos;
+		delay(200);
+		new FaceTo(this.ichunk.facing, 80);
+		this.transverseFace = this.ichunk.facingTransverse;
+		int rightIndex = (this.ichunk.facing.getHorizontalIndex() + 1) % 4;
+		if(this.ichunk.facingTransverse.equals(EnumFacing.getHorizontal(rightIndex))) {
+			this.pressRight = true;
 		}else{
-			this.footNextDiff = new V3D(this.ichunk.facing.getOpposite().getFrontOffsetX(), -1, this.ichunk.facing.getOpposite().getFrontOffsetZ());
-			this.nextRenference = this.ichunk.firstStandPos;
-			delay(200);
-			new FaceTo(this.ichunk.facing, 80);
-			this.transverseFace = this.ichunk.facingTransverse;
-			int rightIndex = (this.ichunk.facing.getHorizontalIndex() + 1) % 4;
-			if(this.ichunk.facingTransverse.equals(EnumFacing.getHorizontal(rightIndex))) {
-				this.pressRight = true;
-			}else{
-				this.pressRight = false;
-			}
-			this.go();
-			WallE.runtime.icFlooring = null;
-			WallE.runtime.flooringBlock = null;
+			this.pressRight = false;
 		}
+		this.go();
+		WallE.runtime.icFlooring = null;
+		WallE.runtime.flooringBlock = null;
 	}
 }

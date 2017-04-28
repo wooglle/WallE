@@ -34,7 +34,7 @@ public class Stuffing{
 				WallE.acts.get(0).doing = false;
 				AIManager.doing = false;
 			}
-			mc.player.sendChatMessage("▁▂▃▄▅▆▇"+  "背包没有" + itemKeyword + "， Wall-E已停止工作▇▆▅▄▃▂▁"); 
+//			mc.player.sendChatMessage("▁▂▃▄▅▆▇"+  "背包没有" + itemKeyword + "， Wall-E已停止工作▇▆▅▄▃▂▁"); 
 		}
 	}
 	
