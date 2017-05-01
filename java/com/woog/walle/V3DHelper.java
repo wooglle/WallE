@@ -63,6 +63,17 @@ public class V3DHelper {
 		return false;
 	}
 	
+	/**
+	 * 获取给定坐标的指定方向、指定距离的坐标
+	 * @param posA 参考点坐标
+	 * @param face 方向
+	 * @param distance 距离
+	 * @return
+	 */
+	public static V3D getPosByDistance(V3D posA, EnumFacing face, int distance) {
+		return posA.add(face.getFrontOffsetX() * distance, face.getFrontOffsetY() * distance, face.getFrontOffsetZ() * distance);
+	}
+	
 	public static Vec3d getFaceCenter(V3D posA, EnumFacing face) {
 		Vec3d center = posA.getCenter();
 		return center.addVector(face.getFrontOffsetX() * 0.5, face.getFrontOffsetY() * 0.5, face.getFrontOffsetZ() * 0.5);
@@ -219,6 +230,21 @@ public class V3DHelper {
 			b.add(b.get(1).add(0, 0, i));
 			b.add(b.get(2).add(-i, 0, 0));
 			b.add(b.get(3).add(0, 0, -i));
+		}
+		return b;
+	}
+	
+
+	public static List<V3D> getSquareByFacing(V3D posA, EnumFacing faceX, int x, EnumFacing faceY, int y) {
+		int dx = (int)(x / 2);
+		int dy = (int)(y / 2);
+		List<V3D> b = new ArrayList<V3D>(dx * dy);
+		for(int i = - dx; i < dx; i++) {
+			for(int j = 0; j < dy; j++) {
+				if(!(i == 0 & j == 0)) {
+					b.add(posA.add(faceX.getFrontOffsetX() * i + faceY.getFrontOffsetX() * i, 0, faceX.getFrontOffsetZ() * j + faceY.getFrontOffsetZ() * j));
+				}
+			}
 		}
 		return b;
 	}

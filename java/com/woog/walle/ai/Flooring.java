@@ -56,7 +56,7 @@ public class Flooring extends ActionBase{
 			}else{
 				this.util.setMovement(0.0F, 0.8F, false, false);
 			}
-			while(this.condition()&& this.isLongitudinal() && this.isTransverseInside()) {
+			while(this.condition()&& this.isTransverseInside()) {
 				if(!APIPlayer.currentInHand().getItem().getUnlocalizedName().equals(WallE.runtime.flooringBlock)) {
 					this.util.setMovement(0.0F, 0.0F, false, false);
 					delay(60);
@@ -87,7 +87,7 @@ public class Flooring extends ActionBase{
 	private boolean isTransverseInside() {
 //		this.ichunk.isPosInside(APIPlayer.getFootWithOffset().addY(-1).add(new V3D(this.ichunk.facing).add(new V3D(this.transverseFace))));
 		V3D temp = APIPlayer.getFootWithOffset().add(new V3D(this.transverseFace).addY(-1));
-		return APIChunk.isEmpty(temp);
+		return APIChunk.isEmpty(temp) | APIChunk.isSafeForStand(temp);
 	}
 	
 	private boolean isLongitudinal() {

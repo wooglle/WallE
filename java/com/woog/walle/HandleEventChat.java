@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import com.woog.walle.additional.GLDraw;
+import com.woog.walle.additional.ICLighting;
 import com.woog.walle.additional.IChunkFlooring;
 import com.woog.walle.additional.IChunkFlooring2;
 import com.woog.walle.additional.IDebug;
@@ -16,6 +17,7 @@ import com.woog.walle.ai.Digging;
 import com.woog.walle.ai.FaceTo;
 import com.woog.walle.ai.Fishing;
 import com.woog.walle.ai.Flooring;
+import com.woog.walle.ai.Lighting;
 import com.woog.walle.ai.LogInIsland;
 import com.woog.walle.ai.Stuffing;
 import com.woog.walle.ai.Walk2There;
@@ -143,7 +145,8 @@ public class HandleEventChat implements Runnable {
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
 						
-//						System.out.println("CHAT    " + new V3D(0, 0, 0).getCrossCube(1));
+//						System.out.println("CHAT    " + new ICLighting().firstLight);
+//						System.out.println("CHAT    " + APIChunk.isSafeForStand(new V3D(908, 30, 243)));
 						
 //						new RayTraceTarget(new V3D(-991, 27, -1051), false);
 //						new AstarFindWay(APIPlayer.getFootWithOffset(), new V3D(-1005, 26, -1053), false);
@@ -152,8 +155,10 @@ public class HandleEventChat implements Runnable {
 //						System.out.println("CHAT   " + APIChunk.isSafeForStand(new V3D(-991, 26, -1053)));
 //						new Walk2There();
 						
-						
-//						System.out.println("       " + APIPlayer.currentInHand().getItem().getUnlocalizedName());
+//						new Lighting();
+//						System.out.println("       " + V3DHelper.getSquareByFacing(new V3D(0, 0, 0),
+//								EnumFacing.EAST, 5, EnumFacing.NORTH, 5));
+//						System.out.println("       " + APIInventory.getHeldItem().isItemDamaged());
 //						System.out.println("       " + APIInventory.getHeldName());
 //						new Stuffing("tile.glass");
 //						EventTickClass.doCheckTrees = false;
@@ -203,6 +208,8 @@ public class HandleEventChat implements Runnable {
 						new Flooring();
 					}  else if (chatInfo.matches("^.*(cuttree|砍树).*$")) {
 						new CutTrees();
+					} else if (chatInfo.matches("^.*(lighting|插火把).*$")) {
+						new Lighting();
 					} else if (chatInfo.matches("^.*disconnect$")) {
 						if (!chatName.equals(myName)) {
 							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始下线！！！！！");

@@ -1,7 +1,9 @@
 package com.woog.walle;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.woog.walle.additional.ICLighting;
 import com.woog.walle.additional.IChunkFlooring;
 import com.woog.walle.additional.IChunkFlooring2;
 import com.woog.walle.additional.RebuildTree;
@@ -9,11 +11,13 @@ import com.woog.walle.additional.RebuildTree;
 import net.minecraft.util.EnumFacing;
 
 public class WallERuntime {
+	//GuiOverlayDebug
+	
 	//行走的路径
-	public static List<V3D> way = null;
+	public static List<V3D> way;
 	
 	//当前正在砍的树
-	public static RebuildTree currentTree = null;
+	public static RebuildTree currentTree;
 	//砍树前的起始坐标
 	public static V3D originPos;
 	//当前正在砍的树已经砍掉木块的数量
@@ -24,4 +28,15 @@ public class WallERuntime {
 	public static IChunkFlooring2 icFlooring;
 	//铺地时 玩家的手持物
 	public static String flooringBlock;
+	
+	//插火把时的地形
+	public static ICLighting icLighting;
+	//插火把时的上一个位置
+	public static V3D lightingPrevious;
+	//插火把时的下一个位置
+	public static V3D lightingNext;
+	//插火把时下一位置周边多余的火把
+	public static List<V3D> lightingSuperfluous = new ArrayList<V3D>(20);
+	//插火把时的横向方向
+	public static EnumFacing longitude;
 }

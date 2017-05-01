@@ -59,7 +59,9 @@ public class ActionBase {
 	 */
 	protected void holdStuff() {
 		if(this.canStuff()) {
+			boolean change = false;
 			if(mc.gameSettings.keyBindAttack.isKeyDown()) {
+				change = true;
 				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
 			}
 			while(this.condition() && this.canStuff()) {
@@ -67,7 +69,7 @@ public class ActionBase {
 				new Stuffing(this.toolsKeyword);
 				delay(100);
 			}
-			if(!mc.gameSettings.keyBindAttack.isKeyDown()) {
+			if(change && !mc.gameSettings.keyBindAttack.isKeyDown()) {
 				mc.gameSettings.keyBindAttack.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), true);
 			}
 		}
@@ -85,7 +87,7 @@ public class ActionBase {
 			if(APIInventory.getHeldItem().getItem().getUnlocalizedName().matches("^.*" + toolsKeyword + ".*")) {
 				flag = true;
 			}
-			if(flag && APIInventory.getHeldItemDamage() < WallE.minItemDamage) {
+			if(flag && APIInventory.getHeldItem().isItemDamaged() && APIInventory.getHeldItemDamage() < WallE.minItemDamage) {
 				return true;
 			} else if(!flag) {
 				return true;
