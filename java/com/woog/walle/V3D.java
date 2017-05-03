@@ -14,7 +14,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.registry.GameData;
 
-//@Immutable
+@Immutable
 public class V3D {
 	public int x;
 	public int y;

@@ -20,7 +20,7 @@ public class Farming extends ActionBase{
 	private boolean isWart;
 	@Override
 	public String getActName(){
-		return "高科技农业";
+		return "Farming";
 	}
 	
 	@Override

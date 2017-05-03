@@ -183,6 +183,8 @@ public class HandleEventChat implements Runnable {
 						if (WallE.currentAct != null) {
 							AIManager.doing = false;
 							WallE.currentAct.doing = false;
+							EventTickClass.doCheckTrees = false;
+							WallE.runtime.isCuttingTree = false;
 						}
 						if (this.ai != null && ai.doing) {
 							this.ai.setDoing(false);
@@ -207,7 +209,7 @@ public class HandleEventChat implements Runnable {
 					} else if (chatInfo.matches("^.*(floor|铺地).*$")) {
 						new Flooring();
 					}  else if (chatInfo.matches("^.*(cuttree|砍树).*$")) {
-						new CutTrees();
+						EventTickClass.doCheckTrees = true;
 					} else if (chatInfo.matches("^.*(lighting|插火把).*$")) {
 						new Lighting();
 					} else if (chatInfo.matches("^.*disconnect$")) {
