@@ -139,22 +139,30 @@ public class HandleEventChat implements Runnable {
 //			System.out.println(chatName + "     +++++       " + chatInfo + "  " + chatInfo.matches("^\\W+$"));
 //			System.out.println("-----" + chatInfo.substring(0, this.myName.length()));
 			if(chatName != null && this.isController(chatName)) { 	// 控制指令
-				if (chatInfo.length() > myName.length() && chatInfo.substring(0, this.myName.length()).equals(myName)) { // 指令格式：name + 指令
-					if (chatInfo.matches("^.*test.*$")) {
+				String[] str = chatInfo.split(" ");
+				if(chatInfo.length() > myName.length() && str.length > 1) {
+					String strName = str[1];
+					String strInfo = "";
+					for(int i = 2; i < str.length; i++) {
+						strInfo += str[i] + " ";
+					}
+//					System.out.println("Chat   +" +strName +"+   +" + strInfo + "+   " + myName + " " + strName.equals(myName));
+					if (strName.equals(myName)) { // 指令格式：name + 指令
+						if (strInfo.matches("^.*test.*$")) {
 //						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
 //								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
 //								itemstack, short1));
-						
+							
 //						System.out.println("CHAT    " + new ICLighting().firstLight);
 //						System.out.println("CHAT    " + APIChunk.isSafeForStand(new V3D(908, 30, 243)));
-						
+							
 //						new RayTraceTarget(new V3D(-991, 27, -1051), false);
 //						new AstarFindWay(APIPlayer.getFootWithOffset(), new V3D(-1005, 26, -1053), false);
 //						new RayTraceTarget(new V3D(-1005, 26, -1053), false); 
 //						new RayTraceTarget(new V3D(873, 22, 252), false); 
 //						System.out.println("CHAT   " + APIChunk.isSafeForStand(new V3D(-991, 26, -1053)));
 //						new Walk2There();
-						
+							
 //						new Lighting();
 //						System.out.println("       " + V3DHelper.getSquareByFacing(new V3D(0, 0, 0),
 //								EnumFacing.EAST, 5, EnumFacing.NORTH, 5));
@@ -165,100 +173,101 @@ public class HandleEventChat implements Runnable {
 //						WallE.runtime.isCuttingTree = false;
 //						EventTickClass.doCheckTrees = true;
 //						new Stuffing("tile.glass");
-						
+							
 //						new IChunkFlooring();
 //						new Flooring();
-						
+							
 //						mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), false);
-						
-						
+							
+							
 //						new FaceTo(EnumFacing.WEST, 85);
 //						System.out.println("       " + new IChunkFlooring2().firstEmpty);
-						
+							
 //						System.out.println("【T】" + APIInventory.getHeldItem());
 //						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourceDomain());
 //						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourcePath());
-						
-					} else if (chatInfo.matches("^.*(stop|停).*$")) {
-						if (WallE.currentAct != null) {
-							AIManager.doing = false;
-							WallE.currentAct.doing = false;
-							EventTickClass.doCheckTrees = false;
-							WallE.runtime.isCuttingTree = false;
-						}
-						if (this.ai != null && ai.doing) {
-							this.ai.setDoing(false);
-						}
-						if (!chatName.equals(myName)) {
-							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，停止AI." + WallE.acts.get(0).getActName());
-						}
-					} else if (chatInfo.matches("^.*(ai).*$")) {
-						this.ai = new AIManager();
-						if (!chatName.equals(myName)) {
-							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开启AI！！！！！");
-						}
-					} else if (chatInfo.matches("^.*(fish|魚|鱼).*$")) {
-						new Fishing();
-						if (!chatName.equals(myName)) {
-							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始钓鱼！！！！！");
-						}
-					} else if (chatInfo.matches("^.*(dig|挖|掘).*$")) {
-						new DigChunk();
-					} else if (chatInfo.matches("^.*(cobble|石|stone).*$")) {
-						new Digging();
-					} else if (chatInfo.matches("^.*(floor|铺地).*$")) {
-						new Flooring();
-					}  else if (chatInfo.matches("^.*(cuttree|砍树).*$")) {
-						EventTickClass.doCheckTrees = true;
-					} else if (chatInfo.matches("^.*(lighting|插火把).*$")) {
-						new Lighting();
-					} else if (chatInfo.matches("^.*disconnect$")) {
-						if (!chatName.equals(myName)) {
-							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始下线！！！！！");
-							mc.world.sendQuittingDisconnectingPacket();
-						}
-					} else if (chatInfo.matches("^.*eyeson$")) {
-						mc.player.sendChatMessage(APIChunk.getBlockEyesOn().toString());
-					} else if (chatInfo.matches(".*(hold|切换).*")) {
-						mc.player.inventory.changeCurrentItem(1);
-					} else if (chatInfo.matches(".*(walk|走).*")) {
-						new WalkOneStep();
-					} else if(chatInfo.matches("^.*light.*off$")) {
-						mc.gameSettings.gammaSetting = 1.0F;
-					} else if(chatInfo.matches("^.*light.*on$")) {
-						mc.gameSettings.gammaSetting = 100F;
-					} else if (chatInfo.matches("^.*(当前客户|chat\\s?guest).*$")) {
-						String guestsName = "";
-						for (int i = 0; i < EventChatClass.guests.size(); i++) {
-							Date da = new Date(EventChatClass.guests.get(i).time);
-							guestsName += EventChatClass.guests.get(i).name + "=" + da.getHours() + ":"
-									+ da.getMinutes() + ":" + da.getSeconds() + "  ";
-						}
-						mc.player.sendChatMessage("当前客户： " + guestsName);
-					} else if (!chatName.equals(this.myName)) { // 远程控制专用指令
-						if (chatInfo.matches("^r.*$")) {
-							mc.player.sendChatMessage(chatInfo.substring(1, chatInfo.length()));
-						} else if (chatInfo.matches("^.*(cancel|取消)(power|关|shut).*(off|机|down).*$")) {
-							try {
-								Runtime.getRuntime().exec("shutdown -a");
-							} catch (IOException e) {
-								e.printStackTrace();
+							
+						} else if (strInfo.matches("^.*(stop|停).*$")) {
+							if (WallE.currentAct != null) {
+								AIManager.doing = false;
+								WallE.currentAct.doing = false;
+								EventTickClass.doCheckTrees = false;
+								WallE.runtime.isCuttingTree = false;
 							}
-							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，取消关机计划！！！！！");
-						} else if (!chatName.equals(this.myName)
-								&& chatInfo.matches("^.*(power|关|shut)(off|机|down).*$")) {
-							mc.player.sendChatMessage("Wall-E 远程控制已接受指令，60秒后关闭计算机！！！！！");
-							try {
-								Runtime.getRuntime().exec("shutdown -s -t 60");
-							} catch (IOException e) {
-								e.printStackTrace();
+							if (this.ai != null && ai.doing) {
+								this.ai.setDoing(false);
+							}
+							if (!chatName.equals(myName)) {
+								mc.player.sendChatMessage("Wall-E 远程控制已接受指令，停止AI." + WallE.acts.get(0).getActName());
+							}
+						} else if (strInfo.matches("^.*(ai).*$")) {
+							this.ai = new AIManager();
+							if (!chatName.equals(myName)) {
+								mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开启AI！！！！！");
+							}
+						} else if (strInfo.matches("^.*(fish|魚|鱼).*$")) {
+							new Fishing();
+							if (!chatName.equals(myName)) {
+								mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始钓鱼！！！！！");
+							}
+						} else if (strInfo.matches("^.*(dig|挖|掘).*$")) {
+							new DigChunk();
+						} else if (strInfo.matches("^.*(cobble|石|stone).*$")) {
+							new Digging();
+						} else if (strInfo.matches("^.*(floor|铺地).*$")) {
+							new Flooring();
+						}  else if (strInfo.matches("^.*(cuttree|砍树).*$")) {
+							EventTickClass.doCheckTrees = true;
+						} else if (strInfo.matches("^.*(lighting|插火把).*$")) {
+							new Lighting();
+						} else if (strInfo.matches("^.*disconnect$")) {
+							if (!chatName.equals(myName)) {
+								mc.player.sendChatMessage("Wall-E 远程控制已接受指令，开始下线！！！！！");
+								mc.world.sendQuittingDisconnectingPacket();
+							}
+						} else if (strInfo.matches("^.*eyeson$")) {
+							mc.player.sendChatMessage(APIChunk.getBlockEyesOn().toString());
+						} else if (strInfo.matches(".*(hold|切换).*")) {
+							mc.player.inventory.changeCurrentItem(1);
+						} else if (strInfo.matches(".*(walk|走).*")) {
+							new WalkOneStep();
+						} else if(strInfo.matches("^.*light.*off$")) {
+							mc.gameSettings.gammaSetting = 1.0F;
+						} else if(strInfo.matches("^.*light.*on$")) {
+							mc.gameSettings.gammaSetting = 100F;
+						} else if (strInfo.matches("^.*(当前客户|chat\\s?guest).*$")) {
+							String guestsName = "";
+							for (int i = 0; i < EventChatClass.guests.size(); i++) {
+								Date da = new Date(EventChatClass.guests.get(i).time);
+								guestsName += EventChatClass.guests.get(i).name + "=" + da.getHours() + ":"
+										+ da.getMinutes() + ":" + da.getSeconds() + "  ";
+							}
+							mc.player.sendChatMessage("当前客户： " + guestsName);
+						} else if (!chatName.equals(this.myName)) { // 远程控制专用指令
+							if (strInfo.matches("^r.*$")) {
+								mc.player.sendChatMessage(strInfo.substring(1, strInfo.length()));
+							} else if (strInfo.matches("^.*(cancel|取消)(power|关|shut).*(off|机|down).*$")) {
+								try {
+									Runtime.getRuntime().exec("shutdown -a");
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+								mc.player.sendChatMessage("Wall-E 远程控制已接受指令，取消关机计划！！！！！");
+							} else if (!chatName.equals(this.myName)
+									&& strInfo.matches("^.*(power|关|shut)(off|机|down).*$")) {
+								mc.player.sendChatMessage("Wall-E 远程控制已接受指令，60秒后关闭计算机！！！！！");
+								try {
+									Runtime.getRuntime().exec("shutdown -s -t 60");
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							}
 						}
 					}
 				}
 			} 
-//			else if(chatName != null && chatInfo.length() > myName.length() && chatInfo.substring(0, this.myName.length()).equals(myName)) {
-//				String msg = chatInfo;
+//			else if(chatName != null && strInfo.length() > myName.length() && strInfo.substring(0, this.myName.length()).equals(myName)) {
+//				String msg = strInfo;
 //				HttpRequest http = new HttpRequest(msg, chatName);
 //				String str = http.answer.replace("<br>", "");
 //				mc.player.sendChatMessage("@" + chatName + "，" + str);
