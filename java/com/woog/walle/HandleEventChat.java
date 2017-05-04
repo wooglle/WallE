@@ -140,7 +140,7 @@ public class HandleEventChat implements Runnable {
 //			System.out.println("-----" + chatInfo.substring(0, this.myName.length()));
 			if(chatName != null && this.isController(chatName)) { 	// 控制指令
 				String[] str = chatInfo.split(" ");
-				if(chatInfo.length() > myName.length() && str.length > 1) {
+				if(str.length > 1) {
 					String strName = str[1];
 					String strInfo = "";
 					for(int i = 2; i < str.length; i++) {

@@ -31,6 +31,11 @@ public class Lighting extends ActionBase{
 		return false;
 	}
 	
+	@Override
+	public boolean condition() {
+		return this.doing && !this.pause && APIPlayer.getFootWithOffset().y == WallE.runtime.lightingHeight;
+	}
+	
 	private boolean hasNext() {
 		if(WallE.runtime.lightingNext != null && !APIChunk.getBlock(WallE.runtime.lightingNext).getRegistryName().toString().equals("minecraft:torch")) {
 			return true;
@@ -83,6 +88,7 @@ public class Lighting extends ActionBase{
 			WallE.runtime.icLighting = light;
 			WallE.runtime.lightingPrevious = new V3D(light.firstLight.x, light.firstLight.y, light.firstLight.z);
 			WallE.runtime.longitude = light.longitude;
+			WallE.runtime.lightingHeight = APIPlayer.getFootWithOffset().y;
 		}
 		while(this.condition() && this.hasNext()) {
 			while(this.condition() && this.hasSuperfluous()) {

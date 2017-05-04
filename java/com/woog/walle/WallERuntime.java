@@ -39,4 +39,6 @@ public class WallERuntime {
 	public static List<V3D> lightingSuperfluous = new ArrayList<V3D>(20);
 	//插火把时的横向方向
 	public static EnumFacing longitude;
+	//插火把时的平面高度
+	public static int lightingHeight;
 }
