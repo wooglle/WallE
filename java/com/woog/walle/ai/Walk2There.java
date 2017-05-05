@@ -74,6 +74,7 @@ public class Walk2There extends ActionBase{
 //				return;
 //			}
 //		}
+		forwardstop();
 		watch.isKeep = false;
 //		util.allDefault();
 	}

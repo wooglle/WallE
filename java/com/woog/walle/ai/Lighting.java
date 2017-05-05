@@ -50,14 +50,14 @@ public class Lighting extends ActionBase{
 		if(!APIChunk.isSafeForStand(temp)) {
 			temp = V3DHelper.getPosByDistance(WallE.runtime.lightingPrevious, ic.latitude, ic.latitudeLenght / 2);
 			WallE.runtime.longitude = WallE.runtime.longitude.getOpposite();
-			temp = V3DHelper.getPosByDistance(temp, WallE.runtime.longitude, ic.longitudeLenght / 2);
-//			System.out.println("Lighting  2  " + WallE.runtime.lightingPrevious + temp);
 			if(!APIChunk.isSafeForStand(temp)) {
-				WallE.runtime.longitude = WallE.runtime.longitude.getOpposite();
-				temp = temp.add(WallE.runtime.longitude.getFrontOffsetX() * ic.longitudeLenght, 0, WallE.runtime.longitude.getFrontOffsetZ() * ic.longitudeLenght);
-//				System.out.println("Lighting  3  " + WallE.runtime.lightingPrevious + temp);
+				temp = V3DHelper.getPosByDistance(temp, WallE.runtime.longitude, ic.longitudeLenght / 2);
 				if(!APIChunk.isSafeForStand(temp)) {
-					return false;
+					WallE.runtime.longitude = WallE.runtime.longitude.getOpposite();
+					temp = temp.add(WallE.runtime.longitude.getFrontOffsetX() * ic.longitudeLenght, 0, WallE.runtime.longitude.getFrontOffsetZ() * ic.longitudeLenght);
+					if(!APIChunk.isSafeForStand(temp)) {
+						return false;
+					}
 				}
 			}
 		}

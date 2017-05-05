@@ -11,7 +11,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 
 public class APIChunk {
-	private static Minecraft mc = Minecraft.getMinecraft();
 
 	/**
 	 * 获取玩家视线落点的方块
