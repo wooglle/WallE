@@ -29,8 +29,6 @@ public class IChunkFlooring2 {
 		this.firstStandPos = APIPlayer.getFootWithOffset();
 		this.facing = APIPlayer.getFacing().getOpposite();
 		this.firstEmpty = this.firstStandPos.add(this.facing.getOpposite().getFrontOffsetX(), -1, this.facing.getOpposite().getFrontOffsetZ());
-		
-		
 	}
 	
 	private void setTransverse() {

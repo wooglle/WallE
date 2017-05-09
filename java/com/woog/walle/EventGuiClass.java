@@ -7,15 +7,19 @@ import java.util.TimerTask;
 
 import com.woog.walle.additional.Crypto;
 import com.woog.walle.additional.IDebug;
+import com.woog.walle.ai.Walk2There;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.play.client.CPacketClickWindow;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -74,6 +78,20 @@ public class EventGuiClass {
 				// 21, 1, 1, is, short1));
 				// n = -200;
 				// }
+				if(APIInventory.getBoxInventory().getName().matches("^.*§7§l\\[ §b§lMineCraft TNT §7§l\\].*$")){
+					
+					short short1 = mc.player.openContainer.getNextTransactionID(mc.player.inventory);
+					ItemStack is = APIInventory.getBoxInventory().getStackInSlot(24);
+					System.out.println("0000000000000   +" +  is.getDisplayName());
+					if(is.getDisplayName().equals("§7§l[ §5高 级 矿 区 §7§l]")) {
+//						System.out.println("0000000000000   +" +  is.getDisplayName());
+						mc.getConnection().sendPacket(new CPacketClickWindow(mc.player.openContainer.windowId, 24, 1, ClickType.PICKUP, is, short1));
+						delay(100);
+					}
+//					delay(1000);
+//					new RayTraceTarget(new V3D(-756, 4, 327));
+//					new Walk2There();
+				}
 			}
 		} else if (guiName.equals("inventory.GuiInventory") && isChange) {
 			// System.out.println("【W】" + mc.theWorld.provider.getSpawnPoint()

@@ -80,6 +80,10 @@ public class V3D {
 		return new V3D(this.x + dx, this.y + dy, this.z + dz);
 	}
 	
+	public V3D add(EnumFacing face) {
+		return new V3D(this.x + face.getFrontOffsetX(), this.y + face.getFrontOffsetY(), this.z + face.getFrontOffsetZ());
+	}
+	
 	public V3D addY(int y) {
 		return new V3D(this.x, this.y + y, this.z);
 	}

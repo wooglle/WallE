@@ -1,7 +1,10 @@
 package com.woog.walle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.woog.walle.additional.GLDraw;
 import com.woog.walle.additional.ICLighting;
@@ -132,8 +135,14 @@ public class HandleEventChat implements Runnable {
 			// mc.ingameGUI.getChatGUI().printChatMessage(new 谁能发一条信息？：woog你好
 			// ChatComponentText("§e§o【Wall-E】." + "已释放技能 。。。"));
 			IDebug.PrintYellow("已释放技能 。。。");
+		} else if(message.matches("^.*死亡信息.*woog.*$")) {	//[死亡信息] WooG 被 Timb_b 使用 风花雪月~~~惟丶吾伤 杀死了！
+			System.out.println("88888888888888888888888888");
+			delay(1000);
+			mc.player.sendChatMessage("/back");
+//			mc.player.sendChatMessage("/kq");
 		} else if (this.isPlayerChat()) {
 			String[] buff = this.getNameChat();
+			this.getNameChat2();
 			String chatName = buff[0];
 			String chatInfo = buff[1];
 //			System.out.println(chatName + "     +++++       " + chatInfo + "  " + chatInfo.matches("^\\W+$"));
@@ -146,7 +155,7 @@ public class HandleEventChat implements Runnable {
 					for(int i = 2; i < str.length; i++) {
 						strInfo += str[i] + " ";
 					}
-//					System.out.println("Chat   +" +strName +"+   +" + strInfo + "+   " + myName + " " + strName.equals(myName));
+					System.out.println("Chat   +" +strName +"+   +" + strInfo + "+   " + myName + " " + strName.equals(myName));
 					if (strName.equals(myName)) { // 指令格式：name + 指令
 						if (strInfo.matches("^.*test.*$")) {
 //						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
@@ -154,14 +163,17 @@ public class HandleEventChat implements Runnable {
 //								itemstack, short1));
 							
 //						System.out.println("CHAT    " + new ICLighting().firstLight);
-//						System.out.println("CHAT    " + APIChunk.isSafeForStand(new V3D(908, 30, 243)));
+//						System.out.println("CHAT    " + APIChunk.getBlockEyesOn());
+//						new RayTraceTarget(new V3D(-756, 4, 327)).info();
+							System.out.println(APIChunk.getBlockState(APIPlayer.getFootWithOffset()));
+							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset()));
 							
 //						new RayTraceTarget(new V3D(-991, 27, -1051), false);
 //						new AstarFindWay(APIPlayer.getFootWithOffset(), new V3D(-1005, 26, -1053), false);
 //						new RayTraceTarget(new V3D(-1005, 26, -1053), false); 
 //						new RayTraceTarget(new V3D(873, 22, 252), false); 
 //						System.out.println("CHAT   " + APIChunk.isSafeForStand(new V3D(-991, 26, -1053)));
-//						new Walk2There();
+//						new Walk2There(); 
 							
 //						new Lighting();
 //						System.out.println("       " + V3DHelper.getSquareByFacing(new V3D(0, 0, 0),
@@ -234,7 +246,7 @@ public class HandleEventChat implements Runnable {
 						} else if(strInfo.matches("^.*light.*off$")) {
 							mc.gameSettings.gammaSetting = 1.0F;
 						} else if(strInfo.matches("^.*light.*on$")) {
-							mc.gameSettings.gammaSetting = 100F;
+							mc.gameSettings.gammaSetting = 1000F;
 						} else if (strInfo.matches("^.*(当前客户|chat\\s?guest).*$")) {
 							String guestsName = "";
 							for (int i = 0; i < EventChatClass.guests.size(); i++) {
@@ -265,7 +277,7 @@ public class HandleEventChat implements Runnable {
 						}
 					}
 				}
-			} 
+			}
 //			else if(chatName != null && strInfo.length() > myName.length() && strInfo.substring(0, this.myName.length()).equals(myName)) {
 //				String msg = strInfo;
 //				HttpRequest http = new HttpRequest(msg, chatName);
@@ -300,6 +312,40 @@ public class HandleEventChat implements Runnable {
 			return true;
 		}
 		return false;
+	}
+	
+	private String[] getNameChat2() {
+		String msg;
+//		msg = "❤Huier❤ <[Elite]dmc2002> 恩";
+//		msg = "<[居民]why100> @dmc2002 真的么？？";
+		ArrayList<String> str = new ArrayList<String>(10);
+		str.add("❤Huier❤ <[Elite]dmc2002> 恩");
+		msg = "[[居民]foobar -> 我] walle woog shutdown";
+		String[] b = new String[2];
+		Pattern p1 = Pattern.compile("[<\\[](.*?)[>\\]]");
+		Matcher m1 = p1.matcher(msg);
+		ArrayList<String> list = new ArrayList<String>();
+		String temp = "";
+		int names = 0, namee = 0;
+		if(m1.find()) {
+			names = m1.start();
+			namee = m1.end();
+			Pattern p2 = Pattern.compile("[<\\[](.*?)[>\\]]");
+			Matcher m2 = p2.matcher(msg.substring(names, namee));
+			if(m2.find()) {
+				names = m2.start();
+				namee = m2.end();
+			}
+		}
+		System.out.println("HEC   " + msg.substring(names, namee));
+		System.out.println("HEC   " + msg.substring(namee, msg.length() - 1));
+//		while(m1.find()) {
+//			list.add(m1.group(0));
+//		}
+//		for(String s : list) {
+//			System.out.println("HEC   " + s);
+//		}
+		return b;
 	}
 
 	private String[] getNameChat() {
