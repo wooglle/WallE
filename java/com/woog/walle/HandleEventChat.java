@@ -141,8 +141,7 @@ public class HandleEventChat implements Runnable {
 			mc.player.sendChatMessage("/back");
 //			mc.player.sendChatMessage("/kq");
 		} else if (this.isPlayerChat()) {
-			String[] buff = this.getNameChat();
-			this.getNameChat2();
+			String[] buff = this.getNameChat2();
 			String chatName = buff[0];
 			String chatInfo = buff[1];
 //			System.out.println(chatName + "     +++++       " + chatInfo + "  " + chatInfo.matches("^\\W+$"));
@@ -150,54 +149,16 @@ public class HandleEventChat implements Runnable {
 			if(chatName != null && this.isController(chatName)) { 	// 控制指令
 				String[] str = chatInfo.split(" ");
 				if(str.length > 1) {
-					String strName = str[1];
+					String strName = str[0];
 					String strInfo = "";
-					for(int i = 2; i < str.length; i++) {
+					for(int i = 1; i < str.length; i++) {
 						strInfo += str[i] + " ";
 					}
-					System.out.println("Chat   +" +strName +"+   +" + strInfo + "+   " + myName + " " + strName.equals(myName));
+					System.out.println("Chat   +" + strName +"+   +" + strInfo + "+   " + myName + " " + strName.equals(myName));
 					if (strName.equals(myName)) { // 指令格式：name + 指令
 						if (strInfo.matches("^.*test.*$")) {
-//						FMLClientHandler.instance().getClient().getConnection().sendPacket(new CPacketClickWindow(
-//								mc.player.inventoryContainer.windowId, slot, 6, ClickType.SWAP, 
-//								itemstack, short1));
-							
-//						System.out.println("CHAT    " + new ICLighting().firstLight);
-//						System.out.println("CHAT    " + APIChunk.getBlockEyesOn());
-//						new RayTraceTarget(new V3D(-756, 4, 327)).info();
-							System.out.println(APIChunk.getBlockState(APIPlayer.getFootWithOffset()));
-							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset()));
-							
-//						new RayTraceTarget(new V3D(-991, 27, -1051), false);
-//						new AstarFindWay(APIPlayer.getFootWithOffset(), new V3D(-1005, 26, -1053), false);
-//						new RayTraceTarget(new V3D(-1005, 26, -1053), false); 
-//						new RayTraceTarget(new V3D(873, 22, 252), false); 
-//						System.out.println("CHAT   " + APIChunk.isSafeForStand(new V3D(-991, 26, -1053)));
-//						new Walk2There(); 
-							
-//						new Lighting();
-//						System.out.println("       " + V3DHelper.getSquareByFacing(new V3D(0, 0, 0),
-//								EnumFacing.EAST, 5, EnumFacing.NORTH, 5));
-//						System.out.println("       " + APIInventory.getHeldItem().isItemDamaged());
-//						System.out.println("       " + APIInventory.getHeldName());
-//						new Stuffing("tile.glass");
-//						EventTickClass.doCheckTrees = false;
-//						WallE.runtime.isCuttingTree = false;
-//						EventTickClass.doCheckTrees = true;
-//						new Stuffing("tile.glass");
-							
-//						new IChunkFlooring();
-//						new Flooring();
-							
-//						mc.gameSettings.keyBindLeft.setKeyBindState(mc.gameSettings.keyBindLeft.getKeyCode(), false);
-							
-							
-//						new FaceTo(EnumFacing.WEST, 85);
-//						System.out.println("       " + new IChunkFlooring2().firstEmpty);
-							
-//						System.out.println("【T】" + APIInventory.getHeldItem());
-//						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourceDomain());
-//						System.out.println("【T】" + APIInventory.getHeldItem().getItem().getRegistryName().getResourcePath());
+							System.out.println(APIChunk.getBlockState(APIPlayer.getFootWithOffset().addY(-1)));
+							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset().addY(-1)));
 							
 						} else if (strInfo.matches("^.*(stop|停).*$")) {
 							if (WallE.currentAct != null) {
@@ -315,36 +276,29 @@ public class HandleEventChat implements Runnable {
 	}
 	
 	private String[] getNameChat2() {
-		String msg;
-//		msg = "❤Huier❤ <[Elite]dmc2002> 恩";
-//		msg = "<[居民]why100> @dmc2002 真的么？？";
-		ArrayList<String> str = new ArrayList<String>(10);
-		str.add("❤Huier❤ <[Elite]dmc2002> 恩");
-		msg = "[[居民]foobar -> 我] walle woog shutdown";
 		String[] b = new String[2];
-		Pattern p1 = Pattern.compile("[<\\[](.*?)[>\\]]");
+		String msg = message;
+		Pattern p1 = Pattern.compile("[<\\[](.*)[>\\]]");	//(.*)为贪婪模式,最长匹配； (.*?)为非贪婪模式，最短匹配
 		Matcher m1 = p1.matcher(msg);
-		ArrayList<String> list = new ArrayList<String>();
-		String temp = "";
-		int names = 0, namee = 0;
+		String tName = "", tChat = "";
 		if(m1.find()) {
-			names = m1.start();
-			namee = m1.end();
-			Pattern p2 = Pattern.compile("[<\\[](.*?)[>\\]]");
-			Matcher m2 = p2.matcher(msg.substring(names, namee));
-			if(m2.find()) {
-				names = m2.start();
-				namee = m2.end();
+			tName = m1.group(1);
+			tName = tName.replaceAll("(<.*>)|(\\[.*\\])", "");
+			String[] names = tName.split(" ");
+			for(String nam : names) {
+				if(nam.matches("^[a-z0-9_]+$")) {
+					b[0] = nam;
+				}
 			}
+			tChat = msg.substring(m1.end());
+			tChat = tChat.replaceAll("[\\W\\u4e00-\\u9fa5]\\s", "");
+			while(tChat.startsWith(" ")) {
+				tChat = tChat.substring(1, tChat.length());
+			}
+			b[1] = tChat;
+//				System.out.println(msg );
+//				System.out.println("		【" + b[0] + "】	【" + tChat + "】");
 		}
-		System.out.println("HEC   " + msg.substring(names, namee));
-		System.out.println("HEC   " + msg.substring(namee, msg.length() - 1));
-//		while(m1.find()) {
-//			list.add(m1.group(0));
-//		}
-//		for(String s : list) {
-//			System.out.println("HEC   " + s);
-//		}
 		return b;
 	}
 
