@@ -26,6 +26,7 @@ import com.woog.walle.ai.Stuffing;
 import com.woog.walle.ai.Walk2There;
 import com.woog.walle.ai.WalkOneStep;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -158,7 +159,9 @@ public class HandleEventChat implements Runnable {
 					if (strName.equals(myName)) { // 指令格式：name + 指令
 						if (strInfo.matches("^.*test.*$")) {
 							System.out.println(APIChunk.getBlockState(APIPlayer.getFootWithOffset().addY(-1)));
-							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset().addY(-1)));
+							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset().addY(-1)).getRegistryName());
+							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset().addY(-1)).getUnlocalizedName());
+							
 							
 						} else if (strInfo.matches("^.*(stop|停).*$")) {
 							if (WallE.currentAct != null) {
@@ -310,16 +313,10 @@ public class HandleEventChat implements Runnable {
 		nc[1] = this.message;
 		if(this.message.matches("^<\\w+>\\s.*$")) {
 			String[] tem = this.message.split("<|>\\s", 3);
-//			for(String s : tem) {
-//				System.out.println("      1111       " + s);
-//			}
 			nc[0] = tem[1];
 			nc[1] = tem[2];
 		}else if(this.message.matches("^.*\\[\\S*\\s\\w+\\]\\s\\S\\s.*$")) { 
 			String[] tem = this.message.split("]|:|\\s", 7);
-//			for(String s : tem) {
-//				System.out.println("      222       " + s);
-//			}
 			nc[0] = tem[2];
 			nc[1] = tem[6];
 		}else if (this.message.matches("^\\[.*\\]?<\\[.*\\].*>.*$")) {
