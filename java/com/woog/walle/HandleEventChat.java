@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.woog.walle.additional.GLDraw;
+import com.woog.walle.additional.ICFarming;
 import com.woog.walle.additional.ICLighting;
 import com.woog.walle.additional.IChunkFlooring;
 import com.woog.walle.additional.IChunkFlooring2;
@@ -158,7 +159,7 @@ public class HandleEventChat implements Runnable {
 					System.out.println("Chat   +" + strName +"+   +" + strInfo + "+   " + myName + " " + strName.equals(myName));
 					if (strName.equals(myName)) { // 指令格式：name + 指令
 						if (strInfo.matches("^.*test.*$")) {
-							System.out.println(APIChunk.getBlockState(APIPlayer.getFootWithOffset().addY(-1)));
+							System.out.println("     " + new ICFarming().facing);
 							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset().addY(-1)).getRegistryName());
 							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset().addY(-1)).getUnlocalizedName());
 							
