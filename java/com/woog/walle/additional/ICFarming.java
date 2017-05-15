@@ -12,8 +12,10 @@ public class ICFarming {
 	public EnumFacing facing;
 	/*次要运动方向， 换行方向*/
 	public EnumFacing facingShift;
-	/*初始位置*/
+	/*第一块土地的位置*/
 	private V3D startPos;
+	/*操作第一块土地时站立的位置*/
+	private V3D firstStandPos;
 	/*是否与脚步高度相等*/
 	public boolean isAccordant;
 	public ICFarming() {
@@ -31,13 +33,12 @@ public class ICFarming {
 	}
 	
 	private void set() {
-		int[] list = new int[4];
 		V3D tem;
 		boolean[][] boo = new boolean[4][10];
 		for(int i = 0; i < 4; i++) {
 			EnumFacing face  = EnumFacing.HORIZONTALS[i];
-			for(int j = 1; j < 10; j++) {
-				tem = this.startPos.add(face);
+			for(int j = 0; j < 10; j++) {
+				tem = this.startPos.add(face.getFrontOffsetX() * (j + 1), 0, face.getFrontOffsetZ() * (j + 1));
 				if(APIChunk.isEmpty(tem)) {
 					break;
 				}else if(this.isPlantBlock(tem) ) {
@@ -45,33 +46,30 @@ public class ICFarming {
 				}
 			}
 		}
-		boolean[] tempArray = new boolean[10];
-		int temp = 0;
+		int[][] iLenght = new int[4][2];
 		for(int i = 0; i < 4; i++) {
-			for(int j = i + 1; j < 3; j++) {
-				int l1 = 0, l2 = 0;
-				for(int b1 = 0; b1 < boo[i].length; b1++) {
-					if(boo[i][b1]) {
-						l1 = b1;
-					}
-				}
-				for(int b2 = 0; b2 < boo[j].length; b2++) {
-					if(boo[j][b2]) {
-						l1 = b2;
-					}
-				}
-				if(l1 < l2) {
-					tempArray = boo[i];
-					boo[i] = boo[j];
-					boo[j] = tempArray;
-					list[i] = j;
-					list[j] = i;
+			iLenght[i][0] = i;
+			int j = 0;
+			while(j < 10 && boo[i][j]) {
+				iLenght[i][1]++;
+				j++;
+			}
+		}
+		int t = 0;
+		for(int i = 0; i < 4; i++) {
+			for(int j = i + 1; j < 4; j++) {
+				if(iLenght[i][1] < iLenght[j][1]) {
+					t = iLenght[i][0];
+					iLenght[i][0] = iLenght[j][0];
+					iLenght[j][0] = t;
+					t = iLenght[i][1];
+					iLenght[i][1] = iLenght[j][1];
+					iLenght[j][1] = t;
 				}
 			}
 		}
-		this.facing = EnumFacing.HORIZONTALS[list[0]];
-		this.facingShift = EnumFacing.HORIZONTALS[list[1]];
-		
+		this.facing = EnumFacing.HORIZONTALS[iLenght[0][0]];
+		this.facingShift = EnumFacing.HORIZONTALS[iLenght[1][0]];
 	}
 	
 	private boolean isPlantBlock(V3D pos) {
