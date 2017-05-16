@@ -13,10 +13,10 @@ public class ICFarming {
 	/*次要运动方向， 换行方向*/
 	public EnumFacing facingShift;
 	/*第一块土地的位置*/
-	private V3D startPos;
+	public V3D startPos;
 	/*操作第一块土地时站立的位置*/
-	private V3D firstStandPos;
-	/*是否与脚步高度相等*/
+	public V3D firstStandPos;
+	/*是否与脚步高度相等, 比头部低一格*/
 	public boolean isAccordant;
 	public ICFarming() {
 		for(V3D pos : V3DHelper.getUDLRFB(APIPlayer.getFootWithOffset())) {
@@ -70,6 +70,13 @@ public class ICFarming {
 		}
 		this.facing = EnumFacing.HORIZONTALS[iLenght[0][0]];
 		this.facingShift = EnumFacing.HORIZONTALS[iLenght[1][0]];
+		if(iLenght[1][1] > 2) {
+			this.isAccordant = false;
+			this.firstStandPos = this.startPos.addY(1);
+		}else{
+			this.isAccordant = true;
+			this.firstStandPos = this.startPos.add(EnumFacing.HORIZONTALS[iLenght[1][0]].getOpposite());
+		}
 	}
 	
 	private boolean isPlantBlock(V3D pos) {
