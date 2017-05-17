@@ -16,7 +16,7 @@ public class ICFarming {
 	public V3D startPos;
 	/*操作第一块土地时站立的位置*/
 	public V3D firstStandPos;
-	/*是否与脚步高度相等, 比头部低一格*/
+	/*是否与脚步高度相等, 即比头部低一格*/
 	public boolean isAccordant;
 	public ICFarming() {
 		for(V3D pos : V3DHelper.getUDLRFB(APIPlayer.getFootWithOffset())) {
@@ -28,6 +28,8 @@ public class ICFarming {
 		if(this.startPos != null) {
 			this.isAccordant = this.startPos.y - APIPlayer.getFootWithOffset().y == 0;
 			System.out.println("ICF 1  " + this.startPos + "   " + this.isAccordant);
+		}else{
+			System.out.println("ICFarming   Errro: startPos is null!!!");
 		}
 		this.set();
 	}

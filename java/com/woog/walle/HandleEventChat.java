@@ -19,6 +19,7 @@ import com.woog.walle.ai.CutTrees;
 import com.woog.walle.ai.DigChunk;
 import com.woog.walle.ai.Digging;
 import com.woog.walle.ai.FaceTo;
+import com.woog.walle.ai.Farming;
 import com.woog.walle.ai.Fishing;
 import com.woog.walle.ai.Flooring;
 import com.woog.walle.ai.Lighting;
@@ -161,8 +162,9 @@ public class HandleEventChat implements Runnable {
 						if (strInfo.matches("^.*test.*$")) {
 //							System.out.println("     " + APIChunk.getBlockState(new V3D(884, 21, 214)));
 //							System.out.println("     " + APIChunk.isEmpty(new V3D(884, 21, 214)));
-							ICFarming icf = new ICFarming();
-							System.out.println("     " + icf.facing + "   " + icf.facingShift);
+//							ICFarming icf = new ICFarming();
+//							System.out.println("     " + EnumFacing.WEST.rotateY().equals(EnumFacing.NORTH));
+							new Farming();
 //							System.out.println("     " + V3DHelper.getUDLRFB(APIPlayer.getFootWithOffset()));
 //							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset().addY(-1)).getUnlocalizedName());
 							

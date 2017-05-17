@@ -61,7 +61,31 @@ public class Farming extends ActionBase{
 	}
 	
 	private void plantingAccordant() {
-		
+		int AD = getAD(WallE.runtime.farmingFace, WallE.runtime.farmingFaceBlock);
+		if(AD == 1) {
+			System.out.println("       向左");
+			this.util.setMovement(0.0F, -0.8F, false, false);
+		}else if(AD == 2) {
+			System.out.println("       向右");
+			this.util.setMovement(0.0F, 0.8F, false, false);
+		}
+		delay(5000);
+	}
+	
+	/**
+	 * face1相对于face2的位置
+	 * @param face1
+	 * @param face2
+	 * @return 1 : 左; 2 ： 右
+	 */
+	private int getAD(EnumFacing face1, EnumFacing face2) {
+		if(face1.rotateY().equals(face2)) {
+			return 2;	//D, 向右
+		}else if(face1.rotateY().getOpposite().equals(face2)) {
+			return 1;	//A， 向左
+		}
+		System.out.println("Farming ERROR:" + face1 + " is not left or right side of " + face2);
+		return 0;
 	}
 	
 	private boolean canShift(V3D pos) {
@@ -91,16 +115,21 @@ public class Farming extends ActionBase{
 			}
 		}
 		if(!APIPlayer.getFootWithOffset().equals(WallE.runtime.farmingNextPos)) {
+//			this.pause = true;
+//			delay(200);
 			new RayTraceTarget(WallE.runtime.farmingNextPos);
 			new Walk2There();
 			return;
 		}else{
+			System.out.println("   " + WallE.runtime.icFarming.startPos + "   " + WallE.runtime.icFarming.isAccordant);
 			if(WallE.runtime.icFarming.isAccordant) {
 				new FaceTo(WallE.runtime.farmingFaceBlock, 0.0F);
 				delay(200);
 				new FaceTo(WallE.runtime.farmingNextBlock, EnumFacing.UP, 2);
 				delay(200);
+				this.plantingAccordant();
 			}
+			WallE.runtime.icFarming = null;
 		}
 	}
 }
