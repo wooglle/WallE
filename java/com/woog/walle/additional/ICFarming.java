@@ -29,7 +29,7 @@ public class ICFarming {
 			this.isAccordant = this.firstPlantPos.y - APIPlayer.getFootWithOffset().y == 0;
 //			System.out.println("ICF 1  " + this.startPos + "   " + this.isAccordant);
 		}else{
-			System.out.println("ICFarming   Errro: startPos is null!!!");
+			System.out.println("ICFarming   Errro: firstPlantPos is null!!!");
 		}
 		this.set();
 //		System.out.printf("\t\tICF  2:  %s, %s, %s, %s, %s\n" , this.facing , this.facingShift, this.startPos, this.firstStandPos, this.isAccordant);

@@ -13,6 +13,8 @@ import com.woog.walle.additional.ICFarming;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockFarmland;
+import net.minecraft.block.BlockSoulSand;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -34,19 +36,24 @@ public class Farming extends ActionBase{
 	}
 	
 	private Item seedOfCrops() {
-		if(APIChunk.getBlockEyesOn() instanceof BlockBush) {
-			Block block = APIChunk.getBlockEyesOn();
+		Item b = null;
+		Block block = APIChunk.getBlockEyesOn();
+		if(block instanceof BlockBush) {
 			if(block == Blocks.WHEAT) {
-				return Items.WHEAT_SEEDS;
+				b = Items.WHEAT_SEEDS;
 			}else if(block == Blocks.CARROTS) {
-				return Items.CARROT;
+				b = Items.CARROT;
 			}else if(block == Blocks.NETHER_WART) {
-				return Items.NETHER_WART;
+				b = Items.NETHER_WART;
 			}else if(block == Blocks.POTATOES) {
-				return Items.POTATO;
+				b = Items.POTATO;
 			}
+		}else if(block instanceof BlockFarmland) {
+			b = Items.WHEAT_SEEDS;
+		}else if(block instanceof BlockSoulSand) {
+			b = Items.NETHER_WART;
 		}
-		return null;
+		return b;
 	}
 	
 	private V3D getDirt(int n) {
@@ -63,7 +70,50 @@ public class Farming extends ActionBase{
 	}
 	
 	private void plantingAccordant() {
+		boolean isStop = false;
 		int AD = getAD(WallE.runtime.farmingFace, WallE.runtime.farmingFaceBlock);
+		this.setAD(AD);
+		V3D eyesonPrevious = null;
+		V3D eyeson = null;
+		Item seed;
+		while(!this.canShift()) {
+			eyeson = APIPlayer.getEyesOn();
+			if(eyeson.equals(eyesonPrevious)) {
+				delay(50);
+				continue;
+			}
+			seed = this.seedOfCrops();
+			if(seed != null) {
+				this.toolsKeyword = seed.getUnlocalizedName();
+				while(APIChunk.canHavest(eyeson)) {
+					this.util.setMovement(0.0F, 0.0F, false, false);
+					isStop = true;
+					this.util.leftDown();
+					delay(50);
+					this.util.leftUp();
+				}
+				while(APIChunk.isEmpty(eyeson)) {
+					delay(20);
+					if(!isStop) {
+						this.util.setMovement(0.0F, 0.0F, false, false);
+					}
+					this.holdStuff();
+					this.util.rightDown();
+					delay(50);
+					this.util.rightUp();
+					eyesonPrevious = eyeson;
+				}
+				if(isStop) {
+					delay(50);
+					this.setAD(AD);
+					isStop = false;
+				}
+			}
+			delay(20);
+		}
+	}
+	
+	private void setAD(int AD) {
 		if(AD == 1) {
 			System.out.println("       向左");
 			this.util.setMovement(0.0F, 0.8F, false, false);
@@ -71,26 +121,6 @@ public class Farming extends ActionBase{
 			System.out.println("       向右...");
 			this.util.setMovement(0.0F, -0.8F, false, false);
 		}
-		while(!this.canShift()) {
-			Item seed = this.seedOfCrops();
-			V3D eyeson = APIPlayer.getEyesOn();
-			if(seed != null) {
-				this.toolsKeyword = seed.getUnlocalizedName();
-				if(APIChunk.canHavest(eyeson)) {
-					this.util.leftDown();
-					delay(60);
-					this.util.leftUp();
-				}
-				if(APIChunk.isEmpty(eyeson)) {
-					this.holdStuff();
-					this.util.rightDown();
-					delay(60);
-					this.util.rightUp();
-				}
-			}
-			delay(20);
-		}
-//		delay(1000);
 	}
 	
 	/**
