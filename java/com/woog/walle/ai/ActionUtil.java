@@ -37,6 +37,13 @@ public class ActionUtil {
 //		mc.gameSettings.keyBindUseItem = new KeyBinding("key.UseItem", 39, "key.categories.movement");
 	}
 	
+	/**
+	 * 
+	 * @param ws
+	 * @param ad
+	 * @param jump
+	 * @param sneak
+	 */
 	public void setMovement(float ws,float ad, boolean jump, boolean sneak) {
 		if(isShield) {
 			movement.set(ws, ad, jump, sneak);

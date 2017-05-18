@@ -21,6 +21,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class Farming extends ActionBase{
+	private String toolsKeyword = "";
+	
 	@Override
 	public String getActName() {
 		return "Farming";
@@ -64,12 +66,31 @@ public class Farming extends ActionBase{
 		int AD = getAD(WallE.runtime.farmingFace, WallE.runtime.farmingFaceBlock);
 		if(AD == 1) {
 			System.out.println("       向左");
-			this.util.setMovement(0.0F, -0.8F, false, false);
-		}else if(AD == 2) {
-			System.out.println("       向右");
 			this.util.setMovement(0.0F, 0.8F, false, false);
+		}else if(AD == 2) {
+			System.out.println("       向右...");
+			this.util.setMovement(0.0F, -0.8F, false, false);
 		}
-		delay(5000);
+		while(!this.canShift()) {
+			Item seed = this.seedOfCrops();
+			V3D eyeson = APIPlayer.getEyesOn();
+			if(seed != null) {
+				this.toolsKeyword = seed.getUnlocalizedName();
+				if(APIChunk.canHavest(eyeson)) {
+					this.util.leftDown();
+					delay(60);
+					this.util.leftUp();
+				}
+				if(APIChunk.isEmpty(eyeson)) {
+					this.holdStuff();
+					this.util.rightDown();
+					delay(60);
+					this.util.rightUp();
+				}
+			}
+			delay(20);
+		}
+//		delay(1000);
 	}
 	
 	/**
@@ -79,16 +100,17 @@ public class Farming extends ActionBase{
 	 * @return 1 : 左; 2 ： 右
 	 */
 	private int getAD(EnumFacing face1, EnumFacing face2) {
-		if(face1.rotateY().equals(face2)) {
-			return 2;	//D, 向右
-		}else if(face1.rotateY().getOpposite().equals(face2)) {
+		if(face2.rotateY().getOpposite().equals(face1)) {
 			return 1;	//A， 向左
+		}else if(face2.rotateY().equals(face1)) {
+			return 2;	//D, 向右
 		}
 		System.out.println("Farming ERROR:" + face1 + " is not left or right side of " + face2);
 		return 0;
 	}
 	
-	private boolean canShift(V3D pos) {
+	private boolean canShift() {
+		V3D pos = APIPlayer.getFootWithOffset().add(APIPlayer.getFacing());	///////
 		V3D pos1 = pos.add(WallE.runtime.farmingFace);
 		V3D pos2 = pos1.add(WallE.runtime.farmingFace);
 		if(!isPlantBlock(pos1) && !isPlantBlock(pos2)) {
@@ -108,6 +130,8 @@ public class Farming extends ActionBase{
 		if(WallE.runtime.icFarming == null) {
 			WallE.runtime.icFarming = new ICFarming();
 			WallE.runtime.farmingNextPos = WallE.runtime.icFarming.firstStandPos;
+			WallE.runtime.farmingNextBlock = WallE.runtime .icFarming.firstPlantPos;
+			WallE.runtime.farmingFace = WallE.runtime.icFarming.facing;
 			if(WallE.runtime.icFarming.isAccordant) {
 				WallE.runtime.farmingFaceBlock = WallE.runtime.icFarming.facingShift;
 			}else{
@@ -121,7 +145,8 @@ public class Farming extends ActionBase{
 			new Walk2There();
 			return;
 		}else{
-			System.out.println("   " + WallE.runtime.icFarming.startPos + "   " + WallE.runtime.icFarming.isAccordant);
+			delay(1000);
+			System.out.println("   " + WallE.runtime.icFarming.firstPlantPos + "   " + WallE.runtime.icFarming.isAccordant);
 			if(WallE.runtime.icFarming.isAccordant) {
 				new FaceTo(WallE.runtime.farmingFaceBlock, 0.0F);
 				delay(200);

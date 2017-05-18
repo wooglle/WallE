@@ -8,30 +8,31 @@ import com.woog.walle.V3DHelper;
 import net.minecraft.util.EnumFacing;
 
 public class ICFarming {
-	/*主要运动方向，单行的方向*/
+	/**主要运动方向，单行的方向*/
 	public EnumFacing facing;
-	/*次要运动方向， 换行方向*/
+	/**次要运动方向， 换行方向*/
 	public EnumFacing facingShift;
-	/*第一块土地的位置*/
-	public V3D startPos;
-	/*操作第一块土地时站立的位置*/
+	/**第一块土地的位置*/
+	public V3D firstPlantPos;
+	/**操作第一块土地时站立的位置*/
 	public V3D firstStandPos;
-	/*是否与脚步高度相等, 即比头部低一格*/
+	/**是否与脚步高度相等, 即比头部低一格*/
 	public boolean isAccordant;
 	public ICFarming() {
 		for(V3D pos : V3DHelper.getUDLRFB(APIPlayer.getFootWithOffset())) {
 			if(this.isPlantBlock(pos)) {
-				this.startPos = pos;
+				this.firstPlantPos = pos;
 				break;
 			}
 		}
-		if(this.startPos != null) {
-			this.isAccordant = this.startPos.y - APIPlayer.getFootWithOffset().y == 0;
-			System.out.println("ICF 1  " + this.startPos + "   " + this.isAccordant);
+		if(this.firstPlantPos != null) {
+			this.isAccordant = this.firstPlantPos.y - APIPlayer.getFootWithOffset().y == 0;
+//			System.out.println("ICF 1  " + this.startPos + "   " + this.isAccordant);
 		}else{
 			System.out.println("ICFarming   Errro: startPos is null!!!");
 		}
 		this.set();
+//		System.out.printf("\t\tICF  2:  %s, %s, %s, %s, %s\n" , this.facing , this.facingShift, this.startPos, this.firstStandPos, this.isAccordant);
 	}
 	
 	private void set() {
@@ -40,7 +41,7 @@ public class ICFarming {
 		for(int i = 0; i < 4; i++) {
 			EnumFacing face  = EnumFacing.HORIZONTALS[i];
 			for(int j = 0; j < 10; j++) {
-				tem = this.startPos.add(face.getFrontOffsetX() * (j + 1), 0, face.getFrontOffsetZ() * (j + 1));
+				tem = this.firstPlantPos.add(face.getFrontOffsetX() * (j + 1), 0, face.getFrontOffsetZ() * (j + 1));
 				if(APIChunk.isEmpty(tem)) {
 					break;
 				}else if(this.isPlantBlock(tem) ) {
@@ -74,10 +75,10 @@ public class ICFarming {
 		this.facingShift = EnumFacing.HORIZONTALS[iLenght[1][0]];
 		if(iLenght[1][1] > 2) {
 			this.isAccordant = false;
-			this.firstStandPos = this.startPos.addY(1);
+			this.firstStandPos = this.firstPlantPos.addY(1);
 		}else{
 			this.isAccordant = true;
-			this.firstStandPos = this.startPos.add(EnumFacing.HORIZONTALS[iLenght[1][0]].getOpposite());
+			this.firstStandPos = this.firstPlantPos.add(EnumFacing.HORIZONTALS[iLenght[1][0]].getOpposite());
 		}
 	}
 	

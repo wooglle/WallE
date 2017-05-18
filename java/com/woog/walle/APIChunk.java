@@ -146,4 +146,15 @@ public class APIChunk {
 	public static boolean isBlockBroke(V3D blockPos) {
 		return false;
 	}
+	
+	public static boolean canHavest(V3D blockPos) {
+		Block block = getBlock(blockPos);
+		String state =  APIChunk.getBlockState(blockPos).toString();
+		if(state.equals("minecraft:nether_wart[age=3]")) {
+			return true;
+		}else if(state.matches("^.*\\[age=7\\]$")) {
+			return true;
+		}
+		return false;
+	}
 }

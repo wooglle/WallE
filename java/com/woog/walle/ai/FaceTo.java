@@ -34,22 +34,36 @@ public class FaceTo {
 	 * 调整视线落点至目标方块指定面的中心
 	 * @param target 目标
 	 * @param face 指定面
-	 * @param type 1: yaw、pitch均改变； 2: 仅改变pitch
+	 * @param type 1: 偏航角、俯仰角均改变； 2: 仅改变俯仰角
 	 */
 	public FaceTo(V3D target, EnumFacing face, int type) {
 		Vec3d point = V3DHelper.getFaceCenter(target, face);
 		if(type == 1) {
 			yp = getAngleOfPoint(point);
 			mc.player.turn((float)(yp.yaw / 0.15D), (float)(yp.pitch / 0.15D));
-		}else{
-			Vec3d centerLine; 
-			if(face.getFrontOffsetX() == 0) {
+		}else if(type == 2){
+			Vec3d centerLine;
+			EnumFacing.Axis axis = face.getAxis();
+			if(axis.equals(EnumFacing.Axis.X)) {
+				centerLine = new Vec3d(point.xCoord, point.yCoord, APIPlayer.getEye().zCoord);
+			}else if(axis.equals(EnumFacing.Axis.Z)) {
 				centerLine = new Vec3d(APIPlayer.getEye().xCoord, point.yCoord, point.zCoord);
 			}else{
-				centerLine = new Vec3d(point.xCoord, point.yCoord, APIPlayer.getEye().zCoord);
+				if(APIPlayer.getFacing().getAxis().equals(EnumFacing.Axis.X)) {
+					centerLine = new Vec3d(point.xCoord, point.yCoord, APIPlayer.getEye().zCoord);
+				}else{
+					centerLine = new Vec3d(APIPlayer.getEye().xCoord, point.yCoord, point.zCoord);
+				}
 			}
+//			if(face.getFrontOffsetX() == 0) {
+//				centerLine = new Vec3d(APIPlayer.getEye().xCoord, point.yCoord, point.zCoord);
+//			}else{
+//				centerLine = new Vec3d(point.xCoord, point.yCoord, APIPlayer.getEye().zCoord);
+//			}
 			yp = getAngleOfPoint(centerLine);
 			mc.player.turn((float)0.0, (float)(yp.pitch / 0.15D));
+		}else{
+			System.out.println("\t\tFaceTo Error, the type is out of defintion.");
 		}
 	}
 	

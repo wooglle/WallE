@@ -160,11 +160,13 @@ public class HandleEventChat implements Runnable {
 					System.out.println("Chat   +" + strName +"+   +" + strInfo + "+   " + myName + " " + strName.equals(myName));
 					if (strName.equals(myName)) { // 指令格式：name + 指令
 						if (strInfo.matches("^.*test.*$")) {
-//							System.out.println("     " + APIChunk.getBlockState(new V3D(884, 21, 214)));
+//							System.out.println("     " + APIChunk.canHavest(APIPlayer.getEyesOn()));
 //							System.out.println("     " + APIChunk.isEmpty(new V3D(884, 21, 214)));
 //							ICFarming icf = new ICFarming();
 //							System.out.println("     " + EnumFacing.WEST.rotateY().equals(EnumFacing.NORTH));
 							new Farming();
+							
+//							new FaceTo(new V3D(-983, 26, -1067), EnumFacing.UP, 2);
 //							System.out.println("     " + V3DHelper.getUDLRFB(APIPlayer.getFootWithOffset()));
 //							System.out.println(APIChunk.getBlock(APIPlayer.getFootWithOffset().addY(-1)).getUnlocalizedName());
 							

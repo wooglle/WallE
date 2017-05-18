@@ -79,12 +79,16 @@ public class APIPlayer {
 	}
 	
 	/**
-	 * 获取玩家方向
+	 * 获取玩家的水平方向
 	 * @return
 	 */
 	public static EnumFacing getFacing() {
 		//GuiOverlayDebug
 		return mc.player.getHorizontalFacing();
+	}
+	
+	public static V3D getEyesOn() {
+		return new V3D(viewX(), viewY(), viewZ());
 	}
 	
 	public static float yaw() {
