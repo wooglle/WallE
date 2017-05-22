@@ -55,4 +55,6 @@ public class WallERuntime {
 	public static EnumFacing farmingFace;
 	/**种植时玩家操作目标时的视线方向*/
 	public static EnumFacing farmingFaceBlock;
+	
+	public static boolean farmingHasNext;
 }

@@ -69,7 +69,7 @@ public class RayTraceTarget {
 	}
 	
 	/**
-	 * 自动获取到达指定坐标的路线
+	 * 自动获取到达指定坐标的路线, 无限制模式
 	 * @param targetV3D 目标（即落脚点）
 	 */
 	public RayTraceTarget(V3D targetV3D) {

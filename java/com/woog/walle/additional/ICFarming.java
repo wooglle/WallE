@@ -82,7 +82,7 @@ public class ICFarming {
 		}
 	}
 	
-	private boolean isPlantBlock(V3D pos) {
+	public boolean isPlantBlock(V3D pos) {
 		String name = APIChunk.getBlock(pos).getRegistryName().toString();
 		return (name.equals("minecraft:farmland") | name.equals("minecraft:sand") | name.equals("minecraft:soul_sand"));
 	}

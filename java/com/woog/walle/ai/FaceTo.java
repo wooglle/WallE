@@ -68,9 +68,9 @@ public class FaceTo {
 	}
 	
 	/**
-	 * 调整视线至指定的角度和俯仰角
-	 * @param face
-	 * @param pitch
+	 * 调整视线至指定的方向和俯仰角
+	 * @param face	方向
+	 * @param pitch	俯仰角
 	 */
 	public FaceTo(EnumFacing face, float pitch) {
 		this.yp = new YawPitch(face.getHorizontalAngle() - APIPlayer.yaw(), APIPlayer.pitch() - pitch);

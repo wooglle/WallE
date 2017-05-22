@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -53,7 +54,6 @@ public class APIChunk {
 	 * @return
 	 */
 	public static boolean isEmpty(V3D pos) {
-//		return getBlock(pos).getRegistryName().toString().equals("minecraft:air");
 		return getMaterial(pos).equals(Material.AIR);
 	}
 	
@@ -68,10 +68,12 @@ public class APIChunk {
 		Block upperBlock = getBlock(pos.addY(1));
 		Block posBlock = getBlock(pos);
 		Material lowerMaterial = getMaterial(pos.addY(-1));
-		if(!(getBlock(pos).canSpawnInBlock() & getBlock(pos.addY(1)).canSpawnInBlock())) {
+		if(!(getBlock(pos.addY(1)).canSpawnInBlock() & (getBlock(pos).canSpawnInBlock() | getBlock(pos) instanceof BlockBush))) {
+//			System.out.println("      1111" );
 			return false;
 		}
 		if(!lowerMaterial.isSolid()) {
+//			System.out.println("      2222222222" );
 			return false;
 		}
 		return true;

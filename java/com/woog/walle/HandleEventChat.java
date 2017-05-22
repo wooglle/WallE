@@ -161,10 +161,16 @@ public class HandleEventChat implements Runnable {
 					if (strName.equals(myName)) { // 指令格式：name + 指令
 						if (strInfo.matches("^.*test.*$")) {
 //							System.out.println("     " + APIChunk.canHavest(APIPlayer.getEyesOn()));
-//							System.out.println("     " + APIChunk.isEmpty(new V3D(884, 21, 214)));
+//							V3D pos = new V3D(-984, 26, -1081);
+//							V3D pos = APIPlayer.getEyesOn();
+//							System.out.println("     " + APIChunk.getBlock(pos).canSpawnInBlock());
+//							System.out.println("     " +  APIChunk.getBlock(pos.addY(1)).canSpawnInBlock());
+//							System.out.println("     " + APIChunk.isSafeForStand(pos));
+//							System.out.println("     " + APIChunk.getBlockState(new V3D(-984, 26, -1081)));
 //							ICFarming icf = new ICFarming();
 //							System.out.println("     " + EnumFacing.WEST.rotateY().equals(EnumFacing.NORTH));
 							new Farming();
+//							new RayTraceTarget(new V3D(-982, 26, -1059), false);
 							
 //							new FaceTo(new V3D(-983, 26, -1067), EnumFacing.UP, 2);
 //							System.out.println("     " + V3DHelper.getUDLRFB(APIPlayer.getFootWithOffset()));
