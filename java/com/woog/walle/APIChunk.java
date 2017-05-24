@@ -131,7 +131,7 @@ public class APIChunk {
 	 * @return
 	 */
 	public static V3D getWood() {
-		V3D[] neighbor = V3DHelper.getNeighborByDistance(APIPlayer.getHeadPos(), 5);
+		V3D[] neighbor = V3DHelper.getNeighborByDistance(APIPlayer.getHeadPos(), 10);
 		for(V3D pos: neighbor) {
 			if(isLog(pos)) {
 				return pos;
